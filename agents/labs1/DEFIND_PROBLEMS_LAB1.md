@@ -1,8 +1,7 @@
 # Lab 1 — PyTorch FashionMNIST Classification
-**Course:** Deep Learning  
-**Assignment:** Practice 1 — PyTorch FashionMNIST Classification  
-**For:** AI coding agent (Claude Code, Cursor, etc.) implementing this lab step by step.  
-**Companion documents (read before starting):**
+
+**Course:** Deep Learning**Assignment:** Practice 1 — PyTorch FashionMNIST Classification**For:** AI coding agent (Claude Code, Cursor, etc.) implementing this lab step by step.**Companion documents (read before starting):**
+
 - `agents/ML_PIPELINE_REFERENCE_v3.md` — pipeline concepts still apply (split boundary, baseline first, log everything, 5W on every number)
 - `agents/ML_SESSION_GUIDE.md` — output format conventions (results/, plots/, logs/, metrics/)
 
@@ -22,6 +21,7 @@ This is a **supervised image classification** task using a well-known benchmark 
   4. Predicted vs. actual image display grid
 
 **The pipeline concepts from ML_PIPELINE_REFERENCE_v3.md still fully apply:**
+
 - Split boundary: FashionMNIST provides a canonical 60k/10k split — respect it, never shuffle train and test together
 - Baseline first (§11): establish a simple model before experimenting
 - Single-variable experiments (§18.3): change one hyperparameter per run
@@ -141,6 +141,7 @@ All subsequent training will run on this device.
 **⚠️ Warning:** If CUDA is not available but the human expects GPU training, stop here and help them diagnose before proceeding. Training FashionMNIST on CPU is feasible but slow for large experiments.
 
 ### Sign-off prompt
+
 *"Environment confirmed. Training will run on [device]. Proceed to Stage 1 — Data?"*
 
 ---
@@ -289,6 +290,7 @@ def plot_sample_grid(dataset, class_names, n_per_class=5, save_path=None):
 **⚠️ Leakage note to record:** FashionMNIST provides a canonical pre-split dataset. The test set is already separated — do NOT combine train and test, shuffle, then re-split. The canonical split must be respected. Document this explicitly in the report.
 
 ### Sign-off prompt
+
 *"Data loaded. Train: [n] samples, Test: [n] samples. Sample grid saved. Class distribution confirmed [balanced/imbalanced]. Proceed to Stage 2 — Baseline Model?"*
 
 ---
@@ -482,6 +484,7 @@ Our result: [value] → [within / above / below] expected range
 ```
 
 ### Sign-off prompt
+
 *"Baseline complete. Test accuracy: [X]%. This is our floor. Proceed to Stage 3 — MLP Architecture?"*
 
 ---
@@ -584,6 +587,7 @@ Inductive bias (ML_PIPELINE_REFERENCE §12):
 ```
 
 ### Sign-off prompt
+
 *"MLP architecture defined. [X] parameters. Proceed to Stage 4 — Training and Experiments?"*
 
 ---
@@ -689,6 +693,7 @@ Best val accuracy:  [value]
 ```
 
 ### Sign-off prompt
+
 *"All experiments logged. Best config: [params], val acc = [X]%. Proceed to Stage 5 — Final Evaluation?"*
 
 ---
@@ -845,6 +850,7 @@ def plot_predictions(model, test_loader, class_names, device,
 ```
 
 ### Sign-off prompt
+
 *"Final evaluation complete. Test accuracy: [X]%. Confusion matrix and prediction grid saved. Proceed to Stage 6 — Save Model and Report?"*
 
 ---
@@ -993,6 +999,7 @@ CNN would exploit spatial structure that MLP ignores]
 ```
 
 ### Sign-off prompt
+
 *"All deliverables complete. Summary of outputs:"*
 
 ```
@@ -1031,26 +1038,26 @@ MODEL:
 
 ## Quick Reference — Stage Order
 
-| Stage | Name | Key output | Gate condition |
-|-------|------|-----------|----------------|
-| 0 | Environment setup | `01_environment.txt` | CUDA status confirmed |
-| 1 | Data loading | Sample grid, class dist plots | Split boundary documented |
-| 2 | Baseline model | `baseline_results.txt`, loss curve | Floor number recorded |
-| 3 | MLP architecture | Architecture decision record | Inductive bias documented |
-| 4 | Training + experiments | Experiment summary table | Single-variable rule followed |
-| 5 | Final evaluation | `final_results.txt`, prediction grid | Test set used exactly once |
-| 6 | Save + report | All deliverables indexed | All 4 assignment items present |
+| Stage | Name                   | Key output                             | Gate condition                 |
+| ----- | ---------------------- | -------------------------------------- | ------------------------------ |
+| 0     | Environment setup      | `01_environment.txt`                 | CUDA status confirmed          |
+| 1     | Data loading           | Sample grid, class dist plots          | Split boundary documented      |
+| 2     | Baseline model         | `baseline_results.txt`, loss curve   | Floor number recorded          |
+| 3     | MLP architecture       | Architecture decision record           | Inductive bias documented      |
+| 4     | Training + experiments | Experiment summary table               | Single-variable rule followed  |
+| 5     | Final evaluation       | `final_results.txt`, prediction grid | Test set used exactly once     |
+| 6     | Save + report          | All deliverables indexed               | All 4 assignment items present |
 
 ---
 
 ## Known Pitfalls — FashionMNIST + PyTorch
 
-| Pitfall | Symptom | Fix |
-|---------|---------|-----|
-| Softmax before CrossEntropyLoss | NaN loss or very slow convergence | Remove softmax from model output — CE loss applies it internally |
-| Forgetting `model.eval()` before evaluation | Dropout/BN behave differently at test time | Always call `model.eval()` and `torch.no_grad()` during evaluation |
-| Normalizing test set with test statistics | Data leakage (§10) | Use train-set mean/std (0.2860, 0.3530) for both splits |
-| Calling `plt.show()` in a script | Blocks execution on servers | Always use `plt.savefig()` + `plt.close()` |
-| Not zeroing gradients | Gradients accumulate across batches | `optimizer.zero_grad()` at the start of every training step |
-| Changing multiple hyperparameters per experiment | Results unattributable | Single-variable principle (§18.3) — one change per run |
-| Looking at test accuracy during tuning | Implicit data leakage | Use val_acc for all decisions; test is evaluated once at the end |
+| Pitfall                                          | Symptom                                    | Fix                                                                   |
+| ------------------------------------------------ | ------------------------------------------ | --------------------------------------------------------------------- |
+| Softmax before CrossEntropyLoss                  | NaN loss or very slow convergence          | Remove softmax from model output — CE loss applies it internally     |
+| Forgetting`model.eval()` before evaluation     | Dropout/BN behave differently at test time | Always call`model.eval()` and `torch.no_grad()` during evaluation |
+| Normalizing test set with test statistics        | Data leakage (§10)                        | Use train-set mean/std (0.2860, 0.3530) for both splits               |
+| Calling`plt.show()` in a script                | Blocks execution on servers                | Always use`plt.savefig()` + `plt.close()`                         |
+| Not zeroing gradients                            | Gradients accumulate across batches        | `optimizer.zero_grad()` at the start of every training step         |
+| Changing multiple hyperparameters per experiment | Results unattributable                     | Single-variable principle (§18.3) — one change per run              |
+| Looking at test accuracy during tuning           | Implicit data leakage                      | Use val_acc for all decisions; test is evaluated once at the end      |
