@@ -1,4 +1,8 @@
+torch
+torchvision
 pandas
 numpy
 tabulate
 matplotlib
+jupyter
+nbformat
