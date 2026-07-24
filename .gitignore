@@ -37,16 +37,23 @@ data/raw/
 
 # Model weights
 model/backup/
+!model/backup/.gitkeep
 model/baseline/
+!model/baseline/.gitkeep
 
 # Lab generated artifacts
 labs/*/results/logs/
+!labs/*/results/logs/.gitkeep
 labs/*/results/metrics/
+!labs/*/results/metrics/.gitkeep
 labs/*/results/models/
+!labs/*/results/models/.gitkeep
 labs/*/results/plots/
+!labs/*/results/plots/.gitkeep
 
 # Logs
 logs/
+!logs/.gitkeep
 
 # Environment
 .env
