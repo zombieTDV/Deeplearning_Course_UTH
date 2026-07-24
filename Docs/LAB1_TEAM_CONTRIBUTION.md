@@ -4,7 +4,7 @@
 **Team size:** 6
 **Submission deadline:** [8:00 - 28-7-2026]
 **Meeting 1 (kickoff):** [21:00 - 24-7-2026]
-**Meeting 2 (review):** [21: 00 - 27-7-2026]
+**Meeting 2 (review):** [21: 00 - 26-7-2026]
 
 ---
 
