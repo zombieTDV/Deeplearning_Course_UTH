@@ -50,3 +50,5 @@ logs/
 # Environment
 .env
 .env.*
+/data
+/outputs/model
