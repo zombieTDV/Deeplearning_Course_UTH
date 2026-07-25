@@ -18,6 +18,7 @@ env/
 *.swp
 *.swo
 *~
+.kilo
 
 # OS
 .DS_Store
