@@ -11,7 +11,7 @@ build/
 .venv/
 venv/
 env/
-
+.kilo
 # IDE / editor
 .vscode/
 .idea/

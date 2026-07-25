@@ -7,7 +7,7 @@ from sklearn.metrics import roc_curve, precision_recall_curve
 def explore_dataset(train_dataset, class_names, save_path='../outputs/images/sample_fashionmnist.png'):
     print(f"Number of classes: {len(class_names)}")
     print(f"Classes: {class_names}")
-    print(f"Train samples: {len(train_dataset)}")
+    print(f"Num samples: {len(train_dataset)}")
     print(f"Image shape: {train_dataset[0][0].shape}")
 
     fig = plt.figure(figsize=(14, 10))
