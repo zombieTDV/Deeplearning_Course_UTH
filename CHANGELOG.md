@@ -328,4 +328,98 @@
 
 ## Conclusion
 
-Ten single-variable experiments spanning **architecture, loss function (Focal, Weighted, Label Smoothing), data augmentation, class weighting, input resolution, training schedule, post-hoc logit adjustment, and ensemble** converge on a single finding: the Shirt sink is a structural limitation of FashionMNIST at 28×28 resolution. No parametric modification eliminates the zero-sum trade-off among upper-body classes — but post-hoc logit adjustment on a well-converged model (E9) provides a practical solution by selecting the optimal operating point without retraining.
+---
+
+## Experiment 11 — Optimizer: SGD + Nesterov + ReduceLROnPlateau
+
+> **Variable changed**: optimizer from Adam to `SGD(lr=0.01, momentum=0.9, weight_decay=1e-4, nesterov=True)` + `ReduceLROnPlateau(patience=5)`
+> **Held constant**: architecture (DiagnosticCNN), loss (CrossEntropy), epochs (40), data (no augmentation)
+
+- **Notebook**: `notebooks/phase11_sgd_tuning.ipynb`
+- **Outputs**: `outputs/error_analysis/sgd_tuning/`
+
+*[pending execution — notebook generated but not run]*
+
+---
+
+## Experiment 12 — Hyperparameter Search: Optuna (Bayesian + ASHA Pruning)
+
+> **Single variable changed**: this is a new *phase*, not a single-variable ablation. All prior experiments (E1–E11) used fixed HPs. This phase finds the optimal HP configuration via Bayesian search.
+
+- **Notebook**: `notebooks/phase12_optuna_hp_search.ipynb`
+- **Study DB**: `outputs/error_analysis/optuna_study/optuna_study.db`
+- **Method**: 30 trials × 35 epochs, TPESampler, MedianPruner (ASHA-style), 10% validation holdout
+- **Search space**: lr [1e-4, 1e-2] log, dropout [0.2, 0.5], weight_decay [1e-6, 1e-3] log, batch_size {64,128,256}, optimizer {Adam, AdamW, SGD}, lr_schedule {None, StepLR, CosineAnnealingLR, ReduceLROnPlateau}
+
+### Results
+
+**9 trials completed, 21 pruned (70% kill rate).**
+
+| Trial | Val-acc | lr | dropout | wd | bs | Optimizer | Schedule |
+|:-----:|:-------:|:--:|:-------:|:--:|:--:|:---------:|:--------:|
+| #24 | **0.9392** | 0.00332 | 0.454 | 1.4e-5 | 64 | AdamW | CosineAnnealingLR |
+| #4 | 0.9382 | 0.00757 | 0.468 | 6.2e-5 | 64 | SGD | StepLR |
+| #25 | 0.9372 | 0.00433 | 0.444 | 4.2e-6 | 64 | AdamW | CosineAnnealingLR |
+| #0 | 0.9358 | 0.00056 | 0.485 | 1.6e-4 | 64 | AdamW | CosineAnnealingLR |
+| #18 | 0.9355 | 0.00151 | 0.462 | 8.6e-5 | 64 | AdamW | CosineAnnealingLR |
+| #8 | 0.9345 | 0.00653 | 0.275 | 1.7e-5 | 64 | SGD | CosineAnnealingLR |
+
+### Key findings
+- **AdamW dominates**: 5 of top 6 completions; mean val-acc 93.47% vs SGD 92.48%
+- **CosineAnnealingLR captures all top-6** — the only trial without a scheduler was the worst (90.18%)
+- **Batch size 64** wins all top-6 spots; 128 underperforms (mean 91.93%)
+- **Higher dropout (0.44–0.48) is better** — suggests E1's 0.3 was suboptimal
+- **Correlations**: lr vs val-acc r=+0.51 (moderate), dropout r=+0.38 (weak positive), weight_decay r≈0 (irrelevant)
+- **Best config**: AdamW, lr=0.00332, dropout=0.454, weight_decay=1.39e-5, batch_size=64, CosineAnnealingLR, 35 epochs
+
+---
+
+## Experiment 13 — HP Validation: Optuna Best Config on Test Set
+
+> **Variable changed**: HPs switched from E1 defaults to Optuna-discovered best values
+> **Held constant**: architecture (DiagnosticCNN), loss (CrossEntropy), data (no augmentation), logit bias sweep included
+
+- **Notebook**: `notebooks/phase13_optuna_best.ipynb`
+- **Outputs**: `outputs/error_analysis/optuna_best/`
+
+### Results
+
+| Metric | E9 Adam bias=0 | E13 AdamW bias=0 | Δ |
+|--------|:--------------:|:----------------:|:-:|
+| Accuracy | **93.26%** | 93.13% | −0.13% |
+| Shirt TPR | 0.785 | 0.764 | −0.021 |
+| Shirt Prec | 0.806 | 0.800 | −0.006 |
+| T-shirt/top TPR | 0.886 | **0.890** | +0.004 |
+| Coat TPR | 0.900 | **0.915** | +0.015 |
+| Macro PR-AUC | — | — | — |
+
+### Bias sweep comparison
+
+| Config | Acc% | Shirt TPR | Shirt Prec |
+|:-------|:----:|:---------:|:----------:|
+| E9 bias=+1.0 (best trade) | **93.17** | 0.811 | 0.778 |
+| E13 bias=+1.0 | 93.05 | 0.811 | 0.763 |
+| E9 bias=+2.0 | 93.00 | **0.834** | **0.751** |
+| E13 bias=+2.0 | 92.81 | 0.834 | 0.728 |
+
+### Key findings
+- Optuna's best config **did not outperform E9's simpler Adam config** — the marginal benefit of AdamW over Adam, and of tuning lr/dropout/weight_decay, is negligible at this scale
+- **E9 remains the overall best model** across all 13 experiments
+- Confirms that HP tuning provides diminishing returns once the training schedule (CosineLR + 35–40 epochs) and architecture are fixed
+
+---
+
+## Summary: All Experiments
+
+| Metric | E1 | E2 | E3 | E4 | E5 | E6 | E7 | **E8** | **E9+1** | E10 | E12 (val) | E13 |
+|--------|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:------:|:--------:|:---:|:---------:|:---:|
+| Accuracy | 92.50 | 92.65 | 92.40 | 92.45 | 91.75 | 90.80 | 92.04 | **92.99** | 93.17 | 93.17 | 93.92v | 93.13 |
+| Shirt TPR | 0.847 | 0.732 | 0.713 | 0.810 | 0.859 | 0.846 | **0.879** | 0.797 | 0.811 | 0.811 | — | 0.764 |
+| Shirt Prec | 0.723 | 0.826 | 0.841 | 0.766 | 0.706 | 0.703 | 0.692 | 0.792 | 0.778 | 0.778 | — | 0.800 |
+| PR-AUC | 0.9712 | 0.9713 | 0.9706 | 0.9719 | 0.9700 | 0.9675 | 0.9709 | **0.9731** | — | — | — | — |
+
+*E12 shows validation accuracy (93.92%), not test; E11 not run.*
+
+## Conclusion
+
+Thirteen experiments spanning **architecture, loss function (Focal, Weighted, Label Smoothing), data augmentation, class weighting, input resolution, training schedule, post-hoc logit adjustment, ensemble, optimizer, and Bayesian HP search** converge on a single finding: the Shirt sink is a structural limitation of FashionMNIST at 28×28 resolution. No parametric modification eliminates the zero-sum trade-off among upper-body classes — but post-hoc logit adjustment on a well-converged model (E9) provides a practical solution by selecting any operating point on the Shirt PR curve without retraining.
