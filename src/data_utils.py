@@ -1,14 +1,13 @@
 import torchvision
 import torchvision.transforms as transforms
 from torch.utils.data import DataLoader, WeightedRandomSampler
-import numpy as np
 from collections import Counter
-from typing import Optional, Tuple, Dict
+from typing import Optional, Tuple
 import torch
 
 
 def get_fashionmnist_transforms(normalize: bool = True, resize: Optional[Tuple[int, int]] = None,
-                              augmentation: bool = False, denoise: bool = False):
+                              augmentation: bool = False):
     """
     Get transforms for FashionMNIST dataset with various preprocessing options.
     
@@ -16,7 +15,6 @@ def get_fashionmnist_transforms(normalize: bool = True, resize: Optional[Tuple[i
         normalize: Apply normalization to images
         resize: Target size for resizing (height, width)
         augmentation: Apply data augmentation
-        denoise: Apply denoising (requires preprocessing module)
     
     Returns:
         Composed transform
@@ -127,57 +125,3 @@ def get_dataloaders(train_dataset, test_dataset, batch_size=64, val_dataset=None
     )
     
     return train_loader, val_loader, test_loader
-
-
-def compute_dataset_statistics(dataset) -> Dict[str, np.ndarray]:
-    """
-    Compute mean and std of dataset for normalization.
-    
-    Args:
-        dataset: PyTorch dataset
-    
-    Returns:
-        Dictionary with 'mean' and 'std' arrays
-    """
-    mean = 0.0
-    std = 0.0
-    total_samples = 0
-    
-    for images, _ in DataLoader(dataset, batch_size=1000):
-        batch_samples = images.size(0)
-        images = images.view(batch_samples, images.size(1), -1)
-        mean += images.mean(2).sum(0)
-        std += images.std(2).sum(0)
-        total_samples += batch_samples
-    
-    mean /= total_samples
-    std /= total_samples
-    
-    return {'mean': mean.numpy(), 'std': std.numpy()}
-
-
-def get_class_weights(dataset) -> torch.Tensor:
-    """
-    Calculate class weights for weighted loss function.
-    
-    Args:
-        dataset: PyTorch dataset
-    
-    Returns:
-        Tensor of class weights
-    """
-    if hasattr(dataset, 'dataset'):
-        # Handle random split dataset
-        labels = [dataset.dataset[i][1] for i in dataset.indices]
-    else:
-        labels = [dataset[i][1] for i in range(len(dataset))]
-    
-    class_counts = Counter(labels)
-    num_classes = len(class_counts)
-    total_samples = len(labels)
-    
-    class_weights = torch.tensor([
-        total_samples / (num_classes * count) for count in class_counts.values()
-    ], dtype=torch.float32)
-    
-    return class_weights
