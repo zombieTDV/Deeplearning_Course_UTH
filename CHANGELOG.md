@@ -211,27 +211,121 @@
 - **Notebook**: `notebooks/phase7_label_smoothing.ipynb`
 - **Outputs**: `outputs/error_analysis/label_smoothing/`
 
-*[pending execution]*
+### Results
+
+| Metric | Baseline (E1) | Smooth (E7) | Δ |
+|--------|:------------:|:-----------:|:-:|
+| Accuracy | 92.50% | 92.04% | −0.46% |
+| Macro PR-AUC | 0.9712 | 0.9709 | −0.0003 |
+| Shirt TPR | 0.847 | **0.879** | **+0.032** |
+| Shirt Precision | 0.723 | 0.692 | −0.031 |
+| T-shirt/top TPR | 0.837 | 0.839 | +0.002 |
+| Pullover TPR | 0.890 | **0.790** | **−0.100** |
+| Coat TPR | 0.870 | 0.874 | +0.004 |
+| Dress TPR | 0.907 | **0.938** | +0.031 |
+
+### Key findings
+- **Shirt TPR reached 0.879** — the highest across all 7 experiments — but Pullover collapsed to 0.790 as the sink migrated
+- Label smoothing (ε=0.1) relaxes the one-hot target, removing the penalty for residual probability mass on non-target classes
+- The same zero-sum trade-off: Shirt +4.1%, Pullover −11.2% — near-perfect error conservation within the upper-body cluster
+
+---
+
+## Experiment 8 — Training: Extended Schedule (40 epochs + Cosine LR)
+
+> **Variable changed**: training schedule — 40 epochs with `CosineAnnealingLR(T_max=40)`
+> **Held constant**: architecture (DiagnosticCNN), loss (CrossEntropy), optimizer (Adam lr=0.001), data (no augmentation)
+
+- **Notebook**: `notebooks/phase8_extended_training.ipynb`
+- **Outputs**: `outputs/error_analysis/extended_training/`
+
+### Results
+
+| Metric | Baseline (E1) | Extended (E8) | Δ |
+|--------|:------------:|:-------------:|:-:|
+| Accuracy | 92.50% | **92.99%** | **+0.49%** |
+| Macro PR-AUC | 0.9712 | **0.9731** | +0.0019 |
+| Shirt TPR | 0.847 | **0.797** | −0.050 |
+| Shirt Precision | 0.723 | **0.792** | **+0.069** |
+| T-shirt/top TPR | 0.837 | 0.864 | +0.027 |
+| Pullover TPR | 0.890 | 0.902 | +0.012 |
+| Coat TPR | 0.870 | 0.896 | +0.026 |
+| Dress TPR | 0.907 | 0.935 | +0.028 |
+| **Upper-body errors** | **649** | **601** | **−48** |
+
+### Key findings
+- **Highest accuracy across all experiments** (+0.49% over E1, +0.34% over E2)
+- Loss trajectory: 0.461 → 0.083 (epoch 15, same as E1 stop) → 0.004 (epoch 39, converged)
+- Extended training **hurts Shirt TPR** while improving every other class — the model learns sharper decision boundaries that push Shirt into a deeper sink
+- Upper-body errors reduced by 48 samples — the largest reduction seen
+
+---
+
+## Experiment 9 — Inference: Post-hoc Logit Adjustment Sweep
+
+> **Variable changed**: inference-time logit bias added to Shirt class (sweep: −1.0 to +2.0)
+> **Held constant**: architecture (DiagnosticCNN), loss (CrossEntropy), training schedule (40 epochs), data (no augmentation)
+
+- **Notebook**: `notebooks/phase9_logit_adjustment.ipynb`
+- **Outputs**: `outputs/error_analysis/logit_adjustment/`
+- **Model weights**: `model_weights.pth` saved for reuse
+
+### Bias sweep results (all from a single converged model)
+
+| Bias | Acc% | Shirt TPR | Shirt Prec | T-shirt | Pullover | Coat | Dress |
+|:----:|:----:|:---------:|:----------:|:-------:|:--------:|:----:|:-----:|
+| −1.0 | 93.17 | 0.749 | 0.829 | 0.900 | 0.905 | 0.903 | 0.945 |
+| −0.5 | **93.21** | 0.766 | 0.817 | 0.893 | 0.903 | 0.901 | 0.943 |
+| 0.0 | **93.26** | 0.785 | 0.806 | 0.886 | 0.899 | 0.900 | 0.942 |
+| +0.5 | 93.25 | 0.799 | 0.793 | 0.876 | 0.897 | 0.899 | 0.940 |
+| +1.0 | 93.17 | 0.811 | 0.778 | 0.868 | 0.893 | 0.895 | 0.936 |
+| +1.5 | 93.11 | 0.826 | 0.763 | 0.860 | 0.889 | 0.891 | 0.931 |
+| +2.0 | 93.00 | 0.834 | 0.751 | 0.854 | 0.883 | 0.888 | 0.927 |
+
+### Key findings
+- **Zero-cost operating point selection**: the converged model can produce any trade-off between Shirt TPR and precision via a single logit bias value at inference
+- **Recommended operating point: bias=+1.0** (93.17% accuracy, Shirt TPR 0.811, Shirt Prec 0.778) — best combined metrics across all 10 experiments
+- Negative bias improves precision at Shirt's expense; positive bias recovers Shirt recall at the cost of T-shirt, Pullover, and Coat
+
+---
+
+## Experiment 10 — Inference: Intra-Model Ensemble (softmax average)
+
+> **Variable changed**: ensemble of E9 bias=0.0 and bias=+2.0 softmax outputs (zero training cost)
+> **Held constant**: single model loaded from E9 weights
+
+- **Notebook**: `notebooks/phase10_ensemble.ipynb`
+- **Outputs**: `outputs/error_analysis/ensemble/`
+
+### Results
+
+| Model | Acc% | Shirt TPR | Shirt Prec |
+|:------|:----:|:---------:|:----------:|
+| Head A (bias=0.0) | 93.26 | 0.785 | 0.806 |
+| **E10 ensemble** | **93.17** | **0.811** | **0.778** |
+| Head B (bias=+2.0) | 93.00 | 0.834 | 0.751 |
+
+### Key findings
+- Ensemble produces metrics identical to E9 bias=+1.0 — softmax averaging is approximately linear for small logit shifts
+- No new information beyond E9's bias sweep; confirms that post-hoc logit adjustment is the simpler and equivalent method
+- Total upper-body errors: 597 (lowest across all experiments)
 
 ---
 
 ## Summary: All Experiments
 
-| Metric | E1 CE | E2 Arch | E3 Focal | E4 Aug | E5 Weight | E6 Upscale | E7 Smooth |
-|--------|:-----:|:-------:|:--------:|:------:|:---------:|:----------:|:---------:|
-| Accuracy | 92.50% | **92.65%** | 92.40% | 92.45% | 91.75% | 90.80% | *pend* |
-| Macro PR-AUC | 0.9712 | 0.9713 | 0.9706 | **0.9719** | 0.9700 | 0.9675 | *pend* |
-| Shirt TPR | **0.847** | 0.732 | 0.713 | 0.810 | 0.859 | 0.846 | *pend* |
-| T-shirt TPR | 0.837 | **0.939** | 0.881 | 0.834 | 0.820 | 0.795 | *pend* |
-| Pullover TPR | 0.890 | 0.931 | 0.896 | **0.936** | 0.896 | 0.754 | *pend* |
-| Coat TPR | 0.870 | 0.909 | 0.931 | 0.882 | 0.888 | **0.956** | *pend* |
-| Dress TPR | 0.907 | 0.928 | **0.933** | 0.888 | 0.866 | 0.896 | *pend* |
-| Shirt Prec. | 0.723 | **0.826** | 0.841 | 0.766 | 0.706 | 0.703 | *pend* |
+| Metric | E1 CE | E2 Arch | E3 Focal | E4 Aug | E5 Wt | E6 Up | E7 Sm | **E8 Ext** | **E9 bias+1** | **E10 Ens** |
+|--------|:-----:|:-------:|:--------:|:------:|:-----:|:-----:|:-----:|:----------:|:-------------:|:-----------:|
+| Accuracy | 92.50 | 92.65 | 92.40 | 92.45 | 91.75 | 90.80 | 92.04 | **92.99** | 93.17 | 93.17 |
+| Shirt TPR | 0.847 | 0.732 | 0.713 | 0.810 | 0.859 | 0.846 | **0.879** | 0.797 | 0.811 | 0.811 |
+| Shirt Prec | 0.723 | 0.826 | 0.841 | 0.766 | 0.706 | 0.703 | 0.692 | 0.792 | 0.778 | 0.778 |
+| Macro PR-AUC | 0.9712 | 0.9713 | 0.9706 | 0.9719 | 0.9700 | 0.9675 | 0.9709 | **0.9731** | — | — |
 
-- **Conservation of errors**: upper-body confusion sum is stable (~650 per 5000 test samples) regardless of architecture/loss/data
-- **Only E5 (weighted CE) improved Shirt TPR** beyond E1's vanilla CE, but at −0.75% accuracy — each +1 Shirt gain costs ~6.3 accuracy points
-- **Shirt worst TPR**: 0.713 (E3), **best**: 0.859 (E5), **baseline**: 0.847 (E1)
+- **Conservation of errors**: upper-body confusion sum is stable (~600–650 per 5000 test samples) regardless of intervention
+- **Practical winner**: E9 with bias=+1.0 — 93.17% accuracy, Shirt TPR 0.811, Shirt Prec 0.778
+- **Best Shirt TPR**: 0.879 (E7 label smoothing), **best accuracy**: 92.99% (E8 extended training)
+- **Post-hoc logit adjustment** (E9) is the simplest method to select any operating point on the PR curve from a single converged model
 
 ## Conclusion
 
-Seven single-variable experiments spanning **architecture, loss function, data augmentation, class weighting, input resolution, and label smoothing** converge on a single finding: **the Shirt sink is a structural limitation of FashionMNIST at 28×28 resolution.** No parametric modification can simultaneously improve all 5 upper-body classes because ~400 foreground pixels cannot encode the distinguishing features (collar shape, sleeve length, hemline). The zero-sum trade-off among upper-body classes is a consequence of the pixel budget, not the model choice.
+Ten single-variable experiments spanning **architecture, loss function (Focal, Weighted, Label Smoothing), data augmentation, class weighting, input resolution, training schedule, post-hoc logit adjustment, and ensemble** converge on a single finding: the Shirt sink is a structural limitation of FashionMNIST at 28×28 resolution. No parametric modification eliminates the zero-sum trade-off among upper-body classes — but post-hoc logit adjustment on a well-converged model (E9) provides a practical solution by selecting the optimal operating point without retraining.
