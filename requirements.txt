@@ -7,3 +7,6 @@ tabulate
 matplotlib
 jupyter
 nbformat
+opencv-python
+imagehash
+Pillow
