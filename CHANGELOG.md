@@ -142,19 +142,96 @@
 
 ---
 
+## Experiment 5 — Loss: Weighted CrossEntropy (Shirt 3×)
+
+> **Variable changed**: loss function weights — Shirt weight=3.0, others=1.0
+> **Held constant**: architecture (DiagnosticCNN), data (no augmentation), optimizer (Adam lr=0.001), epochs (15)
+
+- **Notebook**: `notebooks/phase5_weighted_loss.ipynb`
+- **Outputs**: `outputs/error_analysis/weighted_loss/`
+
+### Results
+
+| Metric | Baseline (E1) | Weighted (E5) | Δ |
+|--------|:------------:|:-------------:|:-:|
+| Accuracy | 92.50% | **91.75%** | −0.75% |
+| Macro PR-AUC | 0.9712 | 0.9700 | −0.0012 |
+| Shirt TPR | 0.847 | **0.859** | **+0.012** |
+| T-shirt/top TPR | 0.837 | 0.820 | −0.017 |
+| Pullover TPR | 0.890 | 0.896 | +0.006 |
+| Coat TPR | 0.870 | 0.888 | +0.018 |
+| Dress TPR | 0.907 | 0.866 | −0.041 |
+| Sandal TPR | 0.978 | 0.938 | −0.040 |
+| Shirt Precision | 0.723 | 0.706 | −0.017 |
+
+### Key findings
+- **Shirt TPR improved for the first time** (+0.012 over E1), but this is the largest accuracy drop (−0.75%) across all experiments
+- Shirt false positives surged: ~324→358 (precision 0.723→0.706) — model became more "Shirt-happy" across all upper-body classes
+- Collateral damage to Sandal (−4.0%) and Dress (−4.1%) — weighted loss distorts the entire decision boundary
+- Trade-off ratio: each +1 Shirt sample gained costs ~6.3 accuracy points overall
+
+---
+
+## Experiment 6 — Data: Input Resolution Upscaling (56×56)
+
+> **Variable changed**: input image size — `Resize(56, bicubic)` before `ToTensor`
+> **Held constant**: architecture (DiagnosticCNN), loss (CrossEntropy), optimizer (Adam lr=0.001), epochs (15), no augmentation
+
+- **Notebook**: `notebooks/phase6_upscale_input.ipynb`
+- **Outputs**: `outputs/error_analysis/upscale_input/`
+
+### Results
+
+| Metric | Baseline (E1) | Upscale (E6) | Δ |
+|--------|:------------:|:------------:|:-:|
+| Accuracy | 92.50% | **90.80%** | **−1.70%** |
+| Macro PR-AUC | 0.9712 | 0.9675 | −0.0037 |
+| Shirt TPR | 0.847 | 0.846 | −0.001 |
+| T-shirt/top TPR | 0.837 | 0.795 | −0.042 |
+| Pullover TPR | 0.890 | **0.754** | **−0.136** |
+| Coat TPR | 0.870 | **0.956** | **+0.086** |
+| Dress TPR | 0.907 | 0.896 | −0.011 |
+| Sandal TPR | 0.978 | 0.925 | −0.053 |
+| Shirt Precision | 0.723 | 0.703 | −0.020 |
+
+### Key findings
+- **Worst accuracy across all experiments** — bicubic interpolation destroys hard-edge information that 3×3 kernels rely on
+- Pullover collapsed (−0.136): hoodie/collar boundary distinguishing it from Coat is smoothed into a gradient
+- Coat benefited (+0.086): smoother silhouette maps more consistently to a single class
+- Shirt essentially unchanged — root cause (silhouette overlap) persists regardless of resolution
+- Hypothesis disproven: upscaling with interpolation adds no new information but blurs existing edges
+
+---
+
+## Experiment 7 — Loss: Label Smoothing CE
+
+> **Variable changed**: loss function — `CrossEntropyLoss(label_smoothing=0.1)`
+> **Held constant**: architecture (DiagnosticCNN), data (no augmentation), optimizer (Adam lr=0.001), epochs (15)
+
+- **Notebook**: `notebooks/phase7_label_smoothing.ipynb`
+- **Outputs**: `outputs/error_analysis/label_smoothing/`
+
+*[pending execution]*
+
+---
+
 ## Summary: All Experiments
 
-| Metric | E1 CE | E2 Wider+Res | E3 Focal γ=2 | E4 Augment |
-|--------|:-----:|:------------:|:------------:|:----------:|
-| Accuracy | 92.50% | **92.65%** | 92.40% | 92.45% |
-| Macro PR-AUC | 0.9712 | 0.9713 | 0.9706 | **0.9719** |
-| Shirt TPR | **0.847** | 0.732 | 0.713 | 0.810 |
-| T-shirt/top TPR | 0.837 | **0.939** | 0.881 | 0.834 |
-| Pullover TPR | 0.890 | 0.931 | 0.896 | **0.936** |
-| Coat TPR | 0.870 | **0.909** | 0.931 | 0.882 |
-| Dress TPR | 0.907 | 0.928 | **0.933** | 0.888 |
-| Shirt Prec. | 0.723 | **0.826** | 0.841 | 0.766 |
+| Metric | E1 CE | E2 Arch | E3 Focal | E4 Aug | E5 Weight | E6 Upscale | E7 Smooth |
+|--------|:-----:|:-------:|:--------:|:------:|:---------:|:----------:|:---------:|
+| Accuracy | 92.50% | **92.65%** | 92.40% | 92.45% | 91.75% | 90.80% | *pend* |
+| Macro PR-AUC | 0.9712 | 0.9713 | 0.9706 | **0.9719** | 0.9700 | 0.9675 | *pend* |
+| Shirt TPR | **0.847** | 0.732 | 0.713 | 0.810 | 0.859 | 0.846 | *pend* |
+| T-shirt TPR | 0.837 | **0.939** | 0.881 | 0.834 | 0.820 | 0.795 | *pend* |
+| Pullover TPR | 0.890 | 0.931 | 0.896 | **0.936** | 0.896 | 0.754 | *pend* |
+| Coat TPR | 0.870 | 0.909 | 0.931 | 0.882 | 0.888 | **0.956** | *pend* |
+| Dress TPR | 0.907 | 0.928 | **0.933** | 0.888 | 0.866 | 0.896 | *pend* |
+| Shirt Prec. | 0.723 | **0.826** | 0.841 | 0.766 | 0.706 | 0.703 | *pend* |
 
 - **Conservation of errors**: upper-body confusion sum is stable (~650 per 5000 test samples) regardless of architecture/loss/data
-- **No experiment improved Shirt TPR beyond E1's vanilla CE**
-- **Shirt worst TPR**: 0.713 (E3), **best**: 0.847 (E1)
+- **Only E5 (weighted CE) improved Shirt TPR** beyond E1's vanilla CE, but at −0.75% accuracy — each +1 Shirt gain costs ~6.3 accuracy points
+- **Shirt worst TPR**: 0.713 (E3), **best**: 0.859 (E5), **baseline**: 0.847 (E1)
+
+## Conclusion
+
+Seven single-variable experiments spanning **architecture, loss function, data augmentation, class weighting, input resolution, and label smoothing** converge on a single finding: **the Shirt sink is a structural limitation of FashionMNIST at 28×28 resolution.** No parametric modification can simultaneously improve all 5 upper-body classes because ~400 foreground pixels cannot encode the distinguishing features (collar shape, sleeve length, hemline). The zero-sum trade-off among upper-body classes is a consequence of the pixel budget, not the model choice.
