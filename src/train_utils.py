@@ -12,11 +12,19 @@ def train_one_epoch(model, train_loader, criterion, optimizer, device):
     return running_loss / len(train_loader)
 
 
-def train_model(model, train_loader, criterion, optimizer, device, num_epochs=10, verbose=True):
+def train_model(model, train_loader, criterion, optimizer, device, num_epochs=10, verbose=True, model_name="model"):
     train_losses = []
     for epoch in range(num_epochs):
         epoch_loss = train_one_epoch(model, train_loader, criterion, optimizer, device)
         train_losses.append(epoch_loss)
         if verbose:
             print(f'Epoch [{epoch + 1}/{num_epochs}], Loss: {epoch_loss:.4f}')
+
+    import os
+    metrics_dir = '../outputs/metrics'
+    os.makedirs(metrics_dir, exist_ok=True)
+    with open(os.path.join(metrics_dir, f'train_losses_{model_name}.txt'), 'w') as f:
+        for loss in train_losses:
+            f.write(f'{loss}\n')
+
     return train_losses
