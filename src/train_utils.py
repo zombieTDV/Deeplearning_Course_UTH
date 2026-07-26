@@ -21,7 +21,7 @@ def train_model(model, train_loader, criterion, optimizer, device, num_epochs=10
             print(f'Epoch [{epoch + 1}/{num_epochs}], Loss: {epoch_loss:.4f}')
 
     import os
-    metrics_dir = '../outputs/metrics'
+    metrics_dir = '../outputs/practice_1/metrics'
     os.makedirs(metrics_dir, exist_ok=True)
     with open(os.path.join(metrics_dir, f'train_losses_{model_name}.txt'), 'w') as f:
         for loss in train_losses:

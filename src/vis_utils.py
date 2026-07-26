@@ -4,7 +4,7 @@ import numpy as np
 from sklearn.metrics import roc_curve, precision_recall_curve
 
 
-def explore_dataset(train_dataset, class_names, save_path='../outputs/images/sample_fashionmnist.png'):
+def explore_dataset(train_dataset, class_names, save_path='../outputs/practice_1/images/sample_fashionmnist.png'):
     print(f"Number of classes: {len(class_names)}")
     print(f"Classes: {class_names}")
     print(f"Num samples: {len(train_dataset)}")
@@ -52,7 +52,7 @@ def explore_dataset(train_dataset, class_names, save_path='../outputs/images/sam
     print(f"Std pixel value: {img_sample.std().item():.4f}")
 
 
-def plot_losses(losses_dict, save_path='../outputs/plots/training_losses.png'):
+def plot_losses(losses_dict, save_path='../outputs/practice_1/plots/training_losses.png'):
     """Plot loss curves for multiple models. losses_dict: {name: [losses]}"""
     fig, ax = plt.subplots(figsize=(8, 5))
     colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728']
@@ -70,7 +70,7 @@ def plot_losses(losses_dict, save_path='../outputs/plots/training_losses.png'):
 
 
 def plot_confusion_matrix(cm, class_names, title='Confusion Matrix',
-                         save_path='../outputs/plots/confusion_matrix.png'):
+                         save_path='../outputs/practice_1/plots/confusion_matrix.png'):
     cm_np = cm.cpu().numpy()
     fig, ax = plt.subplots(figsize=(10, 8))
     ax.imshow(cm_np, cmap='Blues')
@@ -95,7 +95,7 @@ def plot_confusion_matrix(cm, class_names, title='Confusion Matrix',
 
 
 def plot_roc_curves(probas_dict, true_labels, class_names, n_cols=5,
-                    save_path='../outputs/plots/roc_curves.png'):
+                    save_path='../outputs/practice_1/plots/roc_curves.png'):
     """ROC curves per class comparing multiple models.
     probas_dict: {model_name: array(N, C)}"""
     n_classes = len(class_names)
@@ -109,7 +109,7 @@ def plot_roc_curves(probas_dict, true_labels, class_names, n_cols=5,
         y_true = (true_labels == i).astype(int)
         for idx, (name, probas) in enumerate(probas_dict.items()):
             fpr, tpr, _ = roc_curve(y_true, probas[:, i])
-            auc_val = np.trapz(tpr, fpr)
+            auc_val = np.trapezoid(tpr, fpr)
             ax.plot(fpr, tpr, color=colors[idx % len(colors)],
                     label=f'{name} (AUC={auc_val:.3f})', linewidth=1.5)
         ax.plot([0, 1], [0, 1], 'k--', alpha=0.3)
@@ -130,7 +130,7 @@ def plot_roc_curves(probas_dict, true_labels, class_names, n_cols=5,
 
 
 def plot_pr_curves(probas_dict, true_labels, class_names, n_cols=5,
-                   save_path='../outputs/plots/pr_curves.png'):
+                   save_path='../outputs/practice_1/plots/pr_curves.png'):
     """Precision-Recall curves per class comparing multiple models."""
     n_classes = len(class_names)
     n_rows = int(np.ceil(n_classes / n_cols))
@@ -143,7 +143,7 @@ def plot_pr_curves(probas_dict, true_labels, class_names, n_cols=5,
         y_true = (true_labels == i).astype(int)
         for idx, (name, probas) in enumerate(probas_dict.items()):
             precision, recall, _ = precision_recall_curve(y_true, probas[:, i])
-            ap = np.trapz(precision, recall)
+            ap = np.trapezoid(precision, recall)
             ax.plot(recall, precision, color=colors[idx % len(colors)],
                     label=f'{name} (AP={ap:.3f})', linewidth=1.5)
         ax.set_xlim([-0.02, 1.02])
@@ -162,8 +162,62 @@ def plot_pr_curves(probas_dict, true_labels, class_names, n_cols=5,
     plt.show()
 
 
+def plot_class_distribution_comparison(train_dataset, test_dataset, class_names,
+                                        save_path='../outputs/practice_1/plots/class_distribution_comparison.png'):
+    fig, ax = plt.subplots(figsize=(10, 6))
+
+    train_labels = [train_dataset[i][1] for i in range(len(train_dataset))]
+    test_labels = [test_dataset[i][1] for i in range(len(test_dataset))]
+
+    train_counts = [train_labels.count(c) for c in range(len(class_names))]
+    test_counts = [test_labels.count(c) for c in range(len(class_names))]
+
+    x = np.arange(len(class_names))
+    width = 0.35
+
+    bars1 = ax.bar(x - width / 2, train_counts, width, label='Train',
+                   color='skyblue', edgecolor='navy')
+    bars2 = ax.bar(x + width / 2, test_counts, width, label='Test',
+                   color='salmon', edgecolor='darkred')
+
+    ax.set_xlabel('Class')
+    ax.set_ylabel('Count')
+    ax.set_title('Class Distribution Comparison: Train vs Test')
+    ax.set_xticks(x)
+    ax.set_xticklabels(class_names, rotation=45, ha='right', fontsize=9)
+    ax.legend()
+
+    for bar in bars1:
+        ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height(),
+                str(int(bar.get_height())), ha='center', va='bottom', fontsize=7)
+    for bar in bars2:
+        ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height(),
+                str(int(bar.get_height())), ha='center', va='bottom', fontsize=7)
+
+    plt.tight_layout()
+    plt.savefig(save_path, dpi=150)
+    plt.show()
+
+    train_total = len(train_dataset)
+    test_total = len(test_dataset)
+    print(f'\nTrain set size: {train_total}  |  Test set size: {test_total}')
+    print(f'Class proportions (Train):  {[f"{c/train_total*100:.1f}%" for c in train_counts]}')
+    print(f'Class proportions (Test):   {[f"{c/test_total*100:.1f}%" for c in test_counts]}')
+
+    import os
+    metrics_dir = '../outputs/practice_1/metrics'
+    os.makedirs(metrics_dir, exist_ok=True)
+    with open(os.path.join(metrics_dir, 'class_distribution.txt'), 'w') as f:
+        f.write(f'Train samples: {train_total}, Test samples: {test_total}\n\n')
+        f.write(f'{"Class":<15} {"Train Count":>12} {"Train %":>10} {"Test Count":>12} {"Test %":>10}\n')
+        for i, name in enumerate(class_names):
+            tp = train_counts[i] / train_total * 100
+            tep = test_counts[i] / test_total * 100
+            f.write(f'{name:<15} {train_counts[i]:>12} {tp:>9.1f}% {test_counts[i]:>12} {tep:>9.1f}%\n')
+
+
 def plot_predictions(model, test_loader, class_names, device,
-                     save_path='../outputs/plots/predictions.png'):
+                     save_path='../outputs/practice_1/plots/predictions.png'):
     model.eval()
     images, labels = next(iter(test_loader))
     images, labels = images.to(device), labels.to(device)

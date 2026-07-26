@@ -2,7 +2,7 @@ import os
 import torch
 from sklearn.metrics import roc_auc_score, average_precision_score
 
-METRICS_DIR = '../outputs/metrics'
+METRICS_DIR = '../outputs/practice_1/metrics'
 
 
 def evaluate(model, test_loader, device):
