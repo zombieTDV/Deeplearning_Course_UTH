@@ -1,6 +1,29 @@
-# Changelog
+# CNN Experiment Changelog
 
-> All changes to the project are documented here. Each experiment follows the single-variable principle: one modification per run, with all other factors held constant.
+- **Motivation/Background**: This document tracks all CNN experiments for error analysis on Fashion-MNIST. Starting from a practice baseline, it systematically evaluates architecture, loss function, data augmentation, class weighting, input resolution, training schedule, post-hoc inference adjustments, optimizer choice, and Bayesian hyperparameter search to understand and mitigate the upper-body confusion sink effect centered on Shirt.
+- **Purpose**: Document all CNN-specific experiments, results, and findings following a single-variable principle to systematically evaluate how each intervention affects classification performance and the Shirt confusion sink.
+- **Overview Pipeline**: The document was created through iterative experimentation: Baseline established on practice_1, followed by 13 experiments (E1–E13) spanning architecture (widen + residual), loss functions (Focal, Weighted CE, Label Smoothing), data augmentation, input resolution upscaling, extended training schedules, post-hoc logit adjustment, intra-model ensemble, optimizer comparison (SGD), and Optuna Bayesian HP search with validation on test set.
+- **Detailed Plan**: Baseline — practice_1; Experiment 1 — Phase 1 Diagnostic CNN; Experiment 2 — Widen + Residual Architecture; Experiment 3 — Focal Loss; Experiment 4 — Augmentation; Experiment 5 — Weighted CrossEntropy; Experiment 6 — Input Upscaling; Experiment 7 — Label Smoothing; Experiment 8 — Extended Training; Experiment 9 — Post-hoc Logit Adjustment; Experiment 10 — Intra-Model Ensemble; Experiment 11 — SGD Optimizer; Experiment 12 — Optuna HP Search; Experiment 13 — Optuna Best Config Validation; Cross-Experiment Summary.
+- **References**: PyTorch, torchvision (Fashion-MNIST), scikit-learn (accuracy_score, classification metrics), matplotlib, seaborn, NumPy, pandas, Adam, AdamW, SGD optimizer, CosineAnnealingLR, StepLR, ReduceLROnPlateau, Focal Loss, Optuna (TPESampler, MedianPruner, ASHA).
+
+## Table of Contents
+
+- [Baseline — practice_1](#baseline--practice_1)
+- [Experiment 1 — Phase 1 Diagnostic CNN](#experiment-1--phase-1-diagnostic-cnn)
+- [Experiment 2 — Architecture: Widen + Residual](#experiment-2--architecture-widen--residual)
+- [Experiment 3 — Loss: Focal Loss](#experiment-3--loss-focal-loss-%CE%B3%3D20)
+- [Experiment 4 — Data: Augmentation](#experiment-4--data-augmentation-randomerasing--randomaffine)
+- [Experiment 5 — Loss: Weighted CrossEntropy](#experiment-5--loss-weighted-crossentropy-shirt-3%C3%97)
+- [Experiment 6 — Data: Input Resolution Upscaling](#experiment-6--data-input-resolution-upscaling-56%C3%9756)
+- [Experiment 7 — Loss: Label Smoothing CE](#experiment-7--loss-label-smoothing-ce)
+- [Experiment 8 — Training: Extended Schedule](#experiment-8--training-extended-schedule-40-epochs--cosine-lr)
+- [Experiment 9 — Inference: Post-hoc Logit Adjustment](#experiment-9--inference-post-hoc-logit-adjustment-sweep)
+- [Experiment 10 — Inference: Intra-Model Ensemble](#experiment-10--inference-intra-model-ensemble-softmax-average)
+- [Experiment 11 — Optimizer: SGD + Nesterov](#experiment-11--optimizer-sgd--nesterov--reducelronplateau)
+- [Experiment 12 — Hyperparameter Search: Optuna](#experiment-12--hyperparameter-search-optuna-bayesian--asha-pruning)
+- [Experiment 13 — HP Validation: Optuna Best Config](#experiment-13--hp-validation-optuna-best-config-on-test-set)
+- [Cross-Experiment Summary](#cross-experiment-summary)
+- [Conclusion](#conclusion)
 
 ---
 
@@ -11,8 +34,8 @@
 - **Training**: 10 epochs, CrossEntropyLoss + Adam (lr=0.001)
 - **Metric files**: `outputs/practice_1/metrics/`
 - **Key results**:
-  - MLP accuracy: 88.15% ／ CNN accuracy: 92.02%
-  - MLP macro PR-AUC: 0.9394 ／ CNN macro PR-AUC: 0.9677
+  - MLP accuracy: 88.15% / CNN accuracy: 92.02%
+  - MLP macro PR-AUC: 0.9394 / CNN macro PR-AUC: 0.9677
 
 ### Changes
 - `src/train_utils.py` — `train_model()`: added `model_name` param; saves per-epoch losses to `outputs/practice_1/metrics/train_losses_{model_name}.txt`
@@ -270,7 +293,7 @@
 - **Outputs**: `outputs/error_analysis/logit_adjustment/`
 - **Model weights**: `model_weights.pth` saved for reuse
 
-### Bias sweep results (all from a single converged model)
+### Bias sweep results
 
 | Bias | Acc% | Shirt TPR | Shirt Prec | T-shirt | Pullover | Coat | Dress |
 |:----:|:----:|:---------:|:----------:|:-------:|:--------:|:----:|:-----:|
@@ -312,24 +335,6 @@
 
 ---
 
-## Summary: All Experiments
-
-| Metric | E1 CE | E2 Arch | E3 Focal | E4 Aug | E5 Wt | E6 Up | E7 Sm | **E8 Ext** | **E9 bias+1** | **E10 Ens** |
-|--------|:-----:|:-------:|:--------:|:------:|:-----:|:-----:|:-----:|:----------:|:-------------:|:-----------:|
-| Accuracy | 92.50 | 92.65 | 92.40 | 92.45 | 91.75 | 90.80 | 92.04 | **92.99** | 93.17 | 93.17 |
-| Shirt TPR | 0.847 | 0.732 | 0.713 | 0.810 | 0.859 | 0.846 | **0.879** | 0.797 | 0.811 | 0.811 |
-| Shirt Prec | 0.723 | 0.826 | 0.841 | 0.766 | 0.706 | 0.703 | 0.692 | 0.792 | 0.778 | 0.778 |
-| Macro PR-AUC | 0.9712 | 0.9713 | 0.9706 | 0.9719 | 0.9700 | 0.9675 | 0.9709 | **0.9731** | — | — |
-
-- **Conservation of errors**: upper-body confusion sum is stable (~600–650 per 5000 test samples) regardless of intervention
-- **Practical winner**: E9 with bias=+1.0 — 93.17% accuracy, Shirt TPR 0.811, Shirt Prec 0.778
-- **Best Shirt TPR**: 0.879 (E7 label smoothing), **best accuracy**: 92.99% (E8 extended training)
-- **Post-hoc logit adjustment** (E9) is the simplest method to select any operating point on the PR curve from a single converged model
-
-## Conclusion
-
----
-
 ## Experiment 11 — Optimizer: SGD + Nesterov + ReduceLROnPlateau
 
 > **Variable changed**: optimizer from Adam to `SGD(lr=0.01, momentum=0.9, weight_decay=1e-4, nesterov=True)` + `ReduceLROnPlateau(patience=5)`
@@ -344,7 +349,7 @@
 
 ## Experiment 12 — Hyperparameter Search: Optuna (Bayesian + ASHA Pruning)
 
-> **Single variable changed**: this is a new *phase*, not a single-variable ablation. All prior experiments (E1–E11) used fixed HPs. This phase finds the optimal HP configuration via Bayesian search.
+> **Variable changed**: this is a new phase, not a single-variable ablation. All prior experiments (E1–E11) used fixed HPs. This phase finds the optimal HP configuration via Bayesian search.
 
 - **Notebook**: `notebooks/phase12_optuna_hp_search.ipynb`
 - **Study DB**: `outputs/error_analysis/optuna_study/optuna_study.db`
@@ -391,7 +396,6 @@
 | Shirt Prec | 0.806 | 0.800 | −0.006 |
 | T-shirt/top TPR | 0.886 | **0.890** | +0.004 |
 | Coat TPR | 0.900 | **0.915** | +0.015 |
-| Macro PR-AUC | — | — | — |
 
 ### Bias sweep comparison
 
@@ -409,7 +413,7 @@
 
 ---
 
-## Summary: All Experiments
+## Cross-Experiment Summary
 
 | Metric | E1 | E2 | E3 | E4 | E5 | E6 | E7 | **E8** | **E9+1** | E10 | E12 (val) | E13 |
 |--------|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:------:|:--------:|:---:|:---------:|:---:|
