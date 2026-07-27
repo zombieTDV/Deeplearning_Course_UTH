@@ -1,0 +1,74 @@
+Misclassification Analysis
+======================================================================
+
+True class: T-shirt/top  (total errors: 163)
+--------------------------------------------------
+  → predicted as Shirt           count= 132  mean_conf=0.7688
+  → predicted as Pullover        count=  14  mean_conf=0.7595
+  → predicted as Dress           count=  10  mean_conf=0.8089
+  → predicted as Bag             count=   5  mean_conf=0.8436
+  → predicted as Sandal          count=   1  mean_conf=0.9980
+  → predicted as Coat            count=   1  mean_conf=0.5767
+
+True class: Trouser  (total errors: 12)
+--------------------------------------------------
+  → predicted as Dress           count=   6  mean_conf=0.7963
+  → predicted as Shirt           count=   4  mean_conf=0.6755
+  → predicted as Bag             count=   2  mean_conf=0.9760
+
+True class: Pullover  (total errors: 110)
+--------------------------------------------------
+  → predicted as Shirt           count=  65  mean_conf=0.7351
+  → predicted as Coat            count=  22  mean_conf=0.7939
+  → predicted as T-shirt/top     count=  15  mean_conf=0.7464
+  → predicted as Dress           count=   6  mean_conf=0.7866
+  → predicted as Trouser         count=   2  mean_conf=0.8195
+
+True class: Dress  (total errors: 93)
+--------------------------------------------------
+  → predicted as Shirt           count=  55  mean_conf=0.7540
+  → predicted as Coat            count=  12  mean_conf=0.6566
+  → predicted as Pullover        count=  12  mean_conf=0.6932
+  → predicted as T-shirt/top     count=   9  mean_conf=0.6623
+  → predicted as Trouser         count=   5  mean_conf=0.5548
+
+True class: Coat  (total errors: 130)
+--------------------------------------------------
+  → predicted as Shirt           count=  63  mean_conf=0.7888
+  → predicted as Pullover        count=  45  mean_conf=0.7735
+  → predicted as Dress           count=  19  mean_conf=0.6703
+  → predicted as Bag             count=   3  mean_conf=0.5506
+
+True class: Sandal  (total errors: 22)
+--------------------------------------------------
+  → predicted as Sneaker         count=  18  mean_conf=0.8547
+  → predicted as Ankle boot      count=   4  mean_conf=0.9109
+
+True class: Shirt  (total errors: 153)
+--------------------------------------------------
+  → predicted as T-shirt/top     count=  67  mean_conf=0.7640
+  → predicted as Pullover        count=  32  mean_conf=0.7397
+  → predicted as Coat            count=  29  mean_conf=0.7976
+  → predicted as Dress           count=  16  mean_conf=0.7187
+  → predicted as Bag             count=   8  mean_conf=0.8572
+  → predicted as Trouser         count=   1  mean_conf=0.6231
+
+True class: Sneaker  (total errors: 9)
+--------------------------------------------------
+  → predicted as Ankle boot      count=   8  mean_conf=0.7553
+  → predicted as Sandal          count=   1  mean_conf=0.7237
+
+True class: Bag  (total errors: 14)
+--------------------------------------------------
+  → predicted as Shirt           count=   6  mean_conf=0.7236
+  → predicted as Sandal          count=   4  mean_conf=0.5711
+  → predicted as T-shirt/top     count=   2  mean_conf=0.6040
+  → predicted as Dress           count=   1  mean_conf=0.8550
+  → predicted as Trouser         count=   1  mean_conf=0.9530
+
+True class: Ankle boot  (total errors: 44)
+--------------------------------------------------
+  → predicted as Sneaker         count=  39  mean_conf=0.8128
+  → predicted as Sandal          count=   4  mean_conf=0.9943
+  → predicted as Trouser         count=   1  mean_conf=0.7757
+
