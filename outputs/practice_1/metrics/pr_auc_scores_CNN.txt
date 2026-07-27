@@ -1,12 +1,12 @@
-Macro PR-AUC: 0.973562
+Macro PR-AUC: 0.973097
 
-class_0: 0.953430
-class_1: 0.997633
-class_2: 0.968275
-class_3: 0.977609
-class_4: 0.963854
-class_5: 0.997961
-class_6: 0.885916
-class_7: 0.996369
-class_8: 0.999290
-class_9: 0.995280
+class_0: 0.953146
+class_1: 0.997970
+class_2: 0.962503
+class_3: 0.976854
+class_4: 0.966775
+class_5: 0.999126
+class_6: 0.883454
+class_7: 0.996700
+class_8: 0.998954
+class_9: 0.995485
