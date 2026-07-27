@@ -1,0 +1,11 @@
+                   T-shirt/top        Trouser       Pullover          Dress           Coat         Sandal          Shirt        Sneaker            Bag     Ankle boot
+    T-shirt/top            839              0             15             23              4              1            111              0              7              0
+        Trouser              1            980              0             14              2              1              1              0              1              0
+       Pullover             23              0            843              8             70              0             54              0              2              0
+          Dress             18              3             14            908             27              0             25              0              5              0
+           Coat              1              1             71             26            855              0             43              0              3              0
+         Sandal              0              0              0              0              0            964              0             21              0             15
+          Shirt            110              0             81             26             62              0            712              0              9              0
+        Sneaker              0              0              0              0              0             15              0            962              0             23
+            Bag              5              0              5              3              1              2              5              3            976              0
+     Ankle boot              1              0              0              0              0              6              0             32              0            961

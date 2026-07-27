@@ -52,16 +52,19 @@ def explore_dataset(train_dataset, class_names, save_path='../outputs/practice_1
     print(f"Std pixel value: {img_sample.std().item():.4f}")
 
 
-def plot_losses(losses_dict, save_path='../outputs/practice_1/plots/training_losses.png'):
+def plot_losses(losses_dict, title='Training Loss Comparison',
+                save_path='../outputs/practice_1/plots/training_losses.png'):
     """Plot loss curves for multiple models. losses_dict: {name: [losses]}"""
     fig, ax = plt.subplots(figsize=(8, 5))
+    markers = ['o', 's', '^', 'D']
     colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728']
     for idx, (name, losses) in enumerate(losses_dict.items()):
-        ax.plot(range(1, len(losses) + 1), losses, marker='o',
+        ax.plot(range(1, len(losses) + 1), losses,
+                marker=markers[idx % len(markers)],
                 color=colors[idx % len(colors)], label=name, linewidth=2)
     ax.set_xlabel('Epoch')
     ax.set_ylabel('Loss')
-    ax.set_title('Training Loss Comparison')
+    ax.set_title(title)
     ax.legend()
     ax.grid(True, alpha=0.3)
     plt.tight_layout()

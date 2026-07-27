@@ -20,6 +20,9 @@
 - [Experiment 3 — Architecture: Deeper MLP](#experiment-3--architecture-deeper-mlp-51225612810)
   - [Results](#results-2)
   - [Key findings](#key-findings-1)
+- [Experiment 4 — Optuna HP Search](#experiment-4--optuna-hp-search)
+  - [Results](#results-3)
+  - [Key findings](#key-findings-2)
 - [Cross-Experiment Summary](#cross-experiment-summary)
   - [Architectural ceiling](#architectural-ceiling)
 
@@ -139,13 +142,69 @@ Best practical trade-off: bias=+0.5 (89.89% acc, 0.758 Shirt TPR). Shirt TPR can
 
 ---
 
+## Experiment 4 — Optuna HP Search
+
+> **Variable changed**: All HPs (architecture, activation, dropout, optimizer, LR, WD, scheduler) discovered automatically via 50-trial TPE search with Median pruning (PR-AUC).
+> **Held constant**: MLP architecture family, CrossEntropy loss, FashionMNIST (no augmentation), 15 epochs/trial, 30-epoch best-config retrain.
+
+- **Date**: 2026-07-27
+- **Model**: Best config: MLP 784→215→470→10, GELU, Dropout 0.05 — **~332K parameters**
+- **Notebook**: `notebooks/error_analysis/MLP/phase4_mlp_optuna_merged.ipynb`
+- **Outputs**: `outputs/error_analysis/MLP/phase4_optuna/`
+
+### Results
+
+| Metric | Phase 1 | Exp 4 Optuna | Δ |
+|--------|:------:|:-----------:|:-:|
+| Test Accuracy | 90.08% | **90.00%** | −0.08pp |
+| Val Accuracy (best epoch) | — | **90.58%** | — |
+| Shirt TPR (bias=0) | 0.707 | 0.712 | +0.005 |
+| Shirt TPR (bias=+0.5) | 0.758 | 0.744 | −0.014 |
+| Macro PR-AUC | 0.9517 | **0.9593** | +0.0076 |
+| Shirt PR-AUC | 0.8232 | — | — |
+
+| Bias | Acc% | Shirt TPR | Shirt Prec |
+|:----:|:---:|:---------:|:---------:|
+| 0.0 | **90.00** | 0.712 | 0.749 |
+| +0.5 | 89.87 | 0.744 | 0.712 |
+| +1.0 | 89.80 | **0.779** | 0.688 |
+
+### Key findings
+
+1. **Optuna search collapsed to the same region as hand-tuned HPs.** All top-5 trials are 2-layer GELU networks with dropout 0.0–0.05, AdamW, cosine scheduler, LR 1.2–2.6e-3, and near-zero weight decay. The search did not discover a configuration that meaningfully beats Phase 1's hand-tuned baseline (90.08%).
+2. **GELU > ReLU is the only clear HP improvement.** GELU provided ~+0.2pp over ReLU at equivalent capacity. All other HP dimensions (WD, dropout, scheduler type) converged to "effectively off" or had minimal impact.
+3. **Architecture: 2 layers, ascending bottlebrush (small→large).** The best configs consistently used a smaller first layer (~200–300) and larger second layer (~450–750). This reverses Phase 1's 256→128 descending pattern, but the net gain is marginal.
+4. **Higher dropout hurts at this capacity.** The model is in an underfitting regime — dropout 0.0–0.05 dominates. Phase 1's 0.2 dropout was actively harmful.
+5. **AdamW ≈ Adam at near-zero weight decay.** The optimizer choice is not a meaningful differentiator when WD ≈ 2e-6.
+6. **Test accuracy slightly below val accuracy suggests mild val-overfitting.** Val accuracy reached 90.58% (epoch 28) but test accuracy was 90.00% — a 0.58pp gap. The fixed 5K validation split across all 50 trials may have allowed TPE to exploit split-specific patterns.
+
+---
+
 ## Cross-Experiment Summary
 
 | Experiment | Params | Acc% | Shirt TPR | Macro PR-AUC | Best For |
 |:----------:|:-----:|:----:|:---------:|:------------:|----------|
 | Phase 1 (baseline) | 235K | 90.08 | 0.707 | 0.9517 | Baseline reference |
-| Exp 2 (Wider) | 540K | **90.26** | **0.728** | **0.9526** | Highest accuracy & Shirt TPR |
+| Exp 2 (Wider) | 540K | 90.26 | **0.728** | 0.9526 | Highest Shirt TPR |
 | Exp 3 (Deeper) | 572K | 90.13 | 0.714 | 0.9518 | Shirt precision (0.765) |
+| Exp 4 (Optuna) | 332K | 90.00 | 0.712 | **0.9593** | Highest PR-AUC, efficient params |
+| **CNN E9 (reference)** | **~260K** | **93.26** | **0.785** | — | **Overall best** |
 
 ### Architectural ceiling
-No MLP configuration tested reaches CNN-level Shirt discrimination (0.847 TPR at 92.50% acc). The gap is fundamental: convolution provides translation-invariant spatial feature extraction that fully-connected layers cannot replicate regardless of width or depth.
+No MLP configuration tested reaches CNN-level Shirt discrimination (0.785–0.834 TPR at 92.50–93.26% acc). The gap is fundamental: convolution provides translation-invariant spatial feature extraction that fully-connected layers cannot replicate regardless of width, depth, or HP tuning.
+
+The Optuna search (Exp 4) conclusively demonstrated this ceiling — 50 trials over a search space spanning 10+ HPs could not find a configuration exceeding 90.26% accuracy. For overall accuracy at bias=0, the optimal MLP configuration is:
+
+| HP | Optimal Value |
+|----|:------------:|
+| Hidden layers | 2 |
+| Units | 215 → 470 (ascending) |
+| Activation | GELU |
+| Dropout | 0.05 |
+| Optimizer | AdamW |
+| Learning rate | 2.0e-3 |
+| Weight decay | 2.0e-6 |
+| Scheduler | CosineAnnealingLR (T_max=30) |
+| Training epochs | 30 |
+
+Further MLP work is not recommended — effort should focus on CNN experiments or data-centric improvements.

@@ -1,0 +1,19 @@
+{
+  "number": 31,
+  "val_macro_pr_auc": 0.9592614738766342,
+  "val_accuracy": 90.08,
+  "test_accuracy": 90.0,
+  "best_val_epoch": 28,
+  "best_val_acc_at_ckpt": 90.5,
+  "params": {
+    "lr": 0.002160220251328714,
+    "weight_decay": 2.0239797085682152e-06,
+    "optimizer": "AdamW",
+    "scheduler": "cosine",
+    "n_layers": 2,
+    "units_0": 203,
+    "units_1": 457,
+    "activation": "GELU",
+    "dropout": 0.05
+  }
+}
