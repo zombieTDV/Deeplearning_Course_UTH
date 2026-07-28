@@ -1,19 +1,23 @@
 {
-  "number": 31,
-  "val_macro_pr_auc": 0.9592614738766342,
-  "val_accuracy": 90.08,
-  "test_accuracy": 90.0,
-  "best_val_epoch": 28,
-  "best_val_acc_at_ckpt": 90.5,
+  "number": 17,
+  "val_macro_pr_auc": 0.9595930834515893,
+  "val_accuracy": 90.4,
+  "test_accuracy": 89.94,
+  "best_val_epoch": 18,
+  "best_val_acc_at_ckpt": 90.34,
   "params": {
-    "lr": 0.002160220251328714,
-    "weight_decay": 2.0239797085682152e-06,
-    "optimizer": "AdamW",
-    "scheduler": "cosine",
+    "batch_size": 512,
+    "lr": 0.0004354209536991517,
+    "weight_decay": 1.0835847514722128e-06,
+    "optimizer": "Adam",
+    "scheduler": "step",
     "n_layers": 2,
-    "units_0": 203,
-    "units_1": 457,
+    "units_0": 666,
+    "units_1": 753,
     "activation": "GELU",
-    "dropout": 0.05
+    "dropout": 0.30000000000000004,
+    "batch_norm": "after_act",
+    "step_size": 6,
+    "gamma": 0.40447932839439255
   }
 }

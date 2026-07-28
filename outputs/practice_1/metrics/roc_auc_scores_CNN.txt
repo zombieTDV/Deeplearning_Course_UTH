@@ -1,12 +1,12 @@
-Macro ROC-AUC: 0.996080
+Macro ROC-AUC: 0.996606
 
-class_0: 0.992411
-class_1: 0.999645
-class_2: 0.994518
-class_3: 0.997565
-class_4: 0.995709
-class_5: 0.999898
-class_6: 0.982432
-class_7: 0.999576
-class_8: 0.999856
-class_9: 0.999190
+class_0: 0.994776
+class_1: 0.999969
+class_2: 0.995304
+class_3: 0.997429
+class_4: 0.995511
+class_5: 0.999872
+class_6: 0.984247
+class_7: 0.999570
+class_8: 0.999828
+class_9: 0.999553
