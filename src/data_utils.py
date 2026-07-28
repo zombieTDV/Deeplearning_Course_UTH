@@ -14,9 +14,21 @@ def get_fashionmnist_transforms():
     ])
 
 
-def load_fashionmnist(transform, root='../data'):
+def get_augmented_transforms():
+    return transforms.Compose([
+        transforms.RandomRotation(degrees=15, fill=0),
+        transforms.RandomAffine(degrees=0, translate=(0.08, 0.08), scale=(0.9, 1.1), fill=0),
+        transforms.ColorJitter(brightness=0.25, contrast=0.25),
+        transforms.ToTensor(),
+        transforms.Normalize((0.5,), (0.5,)),
+        transforms.RandomErasing(p=0.25, scale=(0.02, 0.15)),
+    ])
+
+
+def load_fashionmnist(transform, root='../data', train_transform=None):
     train_dataset = torchvision.datasets.FashionMNIST(
-        root=root, train=True, download=True, transform=transform
+        root=root, train=True, download=True,
+        transform=train_transform if train_transform else transform
     )
     test_dataset = torchvision.datasets.FashionMNIST(
         root=root, train=False, download=True, transform=transform
@@ -70,7 +82,8 @@ def _load_one(file, full_dataset):
         return Subset(full_dataset, json.load(f))
 
 
-def load_subsets(batch_size=64, val_batch_size=256, split_dir='../splits', root='../data'):
+def load_subsets(batch_size=64, val_batch_size=256, split_dir='../splits', root='../data',
+                 train_transform=None):
     split_dir = Path(split_dir)
     train_file = split_dir / 'train_indices.json'
     val_file = split_dir / 'val_indices.json'
@@ -81,18 +94,26 @@ def load_subsets(batch_size=64, val_batch_size=256, split_dir='../splits', root=
             raise FileNotFoundError(
                 f'Missing split file: {f}. Run create_full_split() first.')
 
-    tf = get_fashionmnist_transforms()
+    tf_plain = get_fashionmnist_transforms()
+    tf_train = train_transform if train_transform else tf_plain
     root_path = Path(root)
-    full_dataset = ConcatDataset([
+
+    full_train = ConcatDataset([
         torchvision.datasets.FashionMNIST(root=str(root_path), train=True, download=False,
-                                          transform=tf),
+                                          transform=tf_train),
         torchvision.datasets.FashionMNIST(root=str(root_path), train=False, download=False,
-                                          transform=tf),
+                                          transform=tf_train),
+    ])
+    full_test = ConcatDataset([
+        torchvision.datasets.FashionMNIST(root=str(root_path), train=True, download=False,
+                                          transform=tf_plain),
+        torchvision.datasets.FashionMNIST(root=str(root_path), train=False, download=False,
+                                          transform=tf_plain),
     ])
 
-    train_subset = _load_one(train_file, full_dataset)
-    val_subset = _load_one(val_file, full_dataset)
-    test_subset = _load_one(test_file, full_dataset)
+    train_subset = _load_one(train_file, full_train)
+    val_subset = _load_one(val_file, full_train)
+    test_subset = _load_one(test_file, full_test)
 
     class_names = torchvision.datasets.FashionMNIST(
         root=str(root_path), train=True, download=False).classes

@@ -60,5 +60,9 @@ logs/
 # Environment
 .env
 .env.*
+# Data & model artifacts
+*.pth
+*.gz
+*-ubyte
 /data
 /outputs/model
