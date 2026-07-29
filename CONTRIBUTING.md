@@ -21,8 +21,8 @@ Verified-By: <how you tested it (e.g., Smoke Test)>
 
 ## 🤖 AI Usage Rules
 
-- Follow the 10-step Vibe Coding Workflow in [`agents/WORKFLOW.md`](file:///home/bush/Desktop/Deeplearning_Course_UTH/agents/WORKFLOW.md).
-- Follow project naming conventions & folder standards in [`agents/AI_REFERENCE.md`](file:///home/bush/Desktop/Deeplearning_Course_UTH/agents/AI_REFERENCE.md).
-- Track task status in [`agents/PROGRESS_TRACKING.md`](file:///home/bush/Desktop/Deeplearning_Course_UTH/agents/PROGRESS_TRACKING.md).
+- Follow the 10-step Vibe Coding Workflow in [`agents/WORKFLOW.md`](agents/WORKFLOW.md).
+- Follow project naming conventions & folder standards in [`agents/AI_REFERENCE.md`](agents/AI_REFERENCE.md).
+- Track task status in [`agents/PROGRESS_TRACKING.md`](agents/PROGRESS_TRACKING.md).
 - Run the fast smoke test (`python3 tests/smoke_test.py`) after code generation.
 - **Never commit AI code without reviewing it first**.
