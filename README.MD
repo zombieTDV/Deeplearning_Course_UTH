@@ -12,6 +12,6 @@ source .venv/bin/activate
 2 Install requirements:
 
 ```bash
-pip install torch --index-url https://download.pytorch.org/whl/cu130
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu130
 pip install -r requirements.txt
 ```

@@ -7,7 +7,15 @@ dist/
 build/
 .eggs/
 .kilo
-data
+Agent AI.txt
+
+# Data — ignore everything except .gitkeep files in subdirectories
+/data/*
+!/data/**/
+!/data/**/.gitkeep
+
+# Experiment outputs (run artifacts, checkpoints, logs)
+experiments/
 
 # Virtual environment
 .venv/
@@ -27,14 +35,6 @@ Thumbs.db
 
 # Jupyter
 .ipynb_checkpoints/
-
-# Data
-data/*.csv
-data/*.parquet
-data/*.h5
-data/*.hdf5
-data/*.npz
-data/raw/
 
 # Model weights
 model/backup/
