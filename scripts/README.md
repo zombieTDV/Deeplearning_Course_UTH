@@ -1,16 +1,13 @@
-# scripts
+# Scripts Directory
 
 ## Purpose
-This directory contains utility and automation scripts for workspace setup, database initialization, CI checks, and AI log validation.
+This directory contains entrypoint scripts and automation utilities for dataset preparation, model training, evaluation, and experiment automation.
 
-## Contents
-- Setup scripts (`setup.sh`)
-- Database seeding scripts (`seed_db.py`)
-- AI log validation utilities (`validate_ai_logs.py`)
-- Build and deployment automation tasks
+## Contents & Examples
+- Dataset scripts: `download_dataset.py`, `preprocess_data.py`
+- Training entrypoints: `train.py`, `train_pipeline.py`
+- Evaluation & export: `evaluate.py`, `export_onnx.py`
 
 ## Naming Convention
-- Format: `snake_case` or `kebab-case` with script extensions (e.g., `setup.sh`, `seed_db.py`, `validate_ai_logs.py`)
-
-## Responsible Person
-- Tech Lead
+- Standalone execution scripts: `snake_case.py` (e.g., `train.py`, `evaluate.py`)
+- Date-stamped experiment scripts: `YYYY-MM-DD_description.py` (e.g., `2026-07-29_train_resnet18.py`)

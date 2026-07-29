@@ -1,0 +1,26 @@
+# Generic Project Configuration Template
+
+project_name: "<PROJECT_NAME>"
+seed: 42
+
+data:
+  dataset_name: "<DATASET_NAME>"
+  raw_path: "data/raw"
+  processed_path: "data/processed"
+  batch_size: 64
+  num_workers: 2
+
+model:
+  name: "<MODEL_CLASS_NAME>"
+  input_dim: "<INPUT_DIMENSION>"
+  num_classes: "<NUM_CLASSES>"
+  dropout_rate: 0.2
+
+training:
+  epochs: 10
+  learning_rate: 0.001
+  optimizer: "adam"
+  checkpoint_dir: "models/backup"
+
+evaluation:
+  output_dir: "evaluation"

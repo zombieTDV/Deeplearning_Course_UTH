@@ -1,17 +1,17 @@
-# tests
+# Tests Directory (Data Science Testing)
 
-## Purpose
-This directory contains all automated test suites, testing utilities, and test data fixtures for verifying code quality and system functionality.
+This directory contains the automated test scripts for the project, implementing the **Two Testing Modes** specified in Section 9 of [`agents/WORKFLOW.md`](file:///home/bush/Desktop/Deeplearning_Course_UTH/agents/WORKFLOW.md):
 
-## Structure & Contents
-- `unit/`: Isolated unit tests for functions, modules, and components.
-- `integration/`: Cross-module integration tests for APIs and service interactions.
-- `e2e/`: End-to-end user workflow automation tests.
-- `fixtures/`: Test data, sample payloads, and mock objects.
+## Testing Structure
+- `smoke_test.py`: **Smoke Test (< 10s)** — Instant sanity check for package imports, CUDA availability, and tensor shape alignment on dummy data.
+- `normal_test.py`: **Normal Test (Full Check)** — Complete verification suite for model forward/backward pass, loss computation, and directory integrity.
+- `unit/`: Thư mục chứa Unit Tests cho custom DataLoaders, model layers, và loss functions.
 
-## Naming Convention
-- Test files: `*.test.ts` or `*.spec.ts` (e.g., `user.service.test.ts`)
-- Fixtures: `*.fixture.json` or `*.mock.ts`
+## Commands
+```bash
+# Fast Smoke Test (< 10s)
+python3 tests/smoke_test.py
 
-## Responsible Person
-- QA Testers, All Developers
+# Full Normal Test
+python3 tests/normal_test.py
+```
