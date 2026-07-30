@@ -9,11 +9,19 @@ Usage:
 
 from __future__ import annotations
 
+import logging
 from pathlib import Path
+from typing import Any
 
 import torch
 import torchvision
 from torch.utils.data import Dataset
+
+
+# ---------------------------------------------------------------------------
+# Logger
+# ---------------------------------------------------------------------------
+logger = logging.getLogger(__name__)
 
 
 # ---------------------------------------------------------------------------
@@ -36,11 +44,17 @@ def download_cifar10(root: str = DEFAULT_DATA_ROOT) -> None:
     Raises:
         RuntimeError: If download fails.
     """
+    logger.info(f"Downloading CIFAR-10 dataset to {root}")
     Path(root).mkdir(parents=True, exist_ok=True)
     
-    # Download both train and test sets
-    torchvision.datasets.CIFAR10(root=root, train=True, download=True)
-    torchvision.datasets.CIFAR10(root=root, train=False, download=True)
+    try:
+        # Download both train and test sets
+        torchvision.datasets.CIFAR10(root=root, train=True, download=True)
+        torchvision.datasets.CIFAR10(root=root, train=False, download=True)
+        logger.info("CIFAR-10 dataset downloaded successfully")
+    except Exception as e:
+        logger.error(f"Failed to download CIFAR-10 dataset: {e}")
+        raise
 
 
 def load_cifar10_dataset(
@@ -61,6 +75,7 @@ def load_cifar10_dataset(
     Raises:
         RuntimeError: If dataset is not found and download is not requested.
     """
+    logger.debug(f"Loading CIFAR-10 dataset from {root} (train={train})")
     return torchvision.datasets.CIFAR10(
         root=root,
         train=train,
@@ -69,7 +84,7 @@ def load_cifar10_dataset(
     )
 
 
-def get_dataset_info(dataset: Dataset) -> dict:
+def get_dataset_info(dataset: Dataset) -> dict[str, Any]:
     """Get information about the dataset.
 
     Args:
@@ -87,9 +102,11 @@ def get_dataset_info(dataset: Dataset) -> dict:
     else:
         classes = getattr(dataset, 'classes', ['unknown'])
 
-    return {
+    info = {
         'name': dataset.__class__.__name__,
         'num_samples': len(dataset),
         'num_classes': len(classes),
         'classes': classes,
     }
+    logger.debug(f"Dataset info: {info}")
+    return info

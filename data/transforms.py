@@ -11,9 +11,16 @@ Usage:
 
 from __future__ import annotations
 
+import logging
 from typing import Any
 
 import torchvision.transforms as transforms
+
+
+# ---------------------------------------------------------------------------
+# Logger
+# ---------------------------------------------------------------------------
+logger = logging.getLogger(__name__)
 
 
 # ---------------------------------------------------------------------------
@@ -50,6 +57,7 @@ def get_train_transform(
     Returns:
         Composed transform pipeline.
     """
+    logger.debug(f"Creating train transform with augmentation={augmentation}")
     if mean is None:
         mean = IMAGENET_MEAN
     if std is None:
@@ -87,6 +95,7 @@ def get_eval_transform(
     Returns:
         Composed transform pipeline.
     """
+    logger.debug("Creating eval transform")
     if mean is None:
         mean = IMAGENET_MEAN
     if std is None:
@@ -115,6 +124,7 @@ def get_cifar10_transforms(
     Returns:
         Tuple of (train_transform, eval_transform).
     """
+    logger.debug(f"Getting CIFAR-10 transforms (use_cifar10_stats={use_cifar10_stats})")
     mean = CIFAR10_MEAN if use_cifar10_stats else IMAGENET_MEAN
     std = CIFAR10_STD if use_cifar10_stats else IMAGENET_STD
     
@@ -150,6 +160,7 @@ def get_transform_config(
     Raises:
         ValueError: If config_name is not recognized.
     """
+    logger.debug(f"Loading transform config: {config_name}")
     configs = {
         "imagenet_standard": {
             "mean": IMAGENET_MEAN,
@@ -178,6 +189,7 @@ def get_transform_config(
     }
     
     if config_name not in configs:
+        logger.error(f"Unknown config '{config_name}'")
         raise ValueError(
             f"Unknown config '{config_name}'. "
             f"Available: {list(configs.keys())}"

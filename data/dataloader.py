@@ -16,6 +16,7 @@ Usage:
 from __future__ import annotations
 
 import json
+import logging
 import os
 from pathlib import Path
 from typing import Any
@@ -23,6 +24,12 @@ from typing import Any
 import torch
 import torchvision
 from torch.utils.data import DataLoader, Subset, random_split
+
+
+# ---------------------------------------------------------------------------
+# Logger
+# ---------------------------------------------------------------------------
+logger = logging.getLogger(__name__)
 
 
 # ---------------------------------------------------------------------------
@@ -41,10 +48,12 @@ TRAIN_RATIO = 0.9  # 45k train / 5k val out of 50k
 def _ensure_split() -> dict[str, Any]:
     """Return the split dict, loaded from disk or generated on first call."""
     if os.path.exists(SPLIT_FILE):
+        logger.debug(f"Loading split from {SPLIT_FILE}")
         with open(SPLIT_FILE, "r") as f:
             return json.load(f)
 
     # --- First call ever: generate and persist ---
+    logger.info(f"Generating new split with seed={SPLIT_SEED}")
     full_train = torchvision.datasets.CIFAR10(
         root=DEFAULT_DATA_ROOT, train=True, download=True
     )
@@ -73,7 +82,8 @@ def _ensure_split() -> dict[str, Any]:
     os.makedirs(os.path.dirname(SPLIT_FILE), exist_ok=True)
     with open(SPLIT_FILE, "w") as f:
         json.dump(split, f, indent=2)
-
+    
+    logger.info(f"Split persisted to {SPLIT_FILE}")
     return split
 
 
@@ -105,6 +115,7 @@ def get_cifar10_loaders(
     Returns:
         Tuple of (train_loader, val_loader, test_loader).
     """
+    logger.info(f"Creating CIFAR-10 DataLoaders with batch_size={batch_size}")
     from data.transforms import get_train_transform, get_eval_transform
     
     split = _ensure_split()
@@ -151,6 +162,7 @@ def get_cifar10_loaders(
         pin_memory=pin_memory, persistent_workers=persistent_workers,
     )
 
+    logger.debug(f"Train samples: {len(train_set)}, Val samples: {len(val_set)}, Test samples: {len(test_set)}")
     return train_loader, val_loader, test_loader
 
 
@@ -173,6 +185,7 @@ def get_single_loader(
     Returns:
         DataLoader instance.
     """
+    logger.debug(f"Creating single DataLoader with batch_size={batch_size}, shuffle={shuffle}")
     return DataLoader(
         dataset,
         batch_size=batch_size,

@@ -1,0 +1,65 @@
+# Data Pipeline Configuration
+# Centralized configuration for the data pipeline modules
+
+dataset:
+  name: "CIFAR-10"
+  root: "data/external/CIFAR-10"
+  download: true
+  num_classes: 10
+
+image:
+  size: 224
+  channels: 3
+
+normalization:
+  # ImageNet statistics for pretrained models
+  imagenet:
+    mean: [0.485, 0.456, 0.406]
+    std: [0.229, 0.224, 0.225]
+  
+  # CIFAR-10 statistics (computed from dataset)
+  cifar10:
+    mean: [0.4914, 0.4822, 0.4465]
+    std: [0.2470, 0.2435, 0.2616]
+
+transforms:
+  train:
+    resize: 224
+    random_crop: 224
+    random_crop_padding: 16
+    random_horizontal_flip: true
+    random_rotation: 0
+    color_jitter:
+      enabled: false
+      brightness: 0.0
+      contrast: 0.0
+      saturation: 0.0
+      hue: 0.0
+  
+  eval:
+    resize: 224
+
+dataloader:
+  batch_size: 64
+  shuffle_train: true
+  shuffle_eval: false
+  num_workers: 2
+  pin_memory: true
+  persistent_workers: false
+  drop_last: false
+
+split:
+  seed: 42
+  train_ratio: 0.9  # 45k train / 5k val out of 50k
+  split_file: "data/processed/cifar10_split_seed42.json"
+
+statistics:
+  batch_size: 1000
+  stats_file: "data/processed/dataset_statistics.json"
+  compute_on_device: null  # null = CPU, or specify device like "cuda"
+
+training:
+  seed: 42
+  device: "cuda"  # or "cpu"
+  deterministic: false
+  benchmark: true

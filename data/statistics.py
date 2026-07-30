@@ -14,11 +14,18 @@ Usage:
 from __future__ import annotations
 
 import json
+import logging
 from pathlib import Path
 from typing import Any
 
 import torch
 from torch.utils.data import Dataset
+
+
+# ---------------------------------------------------------------------------
+# Logger
+# ---------------------------------------------------------------------------
+logger = logging.getLogger(__name__)
 
 
 # ---------------------------------------------------------------------------
@@ -46,6 +53,7 @@ def compute_dataset_statistics(
     Returns:
         Tuple of (mean, std) as tensors with shape (3,).
     """
+    logger.info(f"Computing dataset statistics with batch_size={batch_size}")
     if device is None:
         device = torch.device('cpu')
     
@@ -69,6 +77,7 @@ def compute_dataset_statistics(
     mean = sum_ / count
     std = torch.sqrt((sum_sq / count) - (mean ** 2))
     
+    logger.debug(f"Computed mean: {mean.tolist()}, std: {std.tolist()}")
     return mean.cpu(), std.cpu()
 
 
@@ -84,6 +93,7 @@ def save_statistics(
         std: Standard deviation values as tensor or list.
         filepath: Path to save the statistics file.
     """
+    logger.info(f"Saving statistics to {filepath}")
     if isinstance(mean, torch.Tensor):
         mean = mean.tolist()
     if isinstance(std, torch.Tensor):
@@ -97,6 +107,7 @@ def save_statistics(
     Path(filepath).parent.mkdir(parents=True, exist_ok=True)
     with open(filepath, 'w') as f:
         json.dump(stats, f, indent=2)
+    logger.debug(f"Statistics saved: {stats}")
 
 
 def load_statistics(filepath: str = DEFAULT_STATS_FILE) -> dict[str, Any]:
@@ -111,9 +122,11 @@ def load_statistics(filepath: str = DEFAULT_STATS_FILE) -> dict[str, Any]:
     Raises:
         FileNotFoundError: If the statistics file does not exist.
     """
+    logger.debug(f"Loading statistics from {filepath}")
     with open(filepath, 'r') as f:
         stats = json.load(f)
     
+    logger.debug(f"Loaded statistics: {stats}")
     return stats
 
 
@@ -147,4 +160,5 @@ def get_normalization_transform(
     if isinstance(std, torch.Tensor):
         std = std.tolist()
     
+    logger.debug(f"Normalization parameters: mean={mean}, std={std}")
     return mean, std
