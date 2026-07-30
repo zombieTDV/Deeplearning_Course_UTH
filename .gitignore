@@ -11,10 +11,11 @@ Agent AI.txt
 
 
 
-# Data — ignore everything except .gitkeep files in subdirectories
+# Data — ignore everything except .gitkeep files and Python source files in subdirectories
 /data/*
 !/data/**/
 !/data/**/.gitkeep
+!/data/*.py
 data/raw/*
 
 # Experiment outputs (run artifacts, checkpoints, logs)
