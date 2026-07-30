@@ -120,15 +120,15 @@ def get_cifar10_loaders(
     # Memory overhead is acceptable for CIFAR-10 (~150 MB raw).
     train_full = torchvision.datasets.CIFAR10(
         root=DATA_ROOT, train=True,
-        transform=_train_transform(), download=False,
+        transform=_train_transform(), download=True,
     )
     val_full = torchvision.datasets.CIFAR10(
         root=DATA_ROOT, train=True,
-        transform=_eval_transform(), download=False,
+        transform=_eval_transform(), download=True,
     )
     test_full = torchvision.datasets.CIFAR10(
         root=DATA_ROOT, train=False,
-        transform=_eval_transform(), download=False,
+        transform=_eval_transform(), download=True,
     )
 
     train_set = Subset(train_full, split["train_indices"])
