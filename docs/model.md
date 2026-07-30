@@ -28,14 +28,16 @@ architecture, and adapting the final classification layer for CIFAR-10's
 3. Replace the final layer to output 10 classes instead of 1000
 4. Freeze all other layers for the transfer-learning variant
 5. For the fine-tuning variant, unfreeze the last block(s)
+6. Move model to target device — pass ``device=device`` to the builder,
+   or call ``model.to(device)`` afterwards (see *device placement*)
 
 ## Pipeline
 ```
 torchvision.models.resnet18(weights=...) → inspect .fc layer →
-replace nn.Linear(in_features, 10) → freeze/unfreeze → ready for training
+replace nn.Linear(in_features, 10) → freeze/unfreeze → model.to(device) → ready for training
 
 torchvision.models.densenet121(weights=...) → inspect .classifier layer →
-replace nn.Linear(in_features, 10) → freeze/unfreeze → ready for training
+replace nn.Linear(in_features, 10) → freeze/unfreeze → model.to(device) → ready for training
 ```
 
 ## Detailed experiment plan
@@ -53,6 +55,10 @@ replace nn.Linear(in_features, 10) → freeze/unfreeze → ready for training
 - **Check torchvision version first** — `pretrained=True` is deprecated
   in newer versions in favor of `weights=ResNet18_Weights.DEFAULT`;
   confirm which API applies before writing code, don't assume
+- **Device placement:** ``build_resnet18(..., device=device)`` and
+  ``build_densenet121(..., device=device)`` move the model to the target
+  device before returning.  If ``device=None`` (default), the model stays
+  on CPU — the caller must then call ``model.to(device)`` explicitly.
 
 ## Links
 - Related phase docs: [overview.md](overview.md), [data_prep.md](data_prep.md),

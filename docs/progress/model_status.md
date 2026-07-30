@@ -13,11 +13,14 @@
 - 2026-07-30: Wrote `src/models/build_model.py` — two build functions
   (`build_resnet18`, `build_densenet121`) each with `mode="frozen"` and
   `mode="finetune"`, plus `count_trainable_params` / `count_all_params` helpers
+- 2026-07-30: Added ``device`` parameter to ``build_resnet18`` and
+  ``build_densenet121`` — when provided, model is moved to target device
+  before returning (fixes CUDA/CPU mismatch errors)
 - 2026-07-30: Wrote `notebooks/03_model_setup.ipynb` — architecture inspection,
   final-layer replacement, freeze verification, forward pass sanity check
 - 2026-07-30: Updated `notebooks/practice_2.ipynb` — replaced Section 3 stubs
   with real model code (build 4 variants, param-count summary table,
-  forward-pass check). Sections 4-7 remain stubs for later phases.
+  forward-pass check).  All build calls updated to pass ``device=device``.
 
 ## Blockers (if any)
 

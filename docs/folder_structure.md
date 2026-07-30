@@ -15,9 +15,18 @@ project_root/
 │   ├── naming_convention.md
 │   ├── folder_structure.md
 │   ├── codebase_audit.md
+│   ├── md_convention.md
+│   ├── notebook_header_convention.md
+│   ├── smoke_test_checklist.md
+│   ├── phase_doc_template.md
+│   ├── progress_status_template.md
+│   ├── references/            # external guides (Optuna, etc.)
+│   │   └── optuna_db_guide.md
 │   └── progress/          # one status file per task/phase
 │       ├── data_prep_status.md
-│       └── training_status.md
+│       ├── model_status.md
+│       ├── training_status.md
+│       └── eval_status.md
 ├── data/
 │   ├── raw/                # never edited by the agent
 │   ├── processed/
@@ -30,7 +39,7 @@ project_root/
 │   └── utils/
 ├── notebooks/                 # exploratory only, not production code
 ├── configs/
-├── experiments/                # run outputs, checkpoints, logs (gitignored)
+├── experiments/                # run outputs, checkpoints, logs (gitignored; created at first run)
 └── tests/                      # smoke tests + unit tests
 ```
 

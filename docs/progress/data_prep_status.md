@@ -16,9 +16,6 @@
 - 2026-07-30: Wrote `notebooks/02_data_prep.ipynb` — practice deliverable
   following notebook_header_convention.md; calls `get_cifar10_loaders()`,
   visualises raw/transformed samples, class distribution, split sizes
-- 2026-07-30: Wrote smoke test script `smoke_test_data_prep.py` — verifies
-  split file creation, batch shapes (64,3,224,224), no NaNs, reuse on
-  second call. Smoke test requires CIFAR-10 download (~170 MB) on first run.
 
 ## Blockers (if any)
 

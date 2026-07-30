@@ -15,13 +15,15 @@ loss function, optimizer, training loop, and monitoring.
 ## Input / Output
 - **Input:** adapted model from [model.md](model.md),
   DataLoaders from [data_prep.md](data_prep.md)
-- **Output:** trained model checkpoints (`experiments/<run_id>/model.pt`),
-  TensorBoard logs (`experiments/<run_id>/tb_logs/`)
+- **Output:** trained model checkpoints (`experiments/checkpoints/<run_name>_best.pt`),
+  TensorBoard logs (`experiments/tb_logs/<run_name>/` via ``SummaryWriter``)
 
 ## How to do it (general plan)
 1. Define loss function: `nn.CrossEntropyLoss()`
-2. Define optimizer — only pass `requires_grad=True` params to it
-3. Set up `SummaryWriter` for TensorBoard
+2. Ensure model is on the same device as input tensors
+   (pass ``device=device`` to ``build_resnet18`` / ``build_densenet121``)
+3. Define optimizer — only pass `requires_grad=True` params to it
+4. Set up `SummaryWriter` for TensorBoard
 4. Write training loop: forward, loss, backward, step, log
 5. Run smoke test first (see `docs/smoke_test_checklist.md`) before any
    full run

@@ -16,7 +16,7 @@ frozen vs fine-tuned runs from [training_info.md](training_info.md).
   train data best
 
 ## Input / Output
-- **Input:** trained checkpoints from `experiments/<run_id>/model.pt`,
+- **Input:** trained checkpoints from `experiments/checkpoints/<run_name>_best.pt`,
   `test_loader` from [data_prep.md](data_prep.md)
 - **Output:** a comparison table (accuracy, and optionally per-class
   precision/recall) across all runs

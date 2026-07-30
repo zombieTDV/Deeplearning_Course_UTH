@@ -19,6 +19,7 @@ Modes:
 
 from __future__ import annotations
 
+import torch
 import torch.nn as nn
 from torchvision.models import (
     DenseNet121_Weights,
@@ -62,16 +63,23 @@ def count_all_params(model: nn.Module) -> int:
 # ---------------------------------------------------------------------------
 # Builders
 # ---------------------------------------------------------------------------
-def build_resnet18(num_classes: int = 10, mode: str = "frozen") -> nn.Module:
+def build_resnet18(
+    num_classes: int = 10,
+    mode: str = "frozen",
+    device: torch.device | None = None,
+) -> nn.Module:
     """Load ImageNet-pretrained ResNet18 and adapt for *num_classes*.
 
     Args:
         num_classes: Number of output classes (default 10 for CIFAR-10).
         mode: ``"frozen"`` (feature extraction, default) or ``"finetune"``
               (last residual block + FC trainable).
+        device: Target device (e.g. ``torch.device("cuda")``).  If ``None``
+                (default), the model stays on CPU.
 
     Returns:
-        Model in ``eval()`` mode with the freeze configuration applied.
+        Model in ``eval()`` mode on the requested device with the freeze
+        configuration applied.
     """
     model = resnet18(weights=ResNet18_Weights.DEFAULT)
     in_features = model.fc.in_features  # 512
@@ -92,19 +100,28 @@ def build_resnet18(num_classes: int = 10, mode: str = "frozen") -> nn.Module:
         raise ValueError(f"Unknown mode '{mode}'. Use 'frozen' or 'finetune'.")
 
     model.eval()
+    if device is not None:
+        model = model.to(device)
     return model
 
 
-def build_densenet121(num_classes: int = 10, mode: str = "frozen") -> nn.Module:
+def build_densenet121(
+    num_classes: int = 10,
+    mode: str = "frozen",
+    device: torch.device | None = None,
+) -> nn.Module:
     """Load ImageNet-pretrained DenseNet121 and adapt for *num_classes*.
 
     Args:
         num_classes: Number of output classes (default 10 for CIFAR-10).
         mode: ``"frozen"`` (feature extraction, default) or ``"finetune"``
               (last dense block + classifier trainable).
+        device: Target device (e.g. ``torch.device("cuda")``).  If ``None``
+                (default), the model stays on CPU.
 
     Returns:
-        Model in ``eval()`` mode with the freeze configuration applied.
+        Model in ``eval()`` mode on the requested device with the freeze
+        configuration applied.
     """
     model = densenet121(weights=DenseNet121_Weights.DEFAULT)
     in_features = model.classifier.in_features  # 1024
@@ -126,4 +143,6 @@ def build_densenet121(num_classes: int = 10, mode: str = "frozen") -> nn.Module:
         raise ValueError(f"Unknown mode '{mode}'. Use 'frozen' or 'finetune'.")
 
     model.eval()
+    if device is not None:
+        model = model.to(device)
     return model

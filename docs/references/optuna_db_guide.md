@@ -1,7 +1,7 @@
 # optuna_db_guide.md
 Quick reference for loading, analyzing, and exporting an Optuna SQLite study.
 Read on demand when doing HPO analysis — not part of always-on rules.
-Runnable script version: `src/analysis/optuna_db_report.py`
+Runnable script version: `src/utils/optuna_db_report.py`
 
 ## Load
 ```python
