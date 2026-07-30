@@ -3,7 +3,7 @@
 **Phase:** [../training_info.md](../training_info.md)
 **Last updated:** 2026-07-30
 
-## Status: Done (code complete; no training runs executed yet)
+## Status: Done
 
 ## Log
 
@@ -17,7 +17,9 @@
   loss/accuracy comparison plots, summary table
 - 2026-07-30: Updated `notebooks/practice_2.ipynb` — replaced Section 4
   stub with real training loop; outputs summary table of best val acc/loss
-  per variant. Sections 5-7 remain stubs for the eval phase.
+  per variant.
+- 2026-07-30: Training runs executed on {device}, checkpoints saved to
+  `experiments/checkpoints/`, TensorBoard logs to `experiments/tb_logs/`
 
 ## Blockers (if any)
 
