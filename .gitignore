@@ -9,10 +9,13 @@ build/
 .kilo
 Agent AI.txt
 
+
+
 # Data — ignore everything except .gitkeep files in subdirectories
 /data/*
 !/data/**/
 !/data/**/.gitkeep
+data/raw/*
 
 # Experiment outputs (run artifacts, checkpoints, logs)
 experiments/
