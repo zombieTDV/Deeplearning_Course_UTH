@@ -3,3 +3,12 @@ numpy
 tabulate
 matplotlib
 tensorboard
+torch
+torchvision
+opencv-python
+pillow
+pyyaml
+optuna
+scikit-learn
+tqdm
+pytest
