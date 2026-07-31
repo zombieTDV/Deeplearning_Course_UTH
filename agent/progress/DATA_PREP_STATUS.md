@@ -1,6 +1,6 @@
-# data_prep_status.md
+# DATA_PREP_STATUS.md
 
-**Phase:** [../data_prep.md](../data_prep.md)
+**Phase:** [../phases/DATA_PREP.md](../phases/DATA_PREP.md)
 **Last updated:** 2026-07-30
 
 ## Status: Done
@@ -14,7 +14,7 @@
   transforms (Resize(224) → RandomHorizontalFlip → RandomCrop(224,padding=16)
   → ToTensor → Normalize(ImageNet stats) for train; no augmentation for val/test)
 - 2026-07-30: Wrote `notebooks/02_data_prep.ipynb` — practice deliverable
-  following notebook_header_convention.md; calls `get_cifar10_loaders()`,
+  following NOTEBOOK_HEADER_CONVENTION.md; calls `get_cifar10_loaders()`,
   visualises raw/transformed samples, class distribution, split sizes
 
 ## Blockers (if any)
@@ -23,5 +23,5 @@
 
 ## Next step
 
-- Proceed to [model.md](../model.md): load pretrained ResNet18/DenseNet121,
+- Proceed to [MODEL.md](../phases/MODEL.md): load pretrained ResNet18/DenseNet121,
   inspect architecture, replace final layer, freeze/unfreeze strategy

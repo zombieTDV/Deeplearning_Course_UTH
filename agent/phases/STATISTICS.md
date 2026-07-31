@@ -1,4 +1,4 @@
-# statistics.md
+# STATISTICS.md
 
 ## Overview
 

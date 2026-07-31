@@ -1,5 +1,5 @@
 # <phase_name>.md — Template
-Copy this for each phase/stage (data_prep.md, training_info.md, model.md, eval.md...)
+Copy this for each phase/stage (DATA_PREP.md, TRAINING_INFO.md, MODEL.md, EVAL.md...)
 One file per phase. Everything below stays in this single file.
 
 ## Name
@@ -35,5 +35,5 @@ src/data/load_raw.py → src/data/clean.py → src/data/feature_eng.py → data/
 - External reference: <https://...> (absolute URL)
 
 ## Links
-- Related phase docs: [overview.md](overview.md), [eval.md](eval.md)
-- Progress tracking: [progress/<phase>_status.md](progress/<phase>_status.md)
+- Related phase docs: [OVERVIEW.md](../OVERVIEW.md), [EVAL.md](../phases/EVAL.md)
+- Progress tracking: [progress/<phase>_status.md](../progress/<phase>_STATUS.md)

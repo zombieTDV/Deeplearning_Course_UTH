@@ -1,6 +1,6 @@
-# eval_status.md
+# EVAL_STATUS.md
 
-**Phase:** [../eval.md](../eval.md)
+**Phase:** [../phases/EVAL.md](../phases/EVAL.md)
 **Last updated:** 2026-07-30
 
 ## Status: Done

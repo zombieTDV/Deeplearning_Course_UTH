@@ -1,4 +1,4 @@
-# md_convention.md
+# MD_CONVENTION.md
 Rules for any .md file the agent creates in this project. Condensed from
 MD_creation_guide.md — see that file for full rationale and examples.
 

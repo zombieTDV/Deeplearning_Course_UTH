@@ -1,6 +1,6 @@
-# training_status.md
+# TRAINING_STATUS.md
 
-**Phase:** [../training_info.md](../training_info.md)
+**Phase:** [../phases/TRAINING_INFO.md](../phases/TRAINING_INFO.md)
 **Last updated:** 2026-07-30
 
 ## Status: Done
@@ -27,5 +27,5 @@
 
 ## Next step
 
-- Proceed to [eval.md](../eval.md): test-set evaluation, confusion matrices,
+- Proceed to [EVAL.md](../phases/EVAL.md): test-set evaluation, confusion matrices,
   per-class metrics, cross-run comparison table

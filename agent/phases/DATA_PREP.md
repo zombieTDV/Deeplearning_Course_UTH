@@ -1,4 +1,4 @@
-# data_prep.md
+# DATA_PREP.md
 
 ## Name
 
@@ -54,7 +54,7 @@ torch.utils.data.random_split (train/val) → DataLoader (train/val/test)
   diluted across 224x224; cropping at the working resolution is the
   correction from the original plan.
 - **Batch size:** start at 64, this is one of the hyperparameters to
-  sweep later (see [training_info.md](training_info.md))
+  sweep later (see [TRAINING_INFO.md](TRAINING_INFO.md))
 - **Known gotcha:** resizing 32x32 → 224x224 upsamples, doesn't add
   real detail — expect this to cap accuracy somewhat vs native
   ImageNet-resolution images. Worth noting in eval writeup, not a bug.
@@ -70,7 +70,7 @@ persisted artifact is not.
   (lists of indices per split, plus the seed and ratio used)
 - This file is treated as **read-only** the moment it's created — no
   script (data prep, model, training, eval) may regenerate or mutate it
-- Every later phase (`model.md`, `training_info.md`, `eval.md`) loads
+- Every later phase (`MODEL.md`, `TRAINING_INFO.md`, `EVAL.md`) loads
   the same split file — there is exactly one train/val/test split for
   the entire project, shared across every experiment and model compared
 - If the split ever needs to change, that's a deliberate, logged
@@ -78,5 +78,5 @@ persisted artifact is not.
 
 ## Links
 
-- Related phase docs: [overview.md](overview.md), [model.md](model.md)
-- Progress tracking: [progress/data_prep_status.md](progress/data_prep_status.md)
+- Related phase docs: [OVERVIEW.md](../OVERVIEW.md), [MODEL.md](MODEL.md)
+- Progress tracking: [progress/DATA_PREP_STATUS.md](../progress/DATA_PREP_STATUS.md)

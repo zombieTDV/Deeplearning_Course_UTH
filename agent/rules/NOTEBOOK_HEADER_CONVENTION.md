@@ -1,4 +1,4 @@
-# notebook_header_convention.md
+# NOTEBOOK_HEADER_CONVENTION.md
 Rules for the first cell of every notebook. Condensed from
 notebook_header_guide.md — see that file for the full worked example.
 
