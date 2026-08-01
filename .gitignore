@@ -10,12 +10,15 @@ build/
 
 
 
-# Data — ignore everything except .gitkeep files and Python source files in subdirectories
-/data/*
-!/data/**/
-!/data/**/.gitkeep
-!/data/*.py
-data/raw/*
+# Data — ignore dataset files, external datasets, raw, and processed data
+/data/external/
+/data/processed/
+/data/raw/
+/data/*.tar.gz
+/data/*.zip
+/data/*.pt
+/data/*.json
+
 
 # Experiment outputs (run artifacts, checkpoints, logs)
 /experiments/

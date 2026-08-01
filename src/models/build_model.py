@@ -146,3 +146,91 @@ def build_densenet121(
     if device is not None:
         model = model.to(device)
     return model
+
+
+def build_resnet18_cifar_stem(
+    num_classes: int = 10,
+    mode: str = "finetune",
+    device: torch.device | None = None,
+) -> nn.Module:
+    """Build ResNet18 adapted with 3x3 Conv1 stem for native 32x32 CIFAR-10 images."""
+    weights = ResNet18_Weights.DEFAULT if mode in ["frozen", "finetune"] else None
+    model = resnet18(weights=weights)
+
+    # 1. Replace 7x7 stride=2 conv1 with 3x3 stride=1 conv1
+    model.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1, bias=False)
+
+    # 2. Bypass MaxPool to preserve 32x32 resolution
+    model.maxpool = nn.Identity()
+
+    # 3. Replace final FC layer
+    model.fc = nn.Linear(model.fc.in_features, num_classes)
+
+    # 4. Freeze/Unfreeze configuration
+    if mode == "frozen":
+        set_parameter_requires_grad(model, False)
+        set_parameter_requires_grad(model.conv1, True)
+        set_parameter_requires_grad(model.fc, True)
+    elif mode == "finetune":
+        set_parameter_requires_grad(model, False)
+        set_parameter_requires_grad(model.conv1, True)
+        set_parameter_requires_grad(model.layer4, True)
+        set_parameter_requires_grad(model.fc, True)
+
+    model.eval()
+    if device is not None:
+        model = model.to(device)
+    return model
+
+
+def build_convnext_tiny(
+    num_classes: int = 10,
+    mode: str = "finetune",
+    device: torch.device | None = None,
+) -> nn.Module:
+    """Load ConvNeXt-Tiny and adapt for *num_classes*."""
+    from torchvision.models import ConvNeXt_Tiny_Weights, convnext_tiny
+
+    model = convnext_tiny(weights=ConvNeXt_Tiny_Weights.DEFAULT)
+    in_features = model.classifier[2].in_features
+    model.classifier[2] = nn.Linear(in_features, num_classes)
+
+    if mode == "frozen":
+        set_parameter_requires_grad(model, False)
+        set_parameter_requires_grad(model.classifier, True)
+    elif mode == "finetune":
+        set_parameter_requires_grad(model, False)
+        set_parameter_requires_grad(model.features[7], True)  # Last stage
+        set_parameter_requires_grad(model.classifier, True)
+
+    model.eval()
+    if device is not None:
+        model = model.to(device)
+    return model
+
+
+def build_efficientnet_b0(
+    num_classes: int = 10,
+    mode: str = "finetune",
+    device: torch.device | None = None,
+) -> nn.Module:
+    """Load EfficientNet-B0 and adapt for *num_classes*."""
+    from torchvision.models import EfficientNet_B0_Weights, efficientnet_b0
+
+    model = efficientnet_b0(weights=EfficientNet_B0_Weights.DEFAULT)
+    in_features = model.classifier[1].in_features
+    model.classifier[1] = nn.Linear(in_features, num_classes)
+
+    if mode == "frozen":
+        set_parameter_requires_grad(model, False)
+        set_parameter_requires_grad(model.classifier, True)
+    elif mode == "finetune":
+        set_parameter_requires_grad(model, False)
+        set_parameter_requires_grad(model.features[8], True)  # Last stage
+        set_parameter_requires_grad(model.classifier, True)
+
+    model.eval()
+    if device is not None:
+        model = model.to(device)
+    return model
+

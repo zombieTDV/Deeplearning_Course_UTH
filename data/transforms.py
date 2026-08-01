@@ -196,3 +196,35 @@ def get_transform_config(
         )
     
     return configs[config_name]
+
+
+def get_advanced_train_transform(
+    mean: list[float] | None = None,
+    std: list[float] | None = None,
+    resize_size: int = 224,
+    use_randaugment: bool = True,
+    use_random_erasing: bool = True,
+) -> transforms.Compose:
+    """Get advanced augmentation pipeline (RandAugment + RandomErasing)."""
+    if mean is None:
+        mean = IMAGENET_MEAN
+    if std is None:
+        std = IMAGENET_STD
+
+    transform_list = []
+    transform_list.append(transforms.Resize(resize_size))
+    
+    if use_randaugment:
+        transform_list.append(transforms.RandAugment(num_ops=2, magnitude=9))
+    else:
+        transform_list.append(transforms.RandomHorizontalFlip())
+        transform_list.append(transforms.RandomCrop(resize_size, padding=16 if resize_size==224 else 4))
+
+    transform_list.append(transforms.ToTensor())
+    transform_list.append(transforms.Normalize(mean=mean, std=std))
+
+    if use_random_erasing:
+        transform_list.append(transforms.RandomErasing(p=0.25, scale=(0.02, 0.2)))
+
+    return transforms.Compose(transform_list)
+
