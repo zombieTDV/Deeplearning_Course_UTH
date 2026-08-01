@@ -1,4 +1,4 @@
-# eval.md
+# EVAL.md
 
 ## Name
 Evaluation — Test Set Performance & Model Comparison
@@ -6,7 +6,7 @@ Evaluation — Test Set Performance & Model Comparison
 ## Background
 Covers Practice 2, step 7: evaluate trained models on the held-out
 CIFAR-10 test set, and compare across the ResNet18 vs DenseNet121 and
-frozen vs fine-tuned runs from [training_info.md](training_info.md).
+frozen vs fine-tuned runs from [TRAINING_INFO.md](TRAINING_INFO.md).
 
 ## Goals / Purpose
 - Get a fair, held-out accuracy number for each trained variant
@@ -17,7 +17,7 @@ frozen vs fine-tuned runs from [training_info.md](training_info.md).
 
 ## Input / Output
 - **Input:** trained checkpoints from `experiments/checkpoints/<run_name>_best.pt`,
-  `test_loader` from [data_prep.md](data_prep.md)
+  `test_loader` from [DATA_PREP.md](DATA_PREP.md)
 - **Output:** a comparison table (accuracy, and optionally per-class
   precision/recall) across all runs
 
@@ -45,9 +45,9 @@ accuracy / confusion matrix → append to comparison table
   size, epochs trained, val accuracy, test accuracy
 - **Known gotcha:** never tune anything based on test set results —
   if a decision needs to be made (e.g. picking best LR), that decision
-  should already be settled from val accuracy in training_info.md;
+  should already be settled from val accuracy in TRAINING_INFO.md;
   test set is for final reporting only
 
 ## Links
-- Related phase docs: [overview.md](overview.md), [training_info.md](training_info.md)
-- Progress tracking: [progress/eval_status.md](progress/eval_status.md)
+- Related phase docs: [OVERVIEW.md](../OVERVIEW.md), [TRAINING_INFO.md](TRAINING_INFO.md)
+- Progress tracking: [progress/EVAL_STATUS.md](../progress/EVAL_STATUS.md)

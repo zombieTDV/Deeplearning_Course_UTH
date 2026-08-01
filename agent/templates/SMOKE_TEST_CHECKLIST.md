@@ -1,4 +1,4 @@
-# smoke_test_checklist.md
+# SMOKE_TEST_CHECKLIST.md
 Every script must pass a smoke test before being run "for real"
 (full data, full epochs, production config). This is cheap insurance
 against burning an hour of compute on a bug in line 3.

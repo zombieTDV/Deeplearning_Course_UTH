@@ -1,6 +1,6 @@
-# model_status.md
+# MODEL_STATUS.md
 
-**Phase:** [../model.md](../model.md)
+**Phase:** [../phases/MODEL.md](../phases/MODEL.md)
 **Last updated:** 2026-07-30
 
 ## Status: Done
@@ -28,6 +28,6 @@
 
 ## Next step
 
-- Proceed to [training_info.md](../training_info.md): define loss function,
+- Proceed to [TRAINING_INFO.md](../phases/TRAINING_INFO.md): define loss function,
   optimizers (per-param-group for fine-tune variants), training loop,
   TensorBoard logging, hyperparameter sweep

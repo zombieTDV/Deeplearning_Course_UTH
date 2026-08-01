@@ -1,4 +1,4 @@
-# training_info.md
+# TRAINING_INFO.md
 
 ## Name
 Training — Hyperparameters & TensorBoard Monitoring
@@ -13,8 +13,8 @@ loss function, optimizer, training loop, and monitoring.
 - Log everything to TensorBoard for comparison across runs
 
 ## Input / Output
-- **Input:** adapted model from [model.md](model.md),
-  DataLoaders from [data_prep.md](data_prep.md)
+- **Input:** adapted model from [MODEL.md](MODEL.md),
+  DataLoaders from [DATA_PREP.md](DATA_PREP.md)
 - **Output:** trained model checkpoints (`experiments/checkpoints/<run_name>_best.pt`),
   TensorBoard logs (`experiments/tb_logs/<run_name>/` via ``SummaryWriter``)
 
@@ -25,13 +25,13 @@ loss function, optimizer, training loop, and monitoring.
 3. Define optimizer — only pass `requires_grad=True` params to it
 4. Set up `SummaryWriter` for TensorBoard
 4. Write training loop: forward, loss, backward, step, log
-5. Run smoke test first (see `docs/smoke_test_checklist.md`) before any
+5. Run smoke test first (see `agent/templates/SMOKE_TEST_CHECKLIST.md`) before any
    full run
 6. Run full training sweep
 
 ## Pipeline
 ```
-model (from model.md) + train_loader/val_loader (from data_prep.md) →
+model (from MODEL.md) + train_loader/val_loader (from DATA_PREP.md) →
 loss_fn + optimizer → training loop (per epoch: train step, val step,
 log to TensorBoard) → checkpoint saved per run
 ```
@@ -50,13 +50,13 @@ log to TensorBoard) → checkpoint saved per run
   - `train/loss`, `train/accuracy`
   - `val/loss`, `val/accuracy`
   - learning rate (if using a scheduler)
-- **Run naming:** `<model>_<lr>_<batch>_<date>` per naming_convention.md,
+- **Run naming:** `<model>_<lr>_<batch>_<date>` per NAMING_CONVENTION.md,
   so TensorBoard runs don't collide and stay comparable side-by-side
 - **Known gotcha:** forgetting `model.eval()` / `model.train()` mode
   switches between train and val loops silently breaks BatchNorm
   behavior — double check this in the smoke test
 
 ## Links
-- Related phase docs: [overview.md](overview.md), [model.md](model.md),
-  [eval.md](eval.md)
-- Progress tracking: [progress/training_status.md](progress/training_status.md)
+- Related phase docs: [OVERVIEW.md](../OVERVIEW.md), [MODEL.md](MODEL.md),
+  [EVAL.md](EVAL.md)
+- Progress tracking: [progress/TRAINING_STATUS.md](../progress/TRAINING_STATUS.md)

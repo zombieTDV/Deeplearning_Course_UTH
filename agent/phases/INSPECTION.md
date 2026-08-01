@@ -1,4 +1,4 @@
-# inspection.md
+# INSPECTION.md
 
 ## Overview
 

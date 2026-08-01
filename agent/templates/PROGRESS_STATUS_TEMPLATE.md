@@ -1,5 +1,5 @@
 # <phase_name>_status.md — Template
-One of these per phase, kept in `docs/progress/`. Updated by the agent
+One of these per phase, kept in `agent/progress/`. Updated by the agent
 after every meaningful change — this is the fast thing to check
 without re-reading the whole phase doc.
 

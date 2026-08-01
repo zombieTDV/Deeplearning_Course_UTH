@@ -1,4 +1,4 @@
-# model.md
+# MODEL.md
 
 ## Name
 Model — Pretrained ResNet / DenseNet Adaptation
@@ -61,6 +61,6 @@ replace nn.Linear(in_features, 10) → freeze/unfreeze → model.to(device) → 
   on CPU — the caller must then call ``model.to(device)`` explicitly.
 
 ## Links
-- Related phase docs: [overview.md](overview.md), [data_prep.md](data_prep.md),
-  [training_info.md](training_info.md)
-- Progress tracking: [progress/model_status.md](progress/model_status.md)
+- Related phase docs: [OVERVIEW.md](../OVERVIEW.md), [DATA_PREP.md](DATA_PREP.md),
+  [TRAINING_INFO.md](TRAINING_INFO.md)
+- Progress tracking: [progress/MODEL_STATUS.md](../progress/MODEL_STATUS.md)
