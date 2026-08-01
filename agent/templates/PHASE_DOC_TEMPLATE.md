@@ -36,4 +36,4 @@ src/data/load_raw.py → src/data/clean.py → src/data/feature_eng.py → data/
 
 ## Links
 - Related phase docs: [OVERVIEW.md](../OVERVIEW.md), [EVAL.md](../phases/EVAL.md)
-- Progress tracking: [progress/<phase>_status.md](../progress/<phase>_STATUS.md)
+- Progress tracking: [progress/<phase>_STATUS.md](../progress/<phase>_STATUS.md)

@@ -62,4 +62,4 @@ project_root/
 - If actual folder structure diverges from this file, that's a
   CODEBASE_AUDIT.md finding, not something to silently "fix"
 - Before working on a phase, read the matching agent/phases/<phase>.md and
-  agent/progress/<phase>_status.md yourself before asking the human for context.
+  agent/progress/<phase>_STATUS.md yourself before asking the human for context.

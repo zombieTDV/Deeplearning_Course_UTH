@@ -5,7 +5,7 @@ Edit these to match your actual preferences — this is a starting point.
 ## Files & folders
 - Scripts: `snake_case.py` (e.g. `train_model.py`, not `TrainModel.py`)
 - Notebooks: `NN_short_purpose.ipynb` (e.g. `01_eda.ipynb`, `02_baseline.ipynb`)
-- Docs: `snake_case.md`, matches the phase it documents (`DATA_PREP.md`, `TRAINING_INFO.md`)
+- Docs: `UPPER_SNAKE_CASE.md`, matches the phase it documents (`DATA_PREP.md`, `TRAINING_INFO.md`)
 - Config files: `config.yaml` or `config_<experiment_name>.yaml`
 - Checkpoints/artifacts: `<model>_<dataset>_<date_or_run_id>.pt`
 

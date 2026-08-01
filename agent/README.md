@@ -52,5 +52,5 @@ agent/
 
 1. **Before starting a multi-file task**: Run the procedure in [rules/CODEBASE_AUDIT.md](rules/CODEBASE_AUDIT.md) to check for drift between documentation and real code.
 2. **Before creating or modifying code**: Verify directory locations in [rules/FOLDER_STRUCTURE.md](rules/FOLDER_STRUCTURE.md) and naming rules in [rules/NAMING_CONVENTION.md](rules/NAMING_CONVENTION.md).
-3. **Executing a Phase**: Read the matching phase doc in `phases/<phase>.md` and maintain status in `progress/<phase>_status.md`.
+3. **Executing a Phase**: Read the matching phase doc in `phases/<phase>.md` and maintain status in `progress/<phase>_STATUS.md`.
 4. **Before long runs**: Perform the verification steps in [templates/SMOKE_TEST_CHECKLIST.md](templates/SMOKE_TEST_CHECKLIST.md).

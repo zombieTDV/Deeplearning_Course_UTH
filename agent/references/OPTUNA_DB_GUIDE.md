@@ -59,7 +59,7 @@ plot_param_importances(study).write_html('param_importance.html')
 ## Export (to /agents or similar)
 Write three files: a JSON summary (`best_trial`, counts, params), a full
 `trials_dataframe().to_csv(...)`, and an importance CSV. Full working
-version: `src/analysis/optuna_db_report.py`.
+version: `src/utils/optuna_db_report.py`.
 
 ## Pitfalls
 | Symptom | Fix |

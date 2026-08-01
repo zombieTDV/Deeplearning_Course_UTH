@@ -9,7 +9,7 @@ what the docs claim and what the code actually does, BEFORE acting on it.
    or documented but missing.
 2. For every function/class name referenced in `agent/**/*.md`, grep for
    it in `src/` or `data/`. Flag any that don't exist or whose signature changed.
-3. Cross-check `agent/progress/*_status.md` against real artifacts —
+3. Cross-check `agent/progress/*_STATUS.md` against real artifacts —
    e.g. if `TRAINING_STATUS.md` says "Done," does a checkpoint file
    actually exist? If not, flag it.
 4. Check naming in recently changed files against `NAMING_CONVENTION.md`.
