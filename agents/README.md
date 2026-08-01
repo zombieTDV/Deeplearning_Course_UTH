@@ -7,7 +7,7 @@ Welcome to the **Agent AI Knowledge Base** for the `Deeplearning_Course_UTH` rep
 ## 📁 Directory Architecture
 
 ```
-agent/
+agents/
 ├── README.md                      # Entry point & navigation guide (this file)
 ├── OVERVIEW.md                    # Core project overview, goals & phase roadmap
 ├── PURPOSE.md                     # Original exercise brief & requirements

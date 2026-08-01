@@ -6,7 +6,7 @@ if the structure changes.
 
 ```
 project_root/
-├── agent/                 # Agent AI Knowledge Base (behavior layer, rules, plans, progress)
+├── agents/                # Agent AI Knowledge Base (behavior layer, rules, plans, progress)
 │   ├── README.md          # Index & guide for Agent AI
 │   ├── OVERVIEW.md        # Core project overview & roadmap
 │   ├── PURPOSE.md         # Original exercise brief & requirements
@@ -61,5 +61,5 @@ project_root/
 - Exploratory/throwaway code stays in `notebooks/`, not `src/`
 - If actual folder structure diverges from this file, that's a
   CODEBASE_AUDIT.md finding, not something to silently "fix"
-- Before working on a phase, read the matching agent/phases/<phase>.md and
-  agent/progress/<phase>_STATUS.md yourself before asking the human for context.
+- Before working on a phase, read the matching agents/phases/<phase>.md and
+  agents/progress/<phase>_STATUS.md yourself before asking the human for context.

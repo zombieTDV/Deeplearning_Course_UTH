@@ -17,7 +17,7 @@
 
 - From the description -> make general plan -> Pipeline -> Details experiment plan (all this should be in a single .md files) -> Progress status (in it individual .md files): to do, in progress, Done, On hold, Canceled
 
-- A .MD that note out where everything are using Relative link (agent/OVERVIEW.md: for internal things in project), Cross-file anchor link (agent/OVERVIEW.md#installation: Jump to a heading in another file), Absolute URL (for external things)
+- A .MD that note out where everything are using Relative link (agents/OVERVIEW.md: for internal things in project), Cross-file anchor link (agents/OVERVIEW.md#installation: Jump to a heading in another file), Absolute URL (for external things)
 
 - Must have .MD for every stage/ phase in the project, for example: DATA_PREP.md, TRAINING_INFO.md, MODEL.md, EVAL.md, ....
 

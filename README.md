@@ -13,7 +13,7 @@ The overall pipeline flow is structured as follows:
 ```
 Dataset → Inspection → Statistics → Transforms → DataLoader → Models → Training → Evaluation
                                                                              │
-                                                                 Agent AI Knowledge Base (agent/)
+                                                                 Agent AI Knowledge Base (agents/)
 ```
 
 ---
@@ -23,7 +23,7 @@ Dataset → Inspection → Statistics → Transforms → DataLoader → Models �
 ```
 Deeplearning_Course_UTH/
 │
-├── agent/                    # Agent AI Knowledge Base & Behavioral Control Layer
+├── agents/                   # Agent AI Knowledge Base & Behavioral Control Layer
 │   ├── README.md             # Navigation guide & entry point for AI Agent
 │   ├── OVERVIEW.md           # Project roadmap, goals & phase overview
 │   ├── PURPOSE.md            # Exercise brief & technical objectives
@@ -96,12 +96,12 @@ Deeplearning_Course_UTH/
 
 ## 🤖 Agent AI Control & Knowledge Base
 
-The repository includes a dedicated AI Agent system in `agent/`:
+The repository includes a dedicated AI Agent system in `agents/`:
 
 - **System Conventions**: All configuration files for the AI Agent use uppercase names with lowercase `.md` extension (`README.md`, `AGENT_AI.md`, `CODEBASE_AUDIT.md`) for instant recognition and visual highlighting.
-- **Behavior Layer**: [agent/rules/AGENT_AI.md](agent/rules/AGENT_AI.md) acts as the memory and second brain for AI coding assistants.
-- **Audit Procedure**: Before multi-file tasks, the AI agent executes [agent/rules/CODEBASE_AUDIT.md](agent/rules/CODEBASE_AUDIT.md) to prevent documentation drift.
-- **Phase Execution**: Pipeline stages are documented in [agent/phases/](agent/phases/) and tracked live in [agent/progress/](agent/progress/).
+- **Behavior Layer**: [agents/rules/AGENT_AI.md](agents/rules/AGENT_AI.md) acts as the memory and second brain for AI coding assistants.
+- **Audit Procedure**: Before multi-file tasks, the AI agent executes [agents/rules/CODEBASE_AUDIT.md](agents/rules/CODEBASE_AUDIT.md) to prevent documentation drift.
+- **Phase Execution**: Pipeline stages are documented in [agents/phases/](agents/phases/) and tracked live in [agents/progress/](agents/progress/).
 
 ---
 
