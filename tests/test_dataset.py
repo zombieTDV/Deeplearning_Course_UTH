@@ -3,12 +3,12 @@ test_dataset.py — Unit tests for data.dataset module.
 """
 
 import pytest
-from data.dataset import download_cifar10, load_cifar10_dataset, get_dataset_info
+from src.data.dataset import download_cifar10, load_cifar10_dataset, get_dataset_info
 
 
 def test_imports():
     """Test that dataset module imports successfully."""
-    from data import dataset
+    from src.data import dataset
     assert dataset is not None
 
 
