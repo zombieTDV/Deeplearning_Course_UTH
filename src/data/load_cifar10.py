@@ -252,7 +252,11 @@ def load_cifar10(
     shuffle_eval = dataloader_config.get('shuffle_eval', False)
     
     # Disable pin_memory for MPS (Apple Silicon) as it's not supported
-    if torch.backends.mps.is_available() or torch.backends.mps.is_built():
+    # Also disable for CPU since pin_memory is only useful for CUDA
+    device_type = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    if torch.backends.mps.is_available():
+        device_type = torch.device('mps')
+    if device_type.type != 'cuda':
         pin_memory = False
     
     logger.info(f"Loading CIFAR-10 from {data_root}")
