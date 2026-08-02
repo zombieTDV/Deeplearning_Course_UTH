@@ -7,12 +7,12 @@ import os
 import tempfile
 import pytest
 import torch
-from data.statistics import compute_dataset_statistics, save_statistics, load_statistics, get_normalization_transform
+from src.data.statistics import compute_dataset_statistics, save_statistics, load_statistics, get_normalization_transform
 
 
 def test_imports():
     """Test that statistics module imports successfully."""
-    from data import statistics
+    from src.data import statistics
     assert statistics is not None
 
 

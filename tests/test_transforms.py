@@ -3,7 +3,7 @@ test_transforms.py — Unit tests for data.transforms module.
 """
 
 import pytest
-from data.transforms import (
+from src.data.transforms import (
     get_train_transform,
     get_eval_transform,
     get_cifar10_transforms,
@@ -17,7 +17,7 @@ from data.transforms import (
 
 def test_imports():
     """Test that transforms module imports successfully."""
-    from data import transforms
+    from src.data import transforms
     assert transforms is not None
 
 

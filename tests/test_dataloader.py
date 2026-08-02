@@ -4,12 +4,12 @@ test_dataloader.py — Unit tests for data.dataloader module.
 
 import pytest
 from torch.utils.data import Dataset, TensorDataset
-from data.dataloader import get_single_loader
+from src.data.dataloader import get_single_loader
 
 
 def test_imports():
     """Test that dataloader module imports successfully."""
-    from data import dataloader
+    from src.data import dataloader
     assert dataloader is not None
 
 

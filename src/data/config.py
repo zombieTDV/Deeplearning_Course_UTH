@@ -8,10 +8,21 @@ Usage:
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 from typing import Any
 
 import yaml
+
+
+# ---------------------------------------------------------------------------
+# Constants
+# ---------------------------------------------------------------------------
+_PROJECT_ROOT = Path(__file__).resolve().parents[2]
+
+# Directory paths for training outputs
+TB_LOG_DIR = str(_PROJECT_ROOT / "experiments" / "tensorboard_logs")
+CKPT_DIR = str(_PROJECT_ROOT / "experiments" / "checkpoints")
 
 
 def load_config(config_path: str | Path = "configs/data.yaml") -> dict[str, Any]:

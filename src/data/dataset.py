@@ -61,25 +61,39 @@ def load_cifar10_dataset(
     root: str = DEFAULT_DATA_ROOT,
     train: bool = True,
     transform: object | None = None,
+    auto_download: bool = True,
 ) -> Dataset:
     """Load CIFAR-10 dataset.
+
+    Automatically downloads the dataset if it is not found locally.
 
     Args:
         root: Directory where the dataset is stored.
         train: If True, loads training set. If False, loads test set.
         transform: Optional transform to be applied on a sample.
+        auto_download: If True, automatically downloads dataset if missing.
 
     Returns:
         CIFAR10 dataset instance.
 
     Raises:
-        RuntimeError: If dataset is not found and download is not requested.
+        RuntimeError: If dataset is not found and auto_download is False.
     """
     logger.debug(f"Loading CIFAR-10 dataset from {root} (train={train})")
+    
+    # Check if dataset exists
+    data_path = Path(root)
+    if not data_path.exists():
+        if auto_download:
+            logger.info(f"Dataset not found at {root}, auto-downloading...")
+            download_cifar10(root=root)
+        else:
+            raise RuntimeError(f"Dataset not found at {root} and auto_download is False")
+    
     return torchvision.datasets.CIFAR10(
         root=root,
         train=train,
-        download=False,
+        download=auto_download,  # Let torchvision handle download if needed
         transform=transform,
     )
 

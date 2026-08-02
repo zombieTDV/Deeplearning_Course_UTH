@@ -134,9 +134,10 @@ pip install -r requirements.txt
 ### Running the Data Pipeline
 
 ```python
-from data import download_cifar10, get_cifar10_loaders
+from src.data.dataset import download_cifar10
+from src.data.dataloader import get_cifar10_loaders
 
-# Download dataset
+# Download dataset (auto-downloads if missing)
 download_cifar10()
 
 # Create DataLoaders (returns train, val, test)
