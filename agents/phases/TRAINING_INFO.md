@@ -25,7 +25,7 @@ loss function, optimizer, training loop, and monitoring.
 3. Define optimizer — only pass `requires_grad=True` params to it
 4. Set up `SummaryWriter` for TensorBoard
 4. Write training loop: forward, loss, backward, step, log
-5. Run smoke test first (see `agent/templates/SMOKE_TEST_CHECKLIST.md`) before any
+5. Run smoke test first (see `agents/templates/SMOKE_TEST_CHECKLIST.md`) before any
    full run
 6. Run full training sweep
 
