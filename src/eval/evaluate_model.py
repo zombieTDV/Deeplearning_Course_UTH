@@ -131,7 +131,7 @@ def format_comparison_table(
         ta = res.get("test_acc", float("nan"))
         va = res.get("best_val_acc", float("nan"))
         pca = res.get("per_class_acc", [])
-        if pca:
+        if pca is not None and len(pca) > 0:
             range_str = f"{min(pca):.1f}-{max(pca):.1f}%"
         else:
             range_str = "?"
