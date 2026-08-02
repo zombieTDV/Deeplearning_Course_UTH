@@ -28,6 +28,14 @@
 
 ---
 
+## 📈 Benchmark Visualizations (EXP-03)
+
+- **Regularization Trajectory Plot:** [../../experiments/plots/exp_03_regularization_trajectory.png](../../experiments/plots/exp_03_regularization_trajectory.png)
+- **Generalization Gap Analysis:** [../../experiments/plots/exp_03_generalization_gap.png](../../experiments/plots/exp_03_generalization_gap.png)
+- **Master Augmentation Dashboard:** [../../experiments/plots/exp_03_advanced_augmentations.png](../../experiments/plots/exp_03_advanced_augmentations.png)
+
+---
+
 ## 💡 4. Key Takeaways & Conclusion
 
 1. **Generalization Gap Suppression**: The gap between training accuracy (88.40%) and validation accuracy (92.72%) was negative, proving that RandAugment + Label Smoothing completely eliminated overfitting on the training set.

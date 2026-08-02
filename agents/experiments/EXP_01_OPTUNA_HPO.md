@@ -35,6 +35,14 @@
 
 ---
 
+## 📈 Benchmark Visualizations (EXP-01)
+
+- **Trial Progression Plot:** [../../experiments/plots/exp_01_trial_progression.png](../../experiments/plots/exp_01_trial_progression.png)
+- **Parameter Sensitivity & Importance:** [../../experiments/plots/exp_01_parameter_importance.png](../../experiments/plots/exp_01_parameter_importance.png)
+- **Master HPO Dashboard:** [../../experiments/plots/exp_01_optuna_hpo.png](../../experiments/plots/exp_01_optuna_hpo.png)
+
+---
+
 ## 💡 4. Key Takeaways & Conclusion
 
 1. **Optimal Learning Rate & Optimizer**: `AdamW` with base learning rate `8.96e-5` significantly outperformed standard SGD, reaching **92.06% validation accuracy** in just 2 epochs.

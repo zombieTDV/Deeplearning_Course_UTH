@@ -12,6 +12,8 @@ agents/
 ├── OVERVIEW.md                    # Core project overview, goals & phase roadmap
 ├── PURPOSE.md                     # Original exercise brief & requirements
 │
+├── experiments/                   # Experiment reports & technical comparisons
+│   ├── CODE_DIFFERENCE_PRACTICE2_VS_EXP07.md # practice_2 vs EXP-07 code comparison
 ├── rules/                         # Guidelines, standards & philosophy for Agent AI
 │   ├── AGENT_AI.md                # Agent AI philosophy & behavior layer rules
 │   ├── CODEBASE_AUDIT.md          # Mandatory pre-task codebase audit checklist

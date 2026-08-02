@@ -384,6 +384,52 @@ def plot_exp06_granular():
     plt.close()
     logger.info(f"Saved: {out}")
 
+# -----------------------------------------------------------------------------
+# EXP-07 Individual Plots (ResNet18 & DenseNet121 SOTA Peak Accuracy)
+# -----------------------------------------------------------------------------
+def plot_exp07_granular():
+    logger.info("Generating EXP-07 Granular Plots...")
+
+    variants = [
+        "DenseNet121\n(Baseline EXP-05)",
+        "DenseNet121\n(Peak SOTA EXP-07)",
+        "ResNet18\n(Baseline EXP-05)",
+        "ResNet18\n(Peak SOTA EXP-07)",
+        "ResNet18 + DenseNet121\nEnsemble 🏆"
+    ]
+    accuracies = [90.70, 95.00, 92.36, 94.72, 96.00]
+    colors = ["#ffbb78", "#ff7f0e", "#aec7e8", "#1f77b4", "#ffd700"]
+
+    plt.figure(figsize=(10, 5.5))
+    bars = plt.bar(variants, accuracies, color=colors, edgecolor="black", width=0.55)
+
+    plt.ylabel("Validation Accuracy (%)", fontweight="bold")
+    plt.title("EXP-07: ResNet18 & DenseNet121 Peak SOTA Optimization & Ensemble Record", fontsize=13, fontweight="bold")
+    plt.ylim(85, 98)
+    plt.grid(True, linestyle="--", alpha=0.5, axis="y")
+
+    for bar in bars:
+        height = bar.get_height()
+        plt.text(bar.get_x() + bar.get_width()/2, height + 0.3, f"{height:.2f}%", ha="center", va="bottom", fontsize=9.5, fontweight="bold")
+
+    plt.annotate("+4.30% Boost", xy=(1, 95.00), xytext=(0.5, 96.2),
+                 arrowprops=dict(facecolor="orange", shrink=0.08, width=1.5, headwidth=7),
+                 fontsize=9, fontweight="bold", color="darkorange")
+
+    plt.annotate("+2.36% Boost", xy=(3, 94.72), xytext=(2.5, 96.5),
+                 arrowprops=dict(facecolor="blue", shrink=0.08, width=1.5, headwidth=7),
+                 fontsize=9, fontweight="bold", color="darkblue")
+
+    plt.annotate("🏆 Peak Classic Record: 96.00%", xy=(4, 96.00), xytext=(3.2, 97.2),
+                 arrowprops=dict(facecolor="gold", edgecolor="black", shrink=0.08, width=2, headwidth=8),
+                 fontsize=10, fontweight="bold", color="darkgreen")
+
+    plt.tight_layout()
+    out = os.path.join(PLOT_DIR, "exp_07_resnet_densenet_sota.png")
+    plt.savefig(out, dpi=300)
+    plt.close()
+    logger.info(f"Saved: {out}")
+
 def generate_all_granular():
     create_output_dir()
     plot_exp01_granular()
@@ -392,7 +438,8 @@ def generate_all_granular():
     plot_exp04_granular()
     plot_exp05_granular()
     plot_exp06_granular()
-    logger.info("🎉 All granular experiment plots (EXP-01 to EXP-06) generated successfully!")
+    plot_exp07_granular()
+    logger.info("🎉 All granular experiment plots (EXP-01 to EXP-07) generated successfully!")
 
 if __name__ == "__main__":
     generate_all_granular()

@@ -40,6 +40,13 @@ This ultimate experiment fuses the best architectural backbone (`ConvNeXt-Tiny` 
 
 ---
 
+## 📈 Benchmark Visualizations (EXP-06)
+
+- **10-Epoch Trajectory Dashboard:** [../../experiments/plots/exp_06_sota_convnext_trajectory.png](../../experiments/plots/exp_06_sota_convnext_trajectory.png)
+- **Incremental Waterfall Performance Gain:** [../../experiments/plots/exp_06_sota_waterfall_gain.png](../../experiments/plots/exp_06_sota_waterfall_gain.png)
+
+---
+
 ## 💡 4. Conclusion & Key Takeaways
 
 1. **New Project Record (97.66%)**: Combining ConvNeXt-Tiny with RandAugment, Label Smoothing (0.1), and CosineAnnealingLR produced the highest accuracy achieved in the entire course repository.

@@ -24,7 +24,9 @@
 
 ## 📈 3. Architecture Performance & Loss Trajectory
 
-![EXP-05 Architecture Loss Curves](../../experiments/plots/exp_05_architecture_loss_curves.png)
+- **Architecture Loss Curves:** [../../experiments/plots/exp_05_architecture_loss_curves.png](../../experiments/plots/exp_05_architecture_loss_curves.png)
+- **Architecture Trajectories Plot:** [../../experiments/plots/exp_05_architecture_trajectories.png](../../experiments/plots/exp_05_architecture_trajectories.png)
+- **Master Architecture Sweep Dashboard:** [../../experiments/plots/exp_05_architecture_sweep.png](../../experiments/plots/exp_05_architecture_sweep.png)
 
 ---
 

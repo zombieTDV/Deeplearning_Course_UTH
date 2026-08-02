@@ -29,6 +29,13 @@
 
 ---
 
+## 📈 Benchmark Visualizations (EXP-04)
+
+- **Native Stem Trajectory Plot:** [../../experiments/plots/exp_04_native_stem_trajectory.png](../../experiments/plots/exp_04_native_stem_trajectory.png)
+- **Resolution Benchmark Dashboard:** [../../experiments/plots/exp_04_stem_resolution_benchmark.png](../../experiments/plots/exp_04_stem_resolution_benchmark.png)
+
+---
+
 ## 💡 4. Key Takeaways & Conclusion
 
 1. **High Throughput & Low Latency**: Execution time per epoch was **45.5 seconds** (nearly **2x faster** than 224x224 upsampling at 84s/epoch).
