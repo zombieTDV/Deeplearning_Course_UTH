@@ -20,8 +20,13 @@ build/
 /data/*.json
 
 
-# Experiment outputs (run artifacts, checkpoints, logs)
-/experiments/
+# Experiment outputs (track plots, results & scripts, ignore heavy weights & DBs)
+/experiments/checkpoints/*.pt
+!/experiments/checkpoints/.gitkeep
+/experiments/runs/
+/experiments/tb_logs/
+/experiments/*.db
+/experiments/*.sqlite
 
 # Virtual environment
 .venv/

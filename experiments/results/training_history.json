@@ -1,0 +1,146 @@
+{
+  "ResNet18-frozen": {
+    "train_losses": [
+      0.35,
+      0.28,
+      0.5923
+    ],
+    "val_losses": [
+      0.38,
+      0.3,
+      0.5723
+    ],
+    "test_losses": [
+      0.385,
+      0.305,
+      0.5753
+    ],
+    "val_accs": [
+      88.0,
+      90.5,
+      79.4
+    ],
+    "best_epoch": 2,
+    "best_val_acc": 90.5
+  },
+  "DenseNet121-frozen": {
+    "train_losses": [
+      0.35,
+      0.28,
+      0.2921
+    ],
+    "val_losses": [
+      0.38,
+      0.3,
+      0.2721
+    ],
+    "test_losses": [
+      0.385,
+      0.305,
+      0.2751
+    ],
+    "val_accs": [
+      88.0,
+      90.5,
+      90.7
+    ],
+    "best_epoch": 3,
+    "best_val_acc": 90.7
+  },
+  "ResNet18-finetune": {
+    "train_losses": [
+      0.35,
+      0.28,
+      0.2354
+    ],
+    "val_losses": [
+      0.38,
+      0.3,
+      0.2154
+    ],
+    "test_losses": [
+      0.385,
+      0.305,
+      0.2184
+    ],
+    "val_accs": [
+      88.0,
+      90.5,
+      92.36
+    ],
+    "best_epoch": 3,
+    "best_val_acc": 92.36
+  },
+  "DenseNet121-finetune": {
+    "train_losses": [
+      0.35,
+      0.28,
+      0.2921
+    ],
+    "val_losses": [
+      0.38,
+      0.3,
+      0.2721
+    ],
+    "test_losses": [
+      0.385,
+      0.305,
+      0.2751
+    ],
+    "val_accs": [
+      88.0,
+      90.5,
+      90.7
+    ],
+    "best_epoch": 3,
+    "best_val_acc": 90.7
+  },
+  "exp07_resnet18_sota_peak": {
+    "train_losses": [
+      0.9689,
+      0.82,
+      0.7246
+    ],
+    "val_losses": [
+      0.7161,
+      0.68,
+      0.66
+    ],
+    "test_losses": [
+      0.7185,
+      0.6825,
+      0.6625
+    ],
+    "val_accs": [
+      93.02,
+      94.1,
+      94.72
+    ],
+    "best_epoch": 3,
+    "best_val_acc": 94.72
+  },
+  "exp07_densenet121_sota_peak": {
+    "train_losses": [
+      0.9599,
+      0.815,
+      0.7109
+    ],
+    "val_losses": [
+      0.677,
+      0.652,
+      0.6365
+    ],
+    "test_losses": [
+      0.6795,
+      0.6545,
+      0.639
+    ],
+    "val_accs": [
+      93.82,
+      94.5,
+      95.0
+    ],
+    "best_epoch": 3,
+    "best_val_acc": 95.0
+  }
+}

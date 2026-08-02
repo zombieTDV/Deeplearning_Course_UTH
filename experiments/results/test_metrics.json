@@ -1,0 +1,121 @@
+{
+  "ResNet18-frozen": {
+    "mode": "frozen",
+    "test_loss": 0.6089,
+    "test_acc": 79.2,
+    "per_class_acc": [
+      82.6,
+      94.3,
+      66.7,
+      72.1,
+      63.7,
+      74.9,
+      91.3,
+      84.2,
+      82.5,
+      79.7
+    ]
+  },
+  "DenseNet121-frozen": {
+    "mode": "frozen",
+    "test_loss": 0.2651,
+    "test_acc": 90.91,
+    "per_class_acc": [
+      88.3,
+      93.7,
+      93.1,
+      83.0,
+      89.6,
+      87.3,
+      93.9,
+      88.9,
+      94.7,
+      96.6
+    ]
+  },
+  "ResNet18-finetune": {
+    "mode": "finetune",
+    "test_loss": 0.2293,
+    "test_acc": 92.27,
+    "per_class_acc": [
+      93.2,
+      95.3,
+      92.8,
+      80.5,
+      94.6,
+      86.9,
+      94.7,
+      95.4,
+      94.6,
+      94.7
+    ]
+  },
+  "DenseNet121-finetune": {
+    "mode": "finetune",
+    "test_loss": 0.2651,
+    "test_acc": 90.91,
+    "per_class_acc": [
+      88.3,
+      93.7,
+      93.1,
+      83.0,
+      89.6,
+      87.3,
+      93.9,
+      88.9,
+      94.7,
+      96.6
+    ]
+  },
+  "exp07_resnet18_sota_peak": {
+    "mode": "SOTA Peak",
+    "test_loss": 0.2626,
+    "test_acc": 94.03,
+    "per_class_acc": [
+      96.9,
+      97.4,
+      92.0,
+      84.3,
+      95.0,
+      90.6,
+      97.3,
+      94.5,
+      96.6,
+      95.7
+    ]
+  },
+  "exp07_densenet121_sota_peak": {
+    "mode": "SOTA Peak",
+    "test_loss": 0.2336,
+    "test_acc": 95.0,
+    "per_class_acc": [
+      97.2,
+      97.4,
+      95.1,
+      87.9,
+      95.7,
+      91.8,
+      97.9,
+      95.0,
+      96.6,
+      95.4
+    ]
+  },
+  "Soft-Voting Ensemble \ud83c\udfc6": {
+    "mode": "Ensemble",
+    "test_loss": 0.2285,
+    "test_acc": 95.63,
+    "per_class_acc": [
+      97.9,
+      98.1,
+      95.4,
+      88.5,
+      96.9,
+      92.3,
+      98.2,
+      96.1,
+      96.9,
+      96.0
+    ]
+  }
+}
