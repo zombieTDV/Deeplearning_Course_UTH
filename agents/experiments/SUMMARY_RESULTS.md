@@ -22,17 +22,28 @@ All 6 Deep Learning fine-tuning experiments have completed execution on CUDA GPU
 
 ---
 
-## 📈 Benchmark Visualizations
+## 📈 Benchmark Visualizations Gallery
 
-- **Summary Plot Path**: [`experiments/plots/overall_experiment_summary.png`](file:///home/bush/Desktop/Deeplearning_Course_UTH/experiments/plots/overall_experiment_summary.png)
-- **Loss Curves Path**: [`experiments/plots/exp_05_architecture_loss_curves.png`](file:///home/bush/Desktop/Deeplearning_Course_UTH/experiments/plots/exp_05_architecture_loss_curves.png)
+Below is the complete gallery of 9 in-depth visualization charts across all 6 experiments:
+
+| Chart Title | Relative Plot Path | Analysis & Description |
+| :--- | :--- | :--- |
+| **Master Leaderboard** | [../../experiments/plots/master_experiment_leaderboard.png](../../experiments/plots/master_experiment_leaderboard.png) | Ranked Validation Accuracy across all 9 model configurations (76.98% to 97.66%). |
+| **Pareto Frontier** | [../../experiments/plots/pareto_accuracy_vs_latency.png](../../experiments/plots/pareto_accuracy_vs_latency.png) | Efficiency tradeoff curve between Accuracy (%) and Epoch Training Latency (s/epoch). |
+| **EXP-01: Optuna HPO** | [../../experiments/plots/exp_01_optuna_hpo.png](../../experiments/plots/exp_01_optuna_hpo.png) | Trial accuracy comparison and hyperparameter sensitivity (LR & Optimizer choice). |
+| **EXP-02: LR Schedulers** | [../../experiments/plots/exp_02_lr_schedulers.png](../../experiments/plots/exp_02_lr_schedulers.png) | Loss & Accuracy trajectories comparing Constant LR, ReduceLROnPlateau, and CosineAnnealingLR. |
+| **EXP-03: Augmentations** | [../../experiments/plots/exp_03_advanced_augmentations.png](../../experiments/plots/exp_03_advanced_augmentations.png) | RandAugment + Label Smoothing regularization eliminating training set overfitting. |
+| **EXP-04: Stem Resolution** | [../../experiments/plots/exp_04_stem_resolution_benchmark.png](../../experiments/plots/exp_04_stem_resolution_benchmark.png) | Native 32x32 Stem vs 224x224 Upsampling benchmarking Accuracy, Latency & VRAM. |
+| **EXP-05: Arch Sweep** | [../../experiments/plots/exp_05_architecture_sweep.png](../../experiments/plots/exp_05_architecture_sweep.png) | Empirical benchmark across ResNet18, DenseNet121, ConvNeXt-Tiny, and EfficientNet-B0. |
+| **EXP-06: SOTA Trajectory** | [../../experiments/plots/exp_06_sota_convnext_trajectory.png](../../experiments/plots/exp_06_sota_convnext_trajectory.png) | 10-Epoch training trajectory of ConvNeXt-Tiny reaching the **97.66%** project record. |
+| **Master Summary** | [../../experiments/plots/overall_experiment_summary.png](../../experiments/plots/overall_experiment_summary.png) | 4-panel master summary dashboard consolidating key project metrics. |
 
 ---
 
 ## 💡 Final Fine-Tuning Recommendations
 
 1. **All-Time Top Performance Winner (Target >97.5%)**:
-   - **Model**: `ConvNeXt-Tiny` ([`src/models/build_model.py`](file:///home/bush/Desktop/Deeplearning_Course_UTH/src/models/build_model.py))
+   - **Model**: `ConvNeXt-Tiny` ([`../../src/models/build_model.py`](../../src/models/build_model.py))
    - **Achieved Accuracy**: **🏆 97.66%**
    - **Recipe**: `AdamW(lr=3e-4, weight_decay=1e-4)` + `CosineAnnealingLR` + `RandAugment` + `Label Smoothing (0.1)`.
 

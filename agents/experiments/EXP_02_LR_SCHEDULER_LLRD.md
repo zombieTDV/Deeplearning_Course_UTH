@@ -22,7 +22,7 @@
 
 ## 📊 3. Empirical Execution Results
 
-- **Plot Artifact Path:** [`experiments/plots/exp_02_loss_curves.png`](file:///home/bush/Desktop/Deeplearning_Course_UTH/experiments/plots/exp_02_loss_curves.png)
+- **Plot Artifact Path:** [../../experiments/plots/exp_02_loss_curves.png](../../experiments/plots/exp_02_loss_curves.png)
 
 | Scheduler Name | Epoch 1 Train Loss / Acc | Epoch 1 Val Loss / Acc | Epoch 2 Train Loss / Acc | Epoch 2 Val Loss / Acc | Best Val Acc (%) | Best Val Loss | Checkpoint File |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :--- |

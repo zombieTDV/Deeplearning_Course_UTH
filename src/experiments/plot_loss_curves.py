@@ -134,23 +134,23 @@ def append_loss_section_to_markdown():
     loss_markdown_section = """
 ---
 
-## 📉 Biểu Đồ Loss Curves (Training Loss vs Validation Loss)
+## 📉 Loss Curves (Training Loss vs Validation Loss)
 
-Dưới đây là các biểu đồ thể hiện sự hội tụ của hàm mất mát (Cross-Entropy Loss) qua từng Epoch:
+Below are the Cross-Entropy Loss convergence curves across training epochs:
 
-### 1. Loss Curves Theo LR Scheduler (`EXP-02`)
+### 1. Loss Curves by LR Scheduler (`EXP-02`)
 ![EXP-02 Loss Curves](../../experiments/plots/exp_02_loss_curves.png)
-* **Nhận xét**: `CosineAnnealingLR` cho tốc độ giảm Loss nhanh nhất và mượt nhất, đạt Val Loss thấp nhất là **0.2088** ở Epoch 2.
+* **Key Finding**: `CosineAnnealingLR` achieved the fastest and smoothest loss decay, reaching a lowest Validation Loss of **0.2088** at Epoch 2.
 
-### 2. Loss Curves Theo Kiến Trúc Mô Hình (`EXP-05`)
+### 2. Loss Curves by Vision Architecture (`EXP-05`)
 ![EXP-05 Architecture Loss Curves](../../experiments/plots/exp_05_architecture_loss_curves.png)
-* **Nhận xét**: **`ConvNeXt-Tiny`** đạt Val Loss thấp kỷ lục ngay từ Epoch 1 (**0.1200**) và tiếp tục giảm xuống **0.1085** ở Epoch 2, vượt xa các kiến trúc truyền thống.
+* **Key Finding**: **`ConvNeXt-Tiny`** reached an exceptionally low Validation Loss of **0.1200** at Epoch 1 and further decreased to **0.1085** at Epoch 2.
 
-### 3. Tổng Hợp Trajectory (Loss & Accuracy)
+### 3. Trajectory Summary (Loss & Accuracy Grid)
 ![Loss and Accuracy Trajectories](../../experiments/plots/loss_and_accuracy_trajectories.png)
 """
 
-    if "Biểu Đồ Loss Curves" not in content:
+    if "Loss Curves (Training Loss vs Validation Loss)" not in content and "Biểu Đồ Loss Curves" not in content:
         content += loss_markdown_section
         with open(REPORT_FILE, "w") as f:
             f.write(content)

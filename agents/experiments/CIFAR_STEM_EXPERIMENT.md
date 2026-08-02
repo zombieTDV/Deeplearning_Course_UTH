@@ -25,6 +25,20 @@ The experiment benchmarked 3 epochs of training per variant on CUDA GPU.
 
 ---
 
+## 📈 Benchmark Visualizations (CIFAR Stem Experiment)
+
+Below is the collection of 7 dedicated analytical visualization plots for the CIFAR Conv Stem experiment:
+
+1. **Master Dashboard**: [../../experiments/plots/cifar_stem_master_dashboard.png](../../experiments/plots/cifar_stem_master_dashboard.png) - 4-panel multi-metric summary (Accuracy, Loss, Latency, VRAM).
+2. **Accuracy Comparison**: [../../experiments/plots/cifar_stem_accuracy_comparison.png](../../experiments/plots/cifar_stem_accuracy_comparison.png) - Test Accuracy comparison across Frozen & Finetuned modes.
+3. **Loss Landscape**: [../../experiments/plots/cifar_stem_loss_comparison.png](../../experiments/plots/cifar_stem_loss_comparison.png) - Cross-Entropy Loss analysis and spatial feature misalignment effects.
+4. **Throughput & Speedup**: [../../experiments/plots/cifar_stem_throughput_speedup.png](../../experiments/plots/cifar_stem_throughput_speedup.png) - Execution latency per epoch (s/epoch) and processing throughput (FPS).
+5. **Peak VRAM Footprint**: [../../experiments/plots/cifar_stem_vram_memory_footprint.png](../../experiments/plots/cifar_stem_vram_memory_footprint.png) - Memory savings (~105.9 MB VRAM) without 224x224 upsampling.
+6. **Parameter Breakdown**: [../../experiments/plots/cifar_stem_parameter_breakdown.png](../../experiments/plots/cifar_stem_parameter_breakdown.png) - Total vs Trainable parameter counts.
+7. **Accuracy vs Latency Tradeoff**: [../../experiments/plots/cifar_stem_tradeoff_scatter.png](../../experiments/plots/cifar_stem_tradeoff_scatter.png) - Scatter plot evaluating classification accuracy against training latency.
+
+---
+
 ## 💡 Key Takeaways & Recommendations
 
 1. **Computational & Memory Gains:**
