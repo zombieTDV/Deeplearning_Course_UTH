@@ -62,3 +62,6 @@ logs/
 # Environment
 .env
 .env.*
+data/external/
+notebooks/data/
+*.tar.gz

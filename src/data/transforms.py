@@ -44,6 +44,12 @@ def get_train_transform(
     resize_size: int = 224,
     crop_size: int = 224,
     augmentation: bool = True,
+    interpolation: transforms.InterpolationMode = transforms.InterpolationMode.BICUBIC,
+    random_horizontal_flip: bool = True,
+    random_crop: bool = True,
+    random_crop_padding: int = 16,
+    random_rotation: int = 0,
+    color_jitter: dict[str, float] | None = None,
 ) -> transforms.Compose:
     """Get transform pipeline for training data.
 
@@ -53,11 +59,18 @@ def get_train_transform(
         resize_size: Size to resize images to.
         crop_size: Size for random crop.
         augmentation: If True, applies data augmentation.
+        interpolation: Interpolation mode for resizing. Defaults to BICUBIC for high quality.
+        random_horizontal_flip: If True, applies random horizontal flip.
+        random_crop: If True, applies random crop with padding.
+        random_crop_padding: Padding size for random crop.
+        random_rotation: Maximum rotation angle in degrees. 0 disables rotation.
+        color_jitter: Dictionary with color jitter parameters (brightness, contrast, saturation, hue).
+                     If None or empty, color jitter is disabled.
 
     Returns:
         Composed transform pipeline.
     """
-    logger.debug(f"Creating train transform with augmentation={augmentation}")
+    logger.debug(f"Creating train transform with augmentation={augmentation}, interpolation={interpolation}")
     if mean is None:
         mean = IMAGENET_MEAN
     if std is None:
@@ -65,13 +78,27 @@ def get_train_transform(
     
     transform_list = []
     
-    # Resize
-    transform_list.append(transforms.Resize(resize_size))
+    # Resize with high-quality interpolation and anti-aliasing
+    transform_list.append(transforms.Resize(resize_size, interpolation=interpolation, antialias=True))
     
     if augmentation:
         # Data augmentation
-        transform_list.append(transforms.RandomHorizontalFlip())
-        transform_list.append(transforms.RandomCrop(crop_size, padding=16))
+        if random_horizontal_flip:
+            transform_list.append(transforms.RandomHorizontalFlip())
+        
+        if random_crop:
+            transform_list.append(transforms.RandomCrop(crop_size, padding=random_crop_padding))
+        
+        if random_rotation > 0:
+            transform_list.append(transforms.RandomRotation(random_rotation))
+        
+        if color_jitter and any(v > 0 for v in color_jitter.values()):
+            transform_list.append(transforms.ColorJitter(
+                brightness=color_jitter.get('brightness', 0),
+                contrast=color_jitter.get('contrast', 0),
+                saturation=color_jitter.get('saturation', 0),
+                hue=color_jitter.get('hue', 0),
+            ))
     
     # Convert to tensor and normalize
     transform_list.append(transforms.ToTensor())
@@ -84,6 +111,7 @@ def get_eval_transform(
     mean: list[float] | None = None,
     std: list[float] | None = None,
     resize_size: int = 224,
+    interpolation: transforms.InterpolationMode = transforms.InterpolationMode.BICUBIC,
 ) -> transforms.Compose:
     """Get transform pipeline for validation/test data.
 
@@ -91,18 +119,19 @@ def get_eval_transform(
         mean: Normalization mean values. Defaults to ImageNet statistics.
         std: Normalization std values. Defaults to ImageNet statistics.
         resize_size: Size to resize images to.
+        interpolation: Interpolation mode for resizing. Defaults to BICUBIC for high quality.
 
     Returns:
         Composed transform pipeline.
     """
-    logger.debug("Creating eval transform")
+    logger.debug(f"Creating eval transform with interpolation={interpolation}")
     if mean is None:
         mean = IMAGENET_MEAN
     if std is None:
         std = IMAGENET_STD
     
     transform_list = [
-        transforms.Resize(resize_size),
+        transforms.Resize(resize_size, interpolation=interpolation, antialias=True),
         transforms.ToTensor(),
         transforms.Normalize(mean=mean, std=std),
     ]
@@ -113,6 +142,12 @@ def get_eval_transform(
 def get_cifar10_transforms(
     use_cifar10_stats: bool = False,
     augmentation: bool = True,
+    interpolation: transforms.InterpolationMode = transforms.InterpolationMode.BICUBIC,
+    random_horizontal_flip: bool = True,
+    random_crop: bool = True,
+    random_crop_padding: int = 16,
+    random_rotation: int = 0,
+    color_jitter: dict[str, float] | None = None,
 ) -> tuple[transforms.Compose, transforms.Compose]:
     """Get standard CIFAR-10 transforms.
 
@@ -120,6 +155,12 @@ def get_cifar10_transforms(
         use_cifar10_stats: If True, uses CIFAR-10 statistics.
                            If False, uses ImageNet statistics.
         augmentation: If True, applies augmentation to training transform.
+        interpolation: Interpolation mode for resizing.
+        random_horizontal_flip: If True, applies random horizontal flip.
+        random_crop: If True, applies random crop with padding.
+        random_crop_padding: Padding size for random crop.
+        random_rotation: Maximum rotation angle in degrees. 0 disables rotation.
+        color_jitter: Dictionary with color jitter parameters.
 
     Returns:
         Tuple of (train_transform, eval_transform).
@@ -129,9 +170,15 @@ def get_cifar10_transforms(
     std = CIFAR10_STD if use_cifar10_stats else IMAGENET_STD
     
     train_transform = get_train_transform(
-        mean=mean, std=std, augmentation=augmentation
+        mean=mean, std=std, augmentation=augmentation,
+        interpolation=interpolation,
+        random_horizontal_flip=random_horizontal_flip,
+        random_crop=random_crop,
+        random_crop_padding=random_crop_padding,
+        random_rotation=random_rotation,
+        color_jitter=color_jitter,
     )
-    eval_transform = get_eval_transform(mean=mean, std=std)
+    eval_transform = get_eval_transform(mean=mean, std=std, interpolation=interpolation)
     
     return train_transform, eval_transform
 
