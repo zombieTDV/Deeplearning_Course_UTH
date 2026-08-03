@@ -1,25 +1,23 @@
 # TRAINING_STATUS.md
 
 **Phase:** [../phases/TRAINING_INFO.md](../phases/TRAINING_INFO.md)
-**Last updated:** 2026-07-30
+**Last updated:** 2026-08-02
 
 ## Status: Done
 
 ## Log
 
 - 2026-07-29: File created, not started
-- 2026-07-30: Wrote `src/training/train_model.py` — `train_one_epoch()`,
-  `validate()`, `train_model()` full-loop wrapper with TensorBoard logging,
-  best-checkpoint saving, per-epoch metrics
-- 2026-07-30: Wrote `notebooks/04_training.ipynb` — trains all 4 model
-  variants (ResNet18 frozen/finetune, DenseNet121 frozen/finetune) with
-  per-param-group discriminative LR for fine-tune, TensorBoard logging,
-  loss/accuracy comparison plots, summary table
-- 2026-07-30: Updated `notebooks/practice_2.ipynb` — replaced Section 4
-  stub with real training loop; outputs summary table of best val acc/loss
-  per variant.
-- 2026-07-30: Training runs executed on {device}, checkpoints saved to
-  `experiments/checkpoints/`, TensorBoard logs to `experiments/tb_logs/`
+- 2026-07-30: Wrote `src/training/train_model.py` — `train_one_epoch()`, `validate()`, `train_model()` full-loop wrapper.
+- 2026-08-02: Added `src/experiments/` suite with 5 executable experiment modules (`EXP-01` to `EXP-05`).
+- 2026-08-02: Executed full experiment suite on CUDA GPU:
+  - `EXP-01` (Optuna HPO): Best trial #4 reached **92.06%** validation accuracy.
+  - `EXP-02` (LR Schedulers & LLRD): `CosineAnnealingLR` reached **92.78%** accuracy.
+  - `EXP-03` (Advanced Augmentations): `RandAugment` + `Label Smoothing` reached **92.72%** accuracy.
+  - `EXP-04` (Native 32x32 Stem): Achieved **45.5s/epoch** throughput (2x faster than 224x224).
+  - `EXP-05` (Model Architecture Sweep): **`ConvNeXt-Tiny` achieved 96.42% validation accuracy**.
+- 2026-08-02: Generated comparison charts and Loss curves saved to `experiments/plots/`.
+- 2026-08-02: Exported master report to `agents/experiments/SUMMARY_RESULTS.md` and detailed logs to `agents/experiments/EXP_01_OPTUNA_HPO.md` through `EXP_05_MODEL_ARCH_SWEEP.md`.
 
 ## Blockers (if any)
 
@@ -27,5 +25,4 @@
 
 ## Next step
 
-- Proceed to [EVAL.md](../phases/EVAL.md): test-set evaluation, confusion matrices,
-  per-class metrics, cross-run comparison table
+- All fine-tuning experiments successfully documented and verified.

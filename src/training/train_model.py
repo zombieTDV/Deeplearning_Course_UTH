@@ -108,34 +108,18 @@ def train_model(
     optimizer: torch.optim.Optimizer,
     device: torch.device,
     num_epochs: int = 10,
+    epochs: int | None = None,
     run_name: str | None = None,
+    experiment_name: str | None = None,
+    scheduler: object | None = None,
     writer: SummaryWriter | None = None,
     save_dir: str = "experiments/checkpoints",
 ) -> dict:
-    """Run a full training loop with validation, logging, and checkpointing.
-
-    Args:
-        model: PyTorch model (in ``eval()`` mode; will switch to train).
-        train_loader: Training data.
-        val_loader: Validation data.
-        criterion: Loss function (e.g. ``nn.CrossEntropyLoss()``).
-        optimizer: PyTorch optimizer.
-        device: ``torch.device``.
-        num_epochs: Number of full passes over the training set.
-        run_name: Identifier for this run.  Used for checkpoint filename and
-                  TensorBoard tag.  Auto-generated if ``None``.
-        writer: ``SummaryWriter`` for TensorBoard logging.  If ``None``,
-                logging is skipped.
-        save_dir: Directory to save the best checkpoint.
-
-    Returns:
-        Dict with keys:
-            - run_name, num_epochs
-            - train_losses, val_losses (lists of float)
-            - train_accs, val_accs (lists of float)
-            - best_val_loss, best_epoch
-            - best_state_path (path to saved .pt or None)
-    """
+    """Run a full training loop with validation, logging, scheduler, and checkpointing."""
+    if epochs is not None:
+        num_epochs = epochs
+    if experiment_name is not None:
+        run_name = experiment_name
     if run_name is None:
         run_name = datetime.now().strftime("%Y%m%d_%H%M%S")
 
@@ -145,6 +129,7 @@ def train_model(
     val_accs: list[float] = []
 
     best_val_loss = float("inf")
+    best_val_acc = 0.0
     best_epoch = -1
     best_state_path: str | None = None
 
@@ -158,10 +143,19 @@ def train_model(
         )
         val_loss, val_acc = validate(model, val_loader, criterion, device)
 
+        if scheduler is not None:
+            if isinstance(scheduler, torch.optim.lr_scheduler.ReduceLROnPlateau):
+                scheduler.step(val_loss)
+            else:
+                scheduler.step()
+
         train_losses.append(train_loss)
         val_losses.append(val_loss)
         train_accs.append(train_acc)
         val_accs.append(val_acc)
+
+        if val_acc > best_val_acc:
+            best_val_acc = val_acc
 
         elapsed = time.time() - epoch_start
 
@@ -171,12 +165,11 @@ def train_model(
             writer.add_scalar("train/accuracy", train_acc, epoch)
             writer.add_scalar("val/loss", val_loss, epoch)
             writer.add_scalar("val/accuracy", val_acc, epoch)
-            # Log learning rate (first param group)
             if optimizer.param_groups:
                 lr = optimizer.param_groups[0]["lr"]
                 writer.add_scalar("train/lr", lr, epoch)
 
-        if (epoch % 5 == 0) or (epoch == 1):
+        if (epoch % 5 == 0) or (epoch == 1) or (epoch == num_epochs):
             print(
                 f"  Epoch {epoch:2d}/{num_epochs}  "
                 f"train_loss={train_loss:.4f}  val_loss={val_loss:.4f}  "
@@ -192,9 +185,8 @@ def train_model(
             best_state_path = os.path.join(save_dir, f"{run_name}_best.pt")
             torch.save(model.state_dict(), best_state_path)
 
-    # --- Final summary ---
     print(
-        f"\n  Best epoch: {best_epoch}  (val_loss={best_val_loss:.4f})  "
+        f"\n  Best epoch: {best_epoch}  (val_loss={best_val_loss:.4f}, val_acc={best_val_acc:.2f}%)  "
         f"Checkpoint: {best_state_path}"
     )
 
@@ -206,6 +198,8 @@ def train_model(
         "train_accs": train_accs,
         "val_accs": val_accs,
         "best_val_loss": best_val_loss,
+        "best_val_acc": best_val_acc,
         "best_epoch": best_epoch,
         "best_state_path": best_state_path,
     }
+
