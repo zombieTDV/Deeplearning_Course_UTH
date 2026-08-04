@@ -88,18 +88,28 @@ isolated cat/dog / 86 cross-confusions):
 mine; and arbitration overrides strong SOTA features, degrading S1/S2. S3 is
 within noise. **Post-hoc arbitration has reached its ceiling.**
 
-## Remaining levers (feature-level only)
+## 7. Outcome of the Remaining Levers (measured)
 
-1. **Feature-level fine-tuning**: unfreeze the top block (`layer4` /
-   `denseblock4`) with LLRD on a class-balanced cat/dog set — pushes cat/dog
-   features apart rather than reading them post-hoc. Expected small (+0.2–0.5%).
-2. **TTA (multi-crop voting)** — cheap, typically +0.2–0.5%.
-3. **Larger native resolution / stem upgrade** — attacks the 32×32→224
-   upsampling ceiling noted in `data_prep.md`.
+Ran `src/experiments/feature_level_tta.py` (base = SOTA ensemble, full test 10k
++ isolated cat/dog 2k):
 
-Expected realistic ceiling: ~97–98% full test; 99% is unlikely at this
-resolution. If the goal is a practice deliverable, the current 96.96% already
-fully demonstrates transfer learning + ensembling, and further effort has low ROI.
+| Method | Full acc | dFull | Isolated | cross_conf |
+|--------|----------|-------|----------|-----------|
+| Baseline ensemble (sota) | 96.87% | — | 93.45% | 86 |
+| **Baseline + TTA** (hflip) | **97.12%** | **+0.25%** | **94.00%** | **76** |
+| Fine-tuned ensemble (top block) | 96.36% | −0.51% | 92.00% | 95 |
+| Fine-tuned ensemble + TTA | 96.66% | −0.21% | 92.85% | 88 |
+
+**Conclusion:**
+- **TTA delivers the expected +0.2–0.5%** — measured **+0.25% full test**
+  (96.87→97.12%) and reduces isolated cat/dog cross-confusions **86→76**.
+- **Feature-level fine-tune (unfreezing the top block) does NOT help** — it
+  *hurts* (−0.51% full, cross 86→95). The SOTA model already fits the training
+  set near-perfectly, so re-training the unfrozen top block with dog-weighting
+  perturbs already-good features. This is a genuine negative result, not a bug.
+- Net: the practical ceiling improves to **~97.1% full test via TTA**; further
+  feature changes are not paying off. Recommended to **conclude** here and
+  keep TTA as the final inference-time improvement.
 
 ---
 

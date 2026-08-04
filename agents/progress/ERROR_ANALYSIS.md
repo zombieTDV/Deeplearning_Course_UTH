@@ -114,6 +114,18 @@ needed) · `INFO` (environment/design constraint, not a code bug).
   cat/dog confusion (~86) is genuinely hard high-confidence error. Post-hoc
   methods have reached their ceiling; only feature-level changes remain.
 
+## ERR-07 — Feature-level fine-tune (top-block unfreeze) does not help
+- **Status:** RESOLVED (negative result, measured)
+- **Experiment:** `src/experiments/feature_level_tta.py`, SOTA ensemble base.
+- **Finding:** TTA (horizontal-flip voting) delivers the expected gain
+  (**+0.25% full test**, 96.87→97.12%; isolated cat/dog cross 86→76), but
+  fine-tuning the unfrozen top block (`layer4`/`denseblock4`) *hurts*
+  (**−0.51%** full, cross 86→95). The SOTA model already fits train near-
+  perfectly (train acc ~98.4%), so further top-block re-training with mild dog
+  weighting perturbs already-good features.
+- **Resolution:** adopt TTA as the final inference-time improvement; do not
+  re-train the top block. Practical ceiling ~**97.1% full test**.
+
 ---
 
 ## References
