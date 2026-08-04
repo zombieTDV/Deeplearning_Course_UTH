@@ -23,8 +23,7 @@ See [PURPOSE.md](PURPOSE.md) for the original exercise brief.
 4. [EVAL.md](phases/EVAL.md) — test-set evaluation, metrics, comparison across runs
 5. [PRACTICE2_EXP07_UPGRADE_PLAN.md](phases/PRACTICE2_EXP07_UPGRADE_PLAN.md) — Master SOTA Benchmarking Upgrade Plan (LLRD, RandAugment, Soft-Voting 96.00% Ensemble)
 6. [PRACTICE2_EARLYSTOPPING_ERROR_ANALYSIS_PLAN.md](phases/PRACTICE2_EARLYSTOPPING_ERROR_ANALYSIS_PLAN.md) — EarlyStopping Callback Integration & Misclassified Error Analysis Plan
-7. [PRACTICE2_LOGIT_BIAS_SWEEP_PLAN.md](experiments/PRACTICE2_LOGIT_BIAS_SWEEP_PLAN.md) — Class-Logit Bias Sweep Tuning for Cat/Dog Decision Threshold Optimization
-8. [PRACTICE2_ACCURACY_98_99_PLAN.md](experiments/PRACTICE2_ACCURACY_98_99_PLAN.md) — Master SOTA Plan to Achieve 98.0% – 99.0% Accuracy on CIFAR-10 (Swin-Base, ConvNeXt-Large, Mixup/CutMix, High-Res 384x384, TTA)
+7. [LOGIT_BIAS_SWEEP_STATUS.md](experiments/LOGIT_BIAS_SWEEP_STATUS.md) — Class-Logit Bias Sweep Tuning & Threshold Optimization Results
 
 ## Bug Reports & Troubleshooting
 - [bugs/README.md](bugs/README.md) — Master Bug Index & Troubleshooting Directory

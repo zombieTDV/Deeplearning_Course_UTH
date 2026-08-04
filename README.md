@@ -58,6 +58,10 @@ Deeplearning_Course_UTH/
 │   │   ├── TRAINING_STATUS.md
 │   │   └── EVAL_STATUS.md
 │   │
+│   ├── experiments/          # Experiment reports, status & SOTA benchmarks
+│   │   ├── SUMMARY_RESULTS.md # Final experiment comparison report
+│   │   └── LOGIT_BIAS_SWEEP_STATUS.md # Decision threshold optimization status
+│   │
 │   └── references/           # External guides & technical documentation
 │       └── OPTUNA_DB_GUIDE.md
 │
@@ -77,15 +81,16 @@ Deeplearning_Course_UTH/
 ├── src/                      # Core Deep Learning Modules
 │   ├── models/               # Pretrained model setup (ResNet18, DenseNet121)
 │   ├── training/             # Training loop, optimizers & TensorBoard logging
-│   ├── evaluation/           # Test metrics, confusion matrix & reporting
-│   ├── utils/                # Helper utilities
-│   └── data/                 # Legacy (Deprecated)
+│   ├── eval/                 # Test metrics, confusion matrix & reporting
+│   ├── scratch/              # Notebook builders & temporary test scripts
+│   ├── experiments/          # Python experiment execution scripts
+│   └── utils/                # Helper utilities
 │
-├── notebooks/                # Exploratory Jupyter Notebooks
+├── notebooks/                # Exploratory & Deliverable Jupyter Notebooks
 │   ├── practice_2.ipynb      # Main deliverable notebook
-│   ├── 02_data_prep.ipynb
-│   ├── 03_model_setup.ipynb
-│   └── 04_training.ipynb
+│   └── practice_2_logit_bias_sweep.ipynb # Logit bias & threshold sweep notebook
+│
+├── experiments/              # Run outputs, checkpoints, plots & results JSON
 │
 ├── tests/                    # Unit tests & smoke tests
 ├── requirements.txt          # Dependency requirements

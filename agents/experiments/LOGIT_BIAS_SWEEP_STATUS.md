@@ -3,7 +3,7 @@
 ## Status: COMPLETED ✅
 
 ### Checklist
-- [x] Create detailed phase plan: [`agents/phases/PRACTICE2_LOGIT_BIAS_SWEEP_PLAN.md`](../phases/PRACTICE2_LOGIT_BIAS_SWEEP_PLAN.md)
+- [x] Formulate logit bias tuning strategy for confused classes (`cat` vs `dog`)
 - [x] Create standalone Jupyter notebook: [`notebooks/practice_2_logit_bias_sweep.ipynb`](file:///home/bush/Desktop/Deeplearning_Course_UTH/notebooks/practice_2_logit_bias_sweep.ipynb)
 - [x] Implement logit extraction helper for Validation & Test sets
 - [x] Perform 2D Grid Search over $(\beta_{\text{cat}}, \beta_{\text{dog}})$ on `val_loader` (5,000 samples)
