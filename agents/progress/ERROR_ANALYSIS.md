@@ -94,18 +94,25 @@ needed) · `INFO` (environment/design constraint, not a code bug).
 - **Result after fix (40 epochs):** S2 isolated **86.90%**, dog **88.9%**,
   cross_conf **153** — collapse eliminated, healthy balanced classifier.
 
-## ERR-06 — Strategies do not beat baseline (OPEN)
-- **Status:** OPEN (limitation of the arbitration design)
-- **Symptom:** after fixes, extended run (40 arbiter epochs):
-  - Baseline ensemble: 87.40% (cross 143)
+## ERR-06 — Strategies do not beat baseline (verified on real SOTA model)
+- **Status:** OPEN (limitation of post-hoc arbitration)
+- **Symptom (finetune base):** after fixes, extended run (40 arbiter epochs):
+  - Baseline ensemble (finetune ×2): 87.40% (cross 143)
   - S1 hard-negative: 86.10% (cross 169)
   - S2 focal (fixed): 86.90% (cross 153)
   - S3 specialist CNN: 87.15% (cross 148)
-- **Interpretation:** the frozen-feature linear arbiter + arbitration rule does
-  not out-perform the ensemble's own cat/dog judgment on the isolated test set.
-  Fixing the loss removed a catastrophic failure but did not create an
-  improvement. Remaining errors are high-confidence hard negatives, so
-  feature-level work is required (see `phases/ERROR_ANALYSIS.md`).
+- **Re-verified on the REAL SOTA baseline (checkpoints restored, softmax-voting):**
+  - Baseline ensemble (sota ×2): **93.45%** isolated / **86** cross-confusions
+    (matches reference 93.30% / 91; SOTA fits train so **only 1 hard negative**
+    exists → hard-negative mining has almost nothing to mine)
+  - S1 hard-negative: 92.40% / 107 (worse)
+  - S2 focal (fixed): 92.35% / 108 (worse)
+  - S3 specialist CNN: 93.50% / 85 (marginal, within noise)
+- **Interpretation:** none of the three post-hoc arbitration strategies
+  meaningfully improves the real model. S1/S2 degrade it (arbitration overrides
+  strong SOTA features); S3 is within noise (+0.05%, −1 cross). The residual
+  cat/dog confusion (~86) is genuinely hard high-confidence error. Post-hoc
+  methods have reached their ceiling; only feature-level changes remain.
 
 ---
 

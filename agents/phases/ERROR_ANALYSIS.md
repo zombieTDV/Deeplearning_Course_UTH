@@ -70,22 +70,36 @@ Targeting the Cat↔Dog cluster is the highest-leverage isolated improvement.
   cat/dog features and tracks per-epoch cat/dog accuracy to expose collapse
   dynamics and tune the class weight.
 
-## 6. Open Limitation & Recommended Next Steps
+## 6. Outcome on the Real SOTA Model (post-hoc approaches exhausted)
 
-**Open:** after fixing all code bugs, none of S1/S2/S3 improves isolated
-accuracy over the baseline (all within ±1.3%, S2 −0.5%). The frozen-feature
-arbiter approach does not out-perform the ensemble's own cat/dog judgment.
+Once the SOTA checkpoints were restored, the three strategies were re-verified
+against the **real** baseline (soft-voting ensemble, 96.96% full / 93.45%
+isolated cat/dog / 86 cross-confusions):
 
-**Recommended next steps to actually reduce cross-confusion:**
-1. Feature-level: fine-tune (not freeze) the backbone's top block on a
-   class-balanced cat/dog set, so cat/dog features are pushed apart.
-2. Specialist that takes raw images (S3 CNN) but arbitrate by **marginal
-   cat/dog probability** with a tuned blend, rather than a fixed 0.5/0.5 mix.
-3. Per-class decision threshold on the cat/dog logit margin (extend the
-   logit-bias sweep to cat/dog only), tuned on validation.
-4. Verify against the **SOTA ensemble** once its checkpoints are restored —
-   the target is reducing the reference 91 cross-confusions, not the weaker
-   finetune baseline.
+| Approach | Isolated acc | cross_conf | Δ vs baseline |
+|----------|-------------|-----------|---------------|
+| Baseline ensemble (sota ×2) | 93.45% | 86 | — |
+| S1 Hard-negative mining | 92.40% | 107 | −1.05% (worse) |
+| S2 Focal loss / class-weight | 92.35% | 108 | −1.10% (worse) |
+| S3 Specialist CNN member | 93.50% | 85 | +0.05% (noise) |
+
+**Key finding:** the SOTA model fits the training set almost perfectly
+(**only 1 cat/dog hard negative**), so hard-negative mining has nothing to
+mine; and arbitration overrides strong SOTA features, degrading S1/S2. S3 is
+within noise. **Post-hoc arbitration has reached its ceiling.**
+
+## Remaining levers (feature-level only)
+
+1. **Feature-level fine-tuning**: unfreeze the top block (`layer4` /
+   `denseblock4`) with LLRD on a class-balanced cat/dog set — pushes cat/dog
+   features apart rather than reading them post-hoc. Expected small (+0.2–0.5%).
+2. **TTA (multi-crop voting)** — cheap, typically +0.2–0.5%.
+3. **Larger native resolution / stem upgrade** — attacks the 32×32→224
+   upsampling ceiling noted in `data_prep.md`.
+
+Expected realistic ceiling: ~97–98% full test; 99% is unlikely at this
+resolution. If the goal is a practice deliverable, the current 96.96% already
+fully demonstrates transfer learning + ensembling, and further effort has low ROI.
 
 ---
 

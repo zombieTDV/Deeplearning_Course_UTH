@@ -353,6 +353,8 @@ def main():
     ap.add_argument("--focal-gamma", type=float, default=2.0)
     ap.add_argument("--focal-dog-weight", type=float, default=1.5,
                     help="class weight on dog for S2 focal (mild, 1.0-1.5)")
+    ap.add_argument("--base", type=str, default="sota", choices=["sota", "finetune"],
+                    help="which checkpoint family to use as the base ensemble")
     args = ap.parse_args()
 
     device = get_device()
@@ -364,10 +366,11 @@ def main():
           f"test: {len(te_ds)}")
 
     ckpt_dir = PROJECT_ROOT / "experiments" / "checkpoints"
+    tag = args.base  # 'sota' or 'finetune'
     rn = build_resnet18(num_classes=10, mode="finetune", device=device)
     dn = build_densenet121(num_classes=10, mode="finetune", device=device)
-    rn = load_checkpoint(rn, str(ckpt_dir / "ResNet18-finetune_best.pt"), device)
-    dn = load_checkpoint(dn, str(ckpt_dir / "DenseNet121-finetune_best.pt"), device)
+    rn = load_checkpoint(rn, str(ckpt_dir / f"ResNet18-{tag}_best.pt"), device)
+    dn = load_checkpoint(dn, str(ckpt_dir / f"DenseNet121-{tag}_best.pt"), device)
     rn.eval()
     dn.eval()
 
@@ -375,7 +378,7 @@ def main():
     ens_test = ensemble_probs(rn, dn, te_feat, device).numpy()
     te_true = np.array(te_ds.labels)
     baseline_preds = np.argmax(ens_test, axis=1)
-    results = [report_isolated("Baseline ensemble (finetune x2)", baseline_preds, te_true)]
+    results = [report_isolated(f"Baseline ensemble ({tag} x2)", baseline_preds, te_true)]
 
     # ---- Reference: persisted SOTA ensemble isolated (from saved results) ----
     try:
@@ -439,15 +442,15 @@ def main():
         print(f"{r['name']:32s} {r['isolated_acc']-base:+6.2f}% "
               f"{r['cross_confusions']:>9d} {base_cross-r['cross_confusions']:+7d}")
 
-    out = {"device": str(device), "focal_gamma": args.focal_gamma,
+    out = {"device": str(device), "base": tag, "focal_gamma": args.focal_gamma,
            "focal_dog_weight": args.focal_dog_weight, "epochs": args.epochs,
            "spec_epochs": args.spec_epochs, "results": results,
            "hard_negatives_train": int(len(hard_idx))}
     res_dir = PROJECT_ROOT / "experiments" / "results"
     res_dir.mkdir(parents=True, exist_ok=True)
-    (res_dir / "catdog_confusion_reduction.json").write_text(
-        json.dumps(out, indent=2) + "\n")
-    print("\nSaved -> experiments/results/catdog_confusion_reduction.json")
+    out_file = res_dir / f"catdog_confusion_reduction_{tag}.json"
+    out_file.write_text(json.dumps(out, indent=2) + "\n")
+    print(f"\nSaved -> {out_file.relative_to(PROJECT_ROOT)}")
 
 
 if __name__ == "__main__":
