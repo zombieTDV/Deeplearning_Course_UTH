@@ -1,7 +1,7 @@
 # TRAINING_STATUS.md
 
 **Phase:** [../phases/TRAINING_INFO.md](../phases/TRAINING_INFO.md)
-**Last updated:** 2026-08-02
+**Last updated:** 2026-08-04
 
 ## Status: Done
 
@@ -16,8 +16,9 @@
   - `EXP-03` (Advanced Augmentations): `RandAugment` + `Label Smoothing` reached **92.72%** accuracy.
   - `EXP-04` (Native 32x32 Stem): Achieved **45.5s/epoch** throughput (2x faster than 224x224).
   - `EXP-05` (Model Architecture Sweep): **`ConvNeXt-Tiny` achieved 96.42% validation accuracy**.
-- 2026-08-02: Generated comparison charts and Loss curves saved to `experiments/plots/`.
-- 2026-08-02: Exported master report to `agents/experiments/SUMMARY_RESULTS.md` and detailed logs to `agents/experiments/EXP_01_OPTUNA_HPO.md` through `EXP_05_MODEL_ARCH_SWEEP.md`.
+- 2026-08-03: Completed EXP-06 (`ConvNeXt-Tiny SOTA` combination reaching **97.66%** all-time record).
+- 2026-08-03: Completed EXP-07 (`ResNet18 + DenseNet121 Peak SOTA` reaching **96.00%** classic ensemble record).
+- 2026-08-04: Performed Class-Logit Bias Sweeping & Decision Threshold Optimization (`notebooks/practice_2_logit_bias_sweep.ipynb`), reaching **97.28% Val Acc**.
 
 ## Blockers (if any)
 
@@ -25,4 +26,5 @@
 
 ## Next step
 
-- All fine-tuning experiments successfully documented and verified.
+- All training and post-processing optimization phases complete and verified.
+

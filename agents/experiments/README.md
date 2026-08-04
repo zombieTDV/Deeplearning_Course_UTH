@@ -15,4 +15,5 @@ This directory contains experiment plans, hyperparameter trial logs, and model c
 - [CODE_DIFFERENCE_PRACTICE2_VS_EXP07.md](CODE_DIFFERENCE_PRACTICE2_VS_EXP07.md) — Architectural Code Comparison Report (`practice_2.ipynb` vs `exp_07_resnet_densenet_sota.py`)
 - [../phases/PRACTICE2_EXP07_UPGRADE_PLAN.md](../phases/PRACTICE2_EXP07_UPGRADE_PLAN.md) — Integration & Planning Guide for Upgrading `practice_2.ipynb` with EXP-07, Loss Curves & ROC-AUC Charts
 - [../phases/PRACTICE2_EARLYSTOPPING_ERROR_ANALYSIS_PLAN.md](../phases/PRACTICE2_EARLYSTOPPING_ERROR_ANALYSIS_PLAN.md) — EarlyStopping Callback Integration & Misclassified Error Analysis Plan
+- [LOGIT_BIAS_SWEEP_STATUS.md](LOGIT_BIAS_SWEEP_STATUS.md) — Class-Logit Bias Sweep Tuning & Threshold Optimization Results
 - [SUMMARY_RESULTS.md](SUMMARY_RESULTS.md) — Final Benchmark Report & Loss Curves Visualization

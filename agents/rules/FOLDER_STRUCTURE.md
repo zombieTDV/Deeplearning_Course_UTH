@@ -33,11 +33,16 @@ project_root/
 │   │   └── SMOKE_TEST_CHECKLIST.md
 │   ├── references/        # External guides & reference docs
 │   │   └── OPTUNA_DB_GUIDE.md
-│   └── progress/          # One status file per task/phase
-│       ├── DATA_PREP_STATUS.md
-│       ├── MODEL_STATUS.md
-│       ├── TRAINING_STATUS.md
-│       └── EVAL_STATUS.md
+│   ├── experiments/       # Experiment reports, plans & technical comparisons
+│   │   ├── EXP_01_OPTUNA_HPO.md
+│   │   ├── EXP_07_RESNET_DENSENET_SOTA.md
+│   │   ├── LOGIT_BIAS_SWEEP_STATUS.md
+│   │   └── SUMMARY_RESULTS.md
+│   ├── progress/          # One status file per task/phase
+│   │   ├── DATA_PREP_STATUS.md
+│   │   ├── MODEL_STATUS.md
+│   │   ├── TRAINING_STATUS.md
+│   │   └── EVAL_STATUS.md
 ├── data/
 │   ├── raw/               # never edited by the agent
 │   ├── processed/
@@ -47,10 +52,12 @@ project_root/
 │   ├── models/            # model definitions
 │   ├── training/          # training loops
 │   ├── eval/              # metrics, evaluation scripts
+│   ├── scratch/           # notebook builder scripts & temporary helper tests
+│   ├── experiments/       # python experiment execution scripts
 │   └── utils/
-├── notebooks/             # exploratory only, not production code
+├── notebooks/             # exploratory & deliverable notebooks
 ├── configs/
-├── experiments/           # run outputs, checkpoints, logs (gitignored; created at first run)
+├── experiments/           # run outputs, checkpoints, plots, results
 └── tests/                 # smoke tests + unit tests
 ```
 
