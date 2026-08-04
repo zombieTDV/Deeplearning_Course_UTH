@@ -633,6 +633,7 @@ ax2.plot(fpr_micro, tpr_micro,
 - **Generated Notebook**: [`notebooks/practice_2.ipynb`](../../notebooks/practice_2.ipynb)
 - **EXP-07 Module**: [`src/experiments/exp_07_resnet_densenet_sota.py`](../../src/experiments/exp_07_resnet_densenet_sota.py)
 - **EXP-07 Plots**: [`src/experiments/plot_exp07_details.py`](../../src/experiments/plot_exp07_details.py)
-- **EXP-07 Report**: [`agents/experiments/EXP_07_RESNET_DENSENET_SOTA.md`](./EXP_07_RESNET_DENSENET_SOTA.md)
-- **Code Comparison**: [`agents/experiments/CODE_DIFFERENCE_PRACTICE2_VS_EXP07.md`](./CODE_DIFFERENCE_PRACTICE2_VS_EXP07.md)
+- **EXP-07 Report**: [`../experiments/EXP_07_RESNET_DENSENET_SOTA.md`](../experiments/EXP_07_RESNET_DENSENET_SOTA.md)
+- **Code Comparison**: [`../experiments/CODE_DIFFERENCE_PRACTICE2_VS_EXP07.md`](../experiments/CODE_DIFFERENCE_PRACTICE2_VS_EXP07.md)
+- **EarlyStopping Plan**: [`PRACTICE2_EARLYSTOPPING_ERROR_ANALYSIS_PLAN.md`](PRACTICE2_EARLYSTOPPING_ERROR_ANALYSIS_PLAN.md)
 - **Existing Checkpoints**: `experiments/checkpoints/exp07_resnet18_sota_peak_best.pt`, `exp07_densenet121_sota_peak_best.pt`

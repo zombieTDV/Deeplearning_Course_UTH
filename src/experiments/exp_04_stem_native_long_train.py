@@ -12,8 +12,8 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
 
-from data.dataloader import get_cifar10_loaders
-from data.transforms import get_train_transform, get_eval_transform
+from src.data.dataloader import get_cifar10_loaders
+from src.data.transforms import get_train_transform, get_eval_transform
 from src.models.build_model import build_resnet18_cifar_stem
 from src.training.train_model import train_model
 
