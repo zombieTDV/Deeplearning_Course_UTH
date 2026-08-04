@@ -23,10 +23,13 @@ See [PURPOSE.md](PURPOSE.md) for the original exercise brief.
 4. [EVAL.md](phases/EVAL.md) — test-set evaluation, metrics, comparison across runs
 5. [PRACTICE2_EXP07_UPGRADE_PLAN.md](phases/PRACTICE2_EXP07_UPGRADE_PLAN.md) — Master SOTA Benchmarking Upgrade Plan (LLRD, RandAugment, Soft-Voting 96.00% Ensemble)
 6. [PRACTICE2_EARLYSTOPPING_ERROR_ANALYSIS_PLAN.md](phases/PRACTICE2_EARLYSTOPPING_ERROR_ANALYSIS_PLAN.md) — EarlyStopping Callback Integration & Misclassified Error Analysis Plan
+7. [PRACTICE2_LOGIT_BIAS_SWEEP_PLAN.md](experiments/PRACTICE2_LOGIT_BIAS_SWEEP_PLAN.md) — Class-Logit Bias Sweep Tuning for Cat/Dog Decision Threshold Optimization
+8. [PRACTICE2_ACCURACY_98_99_PLAN.md](experiments/PRACTICE2_ACCURACY_98_99_PLAN.md) — Master SOTA Plan to Achieve 98.0% – 99.0% Accuracy on CIFAR-10 (Swin-Base, ConvNeXt-Large, Mixup/CutMix, High-Res 384x384, TTA)
 
 ## Bug Reports & Troubleshooting
 - [bugs/README.md](bugs/README.md) — Master Bug Index & Troubleshooting Directory
 - [bugs/BUG_01_DATALOADER_BROKEN_PIPE_PYTHON314.md](bugs/BUG_01_DATALOADER_BROKEN_PIPE_PYTHON314.md) — PyTorch DataLoader `BrokenPipeError` in Multiprocessing Workers under Python 3.14 & Linux Jupyter Environments
+- [bugs/BUG_02_PRACTICE2_TRAIN_MODEL_TEST_LOSSES_KEYERROR.md](bugs/BUG_02_PRACTICE2_TRAIN_MODEL_TEST_LOSSES_KEYERROR.md) — `KeyError: 'test_losses'` in Practice 2 Notebook & Build Script
 
 ## Known constraint
 CIFAR-10 images are 32x32; torchvision pretrained models expect 224x224
@@ -39,3 +42,4 @@ most common thing that silently produces garbage results if missed.
 - [progress/MODEL_STATUS.md](progress/MODEL_STATUS.md)
 - [progress/TRAINING_STATUS.md](progress/TRAINING_STATUS.md)
 - [progress/EVAL_STATUS.md](progress/EVAL_STATUS.md)
+- [experiments/LOGIT_BIAS_SWEEP_STATUS.md](experiments/LOGIT_BIAS_SWEEP_STATUS.md)
