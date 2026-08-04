@@ -35,7 +35,7 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 # Constants
 # ---------------------------------------------------------------------------
-_PROJECT_ROOT = Path(__file__).resolve().parents[1]
+_PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_DATA_ROOT = str(_PROJECT_ROOT / "data" / "external" / "CIFAR-10")
 SPLIT_FILE = str(_PROJECT_ROOT / "data" / "processed" / "cifar10_split_seed42.json")
 SPLIT_SEED = 42
@@ -92,7 +92,7 @@ def _ensure_split() -> dict[str, Any]:
 # ---------------------------------------------------------------------------
 def get_cifar10_loaders(
     batch_size: int = 64,
-    num_workers: int = 2,
+    num_workers: int = 0,
     train_transform: object | None = None,
     eval_transform: object | None = None,
     pin_memory: bool = True,
@@ -106,7 +106,7 @@ def get_cifar10_loaders(
 
     Args:
         batch_size: Batch size for DataLoaders.
-        num_workers: Number of worker processes for data loading.
+        num_workers: Number of worker processes for data loading (0 for main process, recommended for Jupyter/Python 3.14).
         train_transform: Transform to apply to training data.
         eval_transform: Transform to apply to validation/test data.
         pin_memory: If True, uses pinned memory for faster GPU transfer.
@@ -116,9 +116,12 @@ def get_cifar10_loaders(
         Tuple of (train_loader, val_loader, test_loader).
     """
     logger.info(f"Creating CIFAR-10 DataLoaders with batch_size={batch_size}")
-    from data.transforms import get_train_transform, get_eval_transform
+    from src.data.transforms import get_train_transform, get_eval_transform
     
     split = _ensure_split()
+
+    if num_workers == 0:
+        persistent_workers = False
 
     # Use default transforms if not provided
     if train_transform is None:

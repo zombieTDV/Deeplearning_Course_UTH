@@ -18,11 +18,15 @@ See [PURPOSE.md](PURPOSE.md) for the original exercise brief.
 
 ## Phases
 1. [DATA_PREP.md](phases/DATA_PREP.md) — CIFAR-10 loading, transforms, DataLoaders
-2. [MODEL.md](phases/MODEL.md) — loading pretrained ResNet/DenseNet, architecture
-   inspection, adapting final layer, freeze/unfreeze strategy
-3. [TRAINING_INFO.md](phases/TRAINING_INFO.md) — training loop, hyperparameters,
-   TensorBoard logging
+2. [MODEL.md](phases/MODEL.md) — loading pretrained ResNet/DenseNet, architecture inspection, adapting final layer, freeze/unfreeze strategy
+3. [TRAINING_INFO.md](phases/TRAINING_INFO.md) — training loop, hyperparameters, TensorBoard logging
 4. [EVAL.md](phases/EVAL.md) — test-set evaluation, metrics, comparison across runs
+5. [PRACTICE2_EXP07_UPGRADE_PLAN.md](phases/PRACTICE2_EXP07_UPGRADE_PLAN.md) — Master SOTA Benchmarking Upgrade Plan (LLRD, RandAugment, Soft-Voting 96.00% Ensemble)
+6. [PRACTICE2_EARLYSTOPPING_ERROR_ANALYSIS_PLAN.md](phases/PRACTICE2_EARLYSTOPPING_ERROR_ANALYSIS_PLAN.md) — EarlyStopping Callback Integration & Misclassified Error Analysis Plan
+
+## Bug Reports & Troubleshooting
+- [bugs/README.md](bugs/README.md) — Master Bug Index & Troubleshooting Directory
+- [bugs/BUG_01_DATALOADER_BROKEN_PIPE_PYTHON314.md](bugs/BUG_01_DATALOADER_BROKEN_PIPE_PYTHON314.md) — PyTorch DataLoader `BrokenPipeError` in Multiprocessing Workers under Python 3.14 & Linux Jupyter Environments
 
 ## Known constraint
 CIFAR-10 images are 32x32; torchvision pretrained models expect 224x224

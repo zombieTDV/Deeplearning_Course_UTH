@@ -98,6 +98,38 @@ def validate(
 
 
 # ---------------------------------------------------------------------------
+# EarlyStopping Callback
+# ---------------------------------------------------------------------------
+class EarlyStopping:
+    """Early stops training if validation loss does not improve after a specified patience."""
+    def __init__(self, patience: int = 3, min_delta: float = 1e-4, verbose: bool = True):
+        self.patience = patience
+        self.min_delta = min_delta
+        self.verbose = verbose
+        self.counter = 0
+        self.best_loss = None
+        self.early_stop = False
+        self.best_state_dict = None
+
+    def __call__(self, val_loss: float, model: nn.Module) -> bool:
+        if self.best_loss is None:
+            self.best_loss = val_loss
+            self.best_state_dict = {k: v.cpu().clone() for k, v in model.state_dict().items()}
+        elif val_loss > self.best_loss - self.min_delta:
+            self.counter += 1
+            if self.verbose:
+                print(f"  [EarlyStopping] Counter: {self.counter}/{self.patience} (Best Val Loss: {self.best_loss:.4f})")
+            if self.counter >= self.patience:
+                self.early_stop = True
+        else:
+            self.best_loss = val_loss
+            self.best_state_dict = {k: v.cpu().clone() for k, v in model.state_dict().items()}
+            self.counter = 0
+
+        return self.early_stop
+
+
+# ---------------------------------------------------------------------------
 # Full training run
 # ---------------------------------------------------------------------------
 def train_model(
@@ -114,8 +146,11 @@ def train_model(
     scheduler: object | None = None,
     writer: SummaryWriter | None = None,
     save_dir: str = "experiments/checkpoints",
+    early_stopping: bool = True,
+    patience: int = 3,
+    min_delta: float = 1e-4,
 ) -> dict:
-    """Run a full training loop with validation, logging, scheduler, and checkpointing."""
+    """Run a full training loop with validation, logging, scheduler, EarlyStopping, and checkpointing."""
     if epochs is not None:
         num_epochs = epochs
     if experiment_name is not None:
@@ -132,6 +167,8 @@ def train_model(
     best_val_acc = 0.0
     best_epoch = -1
     best_state_path: str | None = None
+
+    early_stopper = EarlyStopping(patience=patience, min_delta=min_delta) if early_stopping else None
 
     epoch_iter = range(1, num_epochs + 1)
 
@@ -184,6 +221,14 @@ def train_model(
             os.makedirs(save_dir, exist_ok=True)
             best_state_path = os.path.join(save_dir, f"{run_name}_best.pt")
             torch.save(model.state_dict(), best_state_path)
+
+        # --- Early Stopping Check ---
+        if early_stopper is not None:
+            if early_stopper(val_loss, model):
+                print(f"\n  [EarlyStopping] Triggered at epoch {epoch}. Restoring best model weights...")
+                if early_stopper.best_state_dict is not None:
+                    model.load_state_dict(early_stopper.best_state_dict)
+                break
 
     print(
         f"\n  Best epoch: {best_epoch}  (val_loss={best_val_loss:.4f}, val_acc={best_val_acc:.2f}%)  "
