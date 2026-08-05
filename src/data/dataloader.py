@@ -36,10 +36,21 @@ logger = logging.getLogger(__name__)
 # Constants
 # ---------------------------------------------------------------------------
 _PROJECT_ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_DATA_ROOT = str(_PROJECT_ROOT / "data" / "external" / "CIFAR-10")
+# CIFAR-10 is stored under data/raw (where load_cifar10.py downloads it). Using
+# the same root avoids re-downloading a second copy into data/external every run.
+DEFAULT_DATA_ROOT = str(_PROJECT_ROOT / "data" / "raw")
 SPLIT_FILE = str(_PROJECT_ROOT / "data" / "processed" / "cifar10_split_seed42.json")
 SPLIT_SEED = 42
 TRAIN_RATIO = 0.9  # 45k train / 5k val out of 50k
+
+
+def _cifar10_present() -> bool:
+    """True if the CIFAR-10 batch files already exist at DEFAULT_DATA_ROOT.
+
+    Used to gate ``download=True`` so we never re-fetch the dataset when it is
+    already on disk.
+    """
+    return (Path(DEFAULT_DATA_ROOT) / "cifar-10-batches-py").is_dir()
 
 
 # ---------------------------------------------------------------------------
@@ -55,10 +66,10 @@ def _ensure_split() -> dict[str, Any]:
     # --- First call ever: generate and persist ---
     logger.info(f"Generating new split with seed={SPLIT_SEED}")
     full_train = torchvision.datasets.CIFAR10(
-        root=DEFAULT_DATA_ROOT, train=True, download=True
+        root=DEFAULT_DATA_ROOT, train=True, download=not _cifar10_present()
     )
     _ = torchvision.datasets.CIFAR10(  # ensure test set is downloaded too
-        root=DEFAULT_DATA_ROOT, train=False, download=True
+        root=DEFAULT_DATA_ROOT, train=False, download=not _cifar10_present()
     )
     n_full = len(full_train)  # 50k
 
@@ -134,15 +145,15 @@ def get_cifar10_loaders(
     # Memory overhead is acceptable for CIFAR-10 (~150 MB raw).
     train_full = torchvision.datasets.CIFAR10(
         root=DEFAULT_DATA_ROOT, train=True,
-        transform=train_transform, download=True,
+        transform=train_transform, download=not _cifar10_present(),
     )
     val_full = torchvision.datasets.CIFAR10(
         root=DEFAULT_DATA_ROOT, train=True,
-        transform=eval_transform, download=True,
+        transform=eval_transform, download=not _cifar10_present(),
     )
     test_full = torchvision.datasets.CIFAR10(
         root=DEFAULT_DATA_ROOT, train=False,
-        transform=eval_transform, download=True,
+        transform=eval_transform, download=not _cifar10_present(),
     )
 
 
