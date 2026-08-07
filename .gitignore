@@ -9,6 +9,8 @@ build/
 .kilo
 data
 
+*.pt
+
 # Virtual environment
 .venv/
 venv/
