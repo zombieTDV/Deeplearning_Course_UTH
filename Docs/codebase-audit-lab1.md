@@ -1,224 +1,256 @@
 # Codebase Audit Report — LAB1 (FashionMNIST Classification)
 
-**Project:** Deep Learning Course — Practice 1 (FashionMNIST MLP / CNN)
-**Branch audited:** `LAB1-FashionMNIST-Classification/main` (HEAD `9d99b07`)
-**Date:** 2026-08-08
-**Method:** Static audit of the branch via git (working tree untouched): file tree, `src/` modules, notebooks, `requirements.txt`, `.gitignore`, tracked artifacts, and the project's own rulebase (`Docs/Rulebase.md`, `agents/rules.md`). Report structure mirrors the reference audit report (`docs/codebase-audit.md`) with additional Compliance and Risk Analysis sections.
+- **Motivation/Background**: LAB1 is the FashionMNIST practice deliverable (MLP/CNN, phase-based error analysis); a baseline audit is needed to compare engineering maturity against LAB2. 1–3 sentences.
+- **Purpose**: Establish a baseline of code quality, security, dependency health, architecture consistency, test coverage, and performance for the `LAB1` branch, plus compliance with its own rulebase.
+- **Overview Pipeline**: Audited the branch via git (working tree untouched): file tree, `src/`, notebooks, `requirements.txt`, `.gitignore`, tracked artifacts, and the project rulebase (`Docs/Rulebase.md`, `agents/rules.md`).
+- **Detailed Plan**: Executive Summary; Findings Summary; per-area findings (code quality, security, dependencies, architecture, tests, performance); Compliance; Risk Analysis; Overall Health; Prioritized Action Plan.
+- **References**: `git`, `grep`, `Docs/Rulebase.md`, `agents/rules.md`.
 
-> **Note on the reference document:** the Google Docs link was supplied as a placeholder (no URL), and Google Docs/Drive is not accessible from this environment. This report therefore follows the structure, terminology, and detail level of the reference audit already produced locally (`docs/codebase-audit.md`). It is saved locally as `docs/codebase-audit-lab1.md` for you to copy into the Drive folder.
-
----
-
-## Executive Summary
-
-The LAB1 branch is a **well-documented experimental workflow** for FashionMNIST: a clear phase-based notebook structure (`notebooks/error_analysis/CNN` × 14 phases, `MLP` × 4 phases), comprehensive changelogs, a team-contribution doc, and an explicit AI-assisted development rulebase. Its strengths are **documentation discipline and experiment traceability**.
-
-However, engineering rigor is materially weaker than the LAB2 codebase:
-
-1. **No tests exist** — `pytest` is absent from `requirements.txt` and there is no `tests/` directory (violates Rulebase §9).
-2. **Unsafe checkpoint loading** — `src/model_utils.py` calls `torch.load(...)` without `weights_only=True`, and **14 `.pth` weight files + 2 Optuna `.db` databases are tracked in git** (violates Rulebase §12 and basic VCS hygiene).
-3. **Unpinned dependencies** — `requirements.txt` lists bare package names (non-reproducible).
-
-Overall health: **Good documentation and process; weak automated verification, dependency hygiene, and security hardening.** The prioritized plan (Section 12) remediates the high-severity items first.
+> **Note on the reference document:** the Google Docs link in the request was a placeholder (no URL), and Google Docs/Drive is not accessible from this environment. This report therefore follows the structure and terminology of the local reference audit (`docs/codebase-audit.md`) and is saved locally as `docs/codebase-audit-lab1.md` for upload to the Drive folder.
 
 ---
 
-## 1. Findings Summary
+## Table of Contents
 
-| ID | Area | Severity | Title |
-|---|---|---|---|
-| SEC-1 | Security | **High** | `torch.load` without `weights_only=True` (+ weights tracked in repo) |
-| DEP-1 | Dependencies | **High** | Unpinned `requirements.txt` (non-reproducible) |
-| TST-1 | Testing | **High** | No tests; `pytest` not declared |
-| ARC-2 | Architecture | **Medium** | 14 `.pth` + 2 `.db` + 28 PNG tracked in git (binary bloat) |
-| CQ-1 | Code quality | **Medium** | Hardcoded relative paths (`../outputs/...`) across `src/` |
-| CQ-2 | Code quality | **Medium** | `train_model` tracks only train loss (no validation / early stopping) |
-| TST-2 | Testing | **Medium** | No CI / smoke-test enforcement |
-| ARC-1 | Architecture | **Medium** | Flat `src/utils` modules + duplicated logic across 18 notebooks |
-| DEP-2 | Dependencies | **Low** | Bleeding-edge runtime (torch cu130); no version constraints |
-| CQ-3 | Code quality | **Low** | No linting / type-check configuration |
-| ARC-3 | Architecture | **Low** | `config/` directory empty; no centralized configuration |
-| PERF-1 | Performance | **Low** | `DataLoader` default `num_workers=0` (single-threaded) |
-| PERF-2 | Performance | **Low** | Notebooks recompute results each run (no caching) |
-| SEC-2 | Security | **Info** | No hardcoded credentials / secrets found (good) |
-| CQ-4 | Code quality | **Info** | Documentation & changelogs are a strength (Rulebase §7 compliant) |
+- [1. Executive Summary](#1-executive-summary)
+- [2. Findings Summary](#2-findings-summary)
+- [3. Code Quality](#3-code-quality)
+- [4. Security Vulnerabilities](#4-security-vulnerabilities)
+- [5. Dependency Health](#5-dependency-health)
+- [6. Architecture Consistency](#6-architecture-consistency)
+- [7. Test Coverage](#7-test-coverage)
+- [8. Performance Bottlenecks](#8-performance-bottlenecks)
+- [9. Compliance with Policies and Procedures](#9-compliance-with-policies-and-procedures)
+- [10. Detailed Risk Analysis](#10-detailed-risk-analysis)
+- [11. Overall Project Health](#11-overall-project-health)
+- [12. Prioritized Action Plan](#12-prioritized-action-plan)
 
 ---
 
-## 2. Code Quality
+## 1. Executive Summary
 
-### CQ-1 — Hardcoded relative paths — **Medium**
-- **Description:** All `src/` utilities write to hardcoded relative paths such as `'../outputs/practice_1/metrics'` (`src/eval_utils.py` `METRICS_DIR`, `src/train_utils.py`, `src/model_utils.py` default path). This breaks if notebooks are run from any directory other than `notebooks/`, and mixes logic with I/O location.
+> **Scope:** branch `LAB1-FashionMNIST-Classification/main`, HEAD `9d99b07`; date 2026-08-08; method — static audit via git (no working-tree changes).
+
+LAB1 is a **well-documented experimental workflow** for FashionMNIST: phase-based notebooks (14 CNN + 4 MLP), comprehensive changelogs, a team-contribution doc, and an explicit AI-assisted development rulebase. Its strengths are **documentation and experiment traceability**.
+
+What blocks maturity:
+1. **No tests exist** — `pytest` is absent and there is no `tests/` directory (Rulebase §9 non-compliant).
+2. **Unsafe checkpoint loading** — `src/model_utils.py` calls `torch.load` without `weights_only=True`, and **14 `.pth` weights + 2 Optuna `.db` are tracked in git** (Rulebase §12).
+3. **Unpinned dependencies** — `requirements.txt` lists bare names.
+
+Overall health: **Good documentation and process; weak automated verification, dependency hygiene, and security hardening** (see [§11](#11-overall-project-health), top actions in [§12](#12-prioritized-action-plan)).
+
+---
+
+## 2. Findings Summary
+
+| ID | Area | Severity | Title | Section |
+|---|---|---|---|---|
+| SEC-1 | Security | **High** | `torch.load` without `weights_only=True` | [4. Security Vulnerabilities](#4-security-vulnerabilities) |
+| DEP-1 | Dependencies | **High** | Unpinned `requirements.txt` | [5. Dependency Health](#5-dependency-health) |
+| TST-1 | Testing | **High** | No tests; `pytest` not declared | [7. Test Coverage](#7-test-coverage) |
+| ARC-2 | Architecture | **Medium** | `.pth` / `.db` / PNG tracked in git | [6. Architecture Consistency](#6-architecture-consistency) |
+| CQ-1 | Code quality | **Medium** | Hardcoded relative paths | [3. Code Quality](#3-code-quality) |
+| CQ-2 | Code quality | **Medium** | No validation / early stopping in train loop | [3. Code Quality](#3-code-quality) |
+| TST-2 | Testing | **Medium** | No CI and smoke-test enforcement | [7. Test Coverage](#7-test-coverage) |
+| ARC-1 | Architecture | **Medium** | Flat `src/` + duplicated notebook logic | [6. Architecture Consistency](#6-architecture-consistency) |
+| DEP-2 | Dependencies | **Low** | Bleeding-edge runtime; no constraints | [5. Dependency Health](#5-dependency-health) |
+| CQ-3 | Code quality | **Low** | No linting / type-check config | [3. Code Quality](#3-code-quality) |
+| ARC-3 | Architecture | **Low** | Empty `config/` directory | [6. Architecture Consistency](#6-architecture-consistency) |
+| PERF-1 | Performance | **Low** | `num_workers=0` (single-threaded) | [8. Performance Bottlenecks](#8-performance-bottlenecks) |
+| PERF-2 | Performance | **Low** | Recompute-heavy notebooks | [8. Performance Bottlenecks](#8-performance-bottlenecks) |
+| SEC-2 | Security | **Info** | No hardcoded credentials (good) | [4. Security Vulnerabilities](#4-security-vulnerabilities) |
+| CQ-4 | Code quality | **Info** | Documentation strength | [3. Code Quality](#3-code-quality) |
+
+Severity totals feed the [risk analysis §10](#10-detailed-risk-analysis); policy mapping is in [§9](#9-compliance-with-policies-and-procedures).
+
+---
+
+## 3. Code Quality
+
+### CQ-1: Hardcoded relative paths
+- **Severity:** Medium
+- **Description:** All `src/` utilities write to hardcoded paths such as `'../outputs/practice_1/metrics'` (`src/eval_utils.py` `METRICS_DIR`, `src/train_utils.py`, `src/model_utils.py`), breaking when run from any directory other than `notebooks/`.
 - **Affected:** `src/eval_utils.py`, `src/train_utils.py`, `src/model_utils.py`, `src/data_utils.py`
-- **Remediation:** Resolve paths from the project root (`Path(__file__).resolve().parents[...]` or a `PROJECT_ROOT` helper), as done in the LAB2 codebase.
+- **Remediation:** Resolve paths from a `PROJECT_ROOT` helper (as in LAB2) — tracked in [Action P1.1](#12-prioritized-action-plan).
 
-### CQ-2 — No validation tracking in the training loop — **Medium**
-- **Description:** `train_utils.train_model` records only training loss per epoch; there is no validation loop, early stopping, or scheduler support, so overfitting is not observable during training and "best epoch" is not tracked.
+### CQ-2: No validation tracking in the training loop
+- **Severity:** Medium
+- **Description:** `train_utils.train_model` records only training loss; no validation loop, early stopping, or scheduler support, so overfitting is not observable during training.
 - **Affected:** `src/train_utils.py`
-- **Remediation:** Add a `validate(model, val_loader, ...)` helper and best-model tracking (load-if-present semantics per the notebook rules), mirroring LAB2's `train_model`.
+- **Remediation:** Add `validate()` + best-model tracking — [Action P1.2](#12-prioritized-action-plan).
 
-### CQ-3 — No linting / type-check configuration — **Low**
-- **Description:** No `pyproject.toml`, `ruff`, `mypy`, or `flake8` configuration exists on the branch.
+### CQ-3: No linting or type-check configuration
+- **Severity:** Low
+- **Description:** No `pyproject.toml`, `ruff`, `mypy`, or `flake8` config.
 - **Affected:** repository root
-- **Remediation:** Add `pyproject.toml` with `ruff` and enforce in CI.
+- **Remediation:** Add `pyproject.toml` + `ruff` — [Action P2.1](#12-prioritized-action-plan).
 
-### CQ-4 — Documentation strength — **Info (positive)**
-- **Description:** `CNN_Experiment_Changelog.md`, `MLP_Experiment_Changelog.md`, `Docs/PROJECT_STRUCTURE_*.md`, `Docs/LAB1_TEAM_CONTRIBUTION.md`, and per-phase notebook headers are thorough and satisfy the Rulebase documentation standard.
+### CQ-4: Documentation strength (positive)
+- **Severity:** Info
+- **Description:** `CNN_Experiment_Changelog.md`, `MLP_Experiment_Changelog.md`, `Docs/PROJECT_STRUCTURE_*.md`, `Docs/LAB1_TEAM_CONTRIBUTION.md`, and per-phase headers are thorough and satisfy Rulebase §7.
+- **Affected:** `Docs/`, changelogs
 - **Remediation:** None — maintain.
 
 ---
 
-## 3. Security Vulnerabilities
+## 4. Security Vulnerabilities
 
-### SEC-1 — Unsafe checkpoint loading — **High**
-- **Description:** `src/model_utils.py:12` loads checkpoints with `torch.load(path, map_location=device)` **without `weights_only=True`**, which permits arbitrary pickle-based code execution if a checkpoint is tampered or comes from an untrusted source. Exposure is amplified because **14 `.pth` weight files are committed to the repository** (see ARC-2), so anyone with repo access controls files that will later be `torch.load`-ed.
+### SEC-1: Unsafe checkpoint loading
+- **Severity:** High
+- **Description:** `src/model_utils.py:12` loads checkpoints with `torch.load(path, map_location=device)` **without `weights_only=True`** — arbitrary pickle code execution risk if a checkpoint is tampered. Exposure is amplified because **14 `.pth` files are committed to the repo** (see [ARC-2](#arc-2-tracked-binary-artifacts)).
 - **Affected:** `src/model_utils.py`; notebooks calling `load_model` (`phase10_ensemble.ipynb`, `phase4_mlp_optuna_merged.ipynb`, `_optuna_mlp_hp_search.py`)
-- **Remediation:** Add `weights_only=True` to every `torch.load` (or route through a single hardened loader); stop tracking `.pth` files (`git rm --cached`, extend `.gitignore` to `*.pth`).
+- **Remediation:** Add `weights_only=True`; stop tracking `.pth` — [Action P0.1](#12-prioritized-action-plan).
 
-### SEC-2 — Secrets / credentials — **Info (good)**
+### SEC-2: Secrets / credentials
+- **Severity:** Info
 - **Description:** No hardcoded credentials, API keys, or secrets found in `src/` (grep-verified); no network-exposed service.
+- **Affected:** repository
 - **Remediation:** Continue current policy; never commit `.env` or database files.
 
 ---
 
-## 4. Dependency Health
+## 5. Dependency Health
 
-### DEP-1 — Unpinned dependencies — **High**
-- **Description:** `requirements.txt` lists bare names (`torch`, `torchvision`, `scikit-learn`, `pandas`, ...). Any environment install is non-reproducible; the README's install guide (`pip install torch torchvision --index-url .../cu130`) already targets a specific (bleeding-edge) CUDA build, so results are not portable across machines.
+### DEP-1: Unpinned dependencies
+- **Severity:** High
+- **Description:** `requirements.txt` lists bare names; the README install targets a specific CUDA 130 build, so results are not portable.
 - **Affected:** `requirements.txt`, `README.MD`
-- **Remediation:** Pin exact versions (`pip freeze > requirements.lock`) or constrained ranges; document the tested Python/torch matrix; add `requirements-dev.txt` with `pytest`.
+- **Remediation:** Pin exact versions (`requirements.lock`); add `requirements-dev.txt` with `pytest` — [Action P0.3](#12-prioritized-action-plan).
 
-### DEP-2 — Runtime risk — **Low**
-- **Description:** No version constraints; the documented install pulls a very recent torch/CUDA 130 build. Behavioral changes across versions can silently alter results.
+### DEP-2: Runtime risk
+- **Severity:** Low
+- **Description:** No version constraints; documented install pulls a very recent torch/CUDA build.
 - **Affected:** `requirements.txt`
-- **Remediation:** Same as DEP-1; record actual versions in `requirements.lock`.
+- **Remediation:** Same as DEP-1; record actual versions — [Action P0.3](#12-prioritized-action-plan).
 
 ---
 
-## 5. Architecture Consistency
+## 6. Architecture Consistency
 
-### ARC-1 — Flat `src/` + duplicated logic — **Medium**
-- **Description:** LAB1 uses a flat `src/{data,eval,model,train,vis}_utils.py` layout (no `src/data`, `src/models`, `src/training`, `src/eval` packages). Core logic (evaluation, confusion matrices, metric writing, model definitions) is also duplicated inside 18 notebooks (14 CNN + 4 MLP phases) rather than imported.
+### ARC-1: Flat src with duplicated notebook logic
+- **Severity:** Medium
+- **Description:** Flat `src/{data,eval,model,train,vis}_utils.py` layout (no packages); core logic is duplicated inside 18 phase notebooks rather than imported.
 - **Affected:** `src/*.py`, `notebooks/error_analysis/**/*.ipynb`
-- **Remediation:** Adopt the LAB2 package layout; make notebooks thin orchestrators importing from `src/`.
+- **Remediation:** Adopt the LAB2 package layout; make notebooks thin orchestrators — [Action P2.2](#12-prioritized-action-plan).
 
-### ARC-2 — Tracked binary artifacts — **Medium**
-- **Description:** The branch tracks **14 `.pth` checkpoints, 2 Optuna `.db` databases, 5 Plotly `.html`, and 28 `.png`** files (272 tracked files total). `.gitignore` ignores `*.pt` but **not** `*.pth` or `*.db`, so weights and databases are committed. This bloats the repository, causes merge conflicts on regenerated binaries, risks accidental distribution of trained weights, and frequently corrupts binary DBs in git.
+### ARC-2: Tracked binary artifacts
+- **Severity:** Medium
+- **Description:** The branch tracks **14 `.pth` checkpoints, 2 Optuna `.db`, 5 `.html`, 28 `.png`** (272 files total). `.gitignore` ignores `*.pt` but **not** `*.pth`/`*.db`. Bloat, merge conflicts, accidental weight distribution, corrupt DBs.
 - **Affected:** `.gitignore`, `outputs/**`
-- **Remediation:** Add `*.pth`, `*.db`, `*.html`, `*.png` (except curated result summaries) to `.gitignore`; `git rm --cached` the binaries; keep only small, human-readable metrics (`.txt`/`.csv`) and a few curated plots tracked.
+- **Remediation:** Add `*.pth`/`*.db` to `.gitignore`; `git rm --cached` the binaries — [Action P0.2](#12-prioritized-action-plan).
 
-### ARC-3 — Empty config directory — **Low**
-- **Description:** `config/` contains only `.gitkeep`; no centralized configuration despite the Rulebase's architecture expectations.
+### ARC-3: Empty config directory
+- **Severity:** Low
+- **Description:** `config/` contains only `.gitkeep`.
 - **Affected:** `config/`
-- **Remediation:** Either populate with a config file consumed by `src/`, or remove the empty directory.
+- **Remediation:** Populate or remove — [Action P2.3](#12-prioritized-action-plan).
 
 ---
 
-## 6. Test Coverage
+## 7. Test Coverage
 
-### TST-1 — No tests — **High**
-- **Description:** There is **no `tests/` directory** on the branch and `pytest` is not declared in `requirements.txt`. None of the training, evaluation, or data-loading code is covered; the "fix overfitting" data-augmentation change (commit `1e51fe4`) shipped with no regression test.
+### TST-1: No tests
+- **Severity:** High
+- **Description:** No `tests/` directory; `pytest` not declared; the overfitting-fix (commit `1e51fe4`) shipped untested.
 - **Affected:** repository root, `requirements.txt`
-- **Remediation:** Create `tests/` with unit tests for `data_utils` (split persistence, transforms), `train_utils` (1-epoch smoke), `eval_utils` (metrics correctness), and `model_utils` (save/load round-trip with `weights_only=True`). Add `pytest` to dev requirements.
+- **Remediation:** Create `tests/` (data_utils, train_utils smoke, eval_utils, model_utils round-trip) — [Action P0.4](#12-prioritized-action-plan).
 
-### TST-2 — No CI / smoke enforcement — **Medium**
-- **Description:** No `.github/workflows` or pre-commit; the Rulebase's testing requirement is not enforced by automation, and a smoke-test checklist is not present on this branch.
+### TST-2: No CI and smoke-test enforcement
+- **Severity:** Medium
+- **Description:** No `.github/workflows` or pre-commit; Rulebase testing not automated.
 - **Affected:** repository root
-- **Remediation:** Add a CI workflow that installs pinned deps, runs `pytest`, and executes a notebook smoke test on every PR.
+- **Remediation:** Add CI running `pytest` + notebook smoke — [Action P1.3](#12-prioritized-action-plan).
 
 ---
 
-## 7. Performance Bottlenecks
+## 8. Performance Bottlenecks
 
-### PERF-1 — Single-threaded data loading — **Low**
-- **Description:** `get_dataloaders` and the notebooks do not set `num_workers`, so PyTorch defaults to `num_workers=0` (single-threaded). FashionMNIST is small, so impact is low, but it becomes a GPU-starvation risk for larger runs.
+### PERF-1: Single-threaded data loading
+- **Severity:** Low
+- **Description:** `get_dataloaders` and notebooks do not set `num_workers` (default 0). Low impact for FashionMNIST.
 - **Affected:** `src/data_utils.py`, notebooks
-- **Remediation:** Set `num_workers` explicitly (with the Python-3.14 spawn-safe workaround if applicable) and document the choice.
+- **Remediation:** Set `num_workers` explicitly — [Action P2.4](#12-prioritized-action-plan).
 
-### PERF-2 — Recompute-heavy notebooks — **Low**
-- **Description:** Each phase notebook re-trains/re-evaluates and regenerates artifacts; there is no on-disk result cache, so re-runs repeat work. Impact is low because FashionMNIST models are tiny.
+### PERF-2: Recompute-heavy notebooks
+- **Severity:** Low
+- **Description:** Each phase re-trains/re-evaluates with no result cache; low impact (tiny models).
 - **Affected:** `notebooks/error_analysis/**`
-- **Remediation:** Cache extracted metrics/features to `outputs/` and load-if-present, per the notebook independence rules.
+- **Remediation:** Cache metrics/features to `outputs/`; load-if-present — [Action P2.4](#12-prioritized-action-plan).
 
 ---
 
-## 8. Compliance with Policies & Procedures
+## 9. Compliance with Policies and Procedures
 
-Assessment against the branch's own `Docs/Rulebase.md` (15 sections) and `agents/rules.md`:
+Assessed against `Docs/Rulebase.md` (15 sections) and `agents/rules.md`.
 
-| Policy / procedure | Compliance | Evidence / gap |
-|---|---|---|
-| §1 Role Definition | **Compliant** | AI/developer responsibilities documented; `agents/rules.md` present |
-| §2 Transparency & AI Logging | **Compliant** | `Docs/agents_log.md`, `agents_log.md` exist and are populated |
-| §3 Development Workflow | **Partial** | Iterative commits; but binaries/DBs committed alongside code |
-| §4 Software Architecture Rules | **Partial** | Flat `src/` utils; hardcoded paths; no package layout |
-| §5 Coding Rules | **Partial** | Consistent naming; no linting enforcement; hardcoded paths |
-| §6 AI-Generated Code Rules | **Partial** | Logging exists; no explicit AI-generated-code markers per file |
-| §7 Documentation Standards | **Compliant** | Changelogs, notebook headers, `Docs/`, `PROJECT_STRUCTURE` |
-| §8 Report Writing Rules | **Compliant** | `LAB1_TEAM_CONTRIBUTION.md`, phase changelogs |
-| §9 Testing Rules | **Non-compliant** | No `tests/`, no `pytest`, no verification evidence |
-| §10 Version Control Rules | **Partial** | Commit volume good; tracked `.pth`/`.db` violates VCS hygiene |
-| §11 Technical Decision Records | **Partial** | Changelogs serve as de-facto TDR; no formal TDR format |
-| §12 Security Rules | **Non-compliant** | `torch.load` without `weights_only`; weights committed to repo |
-| §13 Debugging Rules | **Compliant** | Systematic `error_analysis/` phases (focal loss, augmentation, etc.) |
-| §15 Project Completion Checklist | **Partial** | No checklist artifact present in the branch |
+| Policy / procedure | Compliance | Evidence / gap | Related finding |
+|---|---|---|---|
+| §1 Role Definition | **Compliant** | AI/developer responsibilities documented | — |
+| §2 Transparency & AI Logging | **Compliant** | `Docs/agents_log.md` present and populated | — |
+| §3 Development Workflow | **Partial** | Iterative commits; binaries committed alongside code | [ARC-2](#arc-2-tracked-binary-artifacts) |
+| §4 Software Architecture Rules | **Partial** | Flat `src/`; hardcoded paths | [ARC-1](#arc-1-flat-src-with-duplicated-notebook-logic), [CQ-1](#cq-1-hardcoded-relative-paths) |
+| §5 Coding Rules | **Partial** | Consistent naming; no linting | [CQ-3](#cq-3-no-linting-or-type-check-configuration) |
+| §7 Documentation Standards | **Compliant** | Changelogs, headers, `Docs/` | [CQ-4](#cq-4-documentation-strength-positive) |
+| §8 Report Writing Rules | **Compliant** | `LAB1_TEAM_CONTRIBUTION.md` | — |
+| §9 Testing Rules | **Non-compliant** | No `tests/`, no `pytest` | [TST-1](#tst-1-no-tests) |
+| §10 Version Control Rules | **Partial** | Commit volume good; tracked binaries | [ARC-2](#arc-2-tracked-binary-artifacts) |
+| §11 Technical Decision Records | **Partial** | Changelogs as de-facto TDR | — |
+| §12 Security Rules | **Non-compliant** | `torch.load` without `weights_only`; weights committed | [SEC-1](#sec-1-unsafe-checkpoint-loading) |
+| §13 Debugging Rules | **Compliant** | Systematic `error_analysis/` phases | — |
+| §15 Project Completion Checklist | **Partial** | No checklist artifact present | — |
 
-**Bottom line:** The documentation, transparency, and debugging policies are well met. The **testing (§9)** and **security (§12)** policies are not met, and **version control hygiene (§10)** is only partially met due to committed binaries.
-
----
-
-## 9. Detailed Risk Analysis
-
-| Risk | Likelihood | Impact | Overall | Description & mitigation |
-|---|---|---|---|---|
-| **Pickle RCE via `torch.load`** | Low | High | **Moderate** | Checkpoints are local/trusted today, but weights are in the repo; a tampered `.pth` executes arbitrary code when loaded. Mitigate with `weights_only=True` + untrack weights. |
-| **Reproducibility failure** | High | High | **High** | Unpinned deps + CUDA-specific install → results differ across machines. Pin `requirements.lock`. |
-| **Regression / correctness** | High | High | **High** | No tests; the overfitting-fix shipped untested. Add unit + smoke tests and CI. |
-| **Repo bloat / data governance** | Medium | Medium | **Medium** | 14 `.pth`, 2 `.db`, 5 `.html`, 28 `.png` tracked → large repo, conflicts, accidental weight distribution, corrupt DBs. Gitignore + `git rm --cached`. |
-| **Portability breakage** | Medium | Medium | **Medium** | Hardcoded `../outputs/...` paths fail when run from other directories. Root-relative `Path` resolution. |
-| **Silent overfitting** | Medium | Medium | **Medium** | `train_model` tracks only train loss; no validation/early stopping in the loop. Add val tracking. |
-| **Policy non-compliance exposure** | Medium | Medium | **Medium** | Rulebase §9/§12/§10 unmet; audit/review exposure. Remediate per plan. |
+Cross-reference: non-compliance maps to [risk §10](#10-detailed-risk-analysis) and [action §12](#12-prioritized-action-plan).
 
 ---
 
-## 10. Overall Project Health
+## 10. Detailed Risk Analysis
+
+| Risk | Likelihood | Impact | Overall | Description & mitigation | Related finding |
+|---|---|---|---|---|---|
+| Pickle RCE via `torch.load` | Low | High | **Moderate** | Checkpoints are local/trusted, but weights are in repo; tampered `.pth` executes code on load. Add `weights_only=True` + untrack weights | [SEC-1](#sec-1-unsafe-checkpoint-loading) |
+| Reproducibility failure | High | High | **High** | Unpinned deps + CUDA-specific install. Pin `requirements.lock` | [DEP-1](#dep-1-unpinned-dependencies) |
+| Regression / correctness | High | High | **High** | No tests; overfitting fix shipped untested. Add tests + CI | [TST-1](#tst-1-no-tests) |
+| Repo bloat / data governance | Medium | Medium | **Medium** | 14 `.pth`, 2 `.db`, 28 `.png` tracked. Gitignore + `git rm --cached` | [ARC-2](#arc-2-tracked-binary-artifacts) |
+| Portability breakage | Medium | Medium | **Medium** | Hardcoded `../outputs/...` paths. Root-relative `Path` | [CQ-1](#cq-1-hardcoded-relative-paths) |
+| Silent overfitting | Medium | Medium | **Medium** | Train loop tracks only train loss. Add val tracking | [CQ-2](#cq-2-no-validation-tracking-in-the-training-loop) |
+| Policy non-compliance exposure | Medium | Medium | **Medium** | Rulebase §9/§12/§10 unmet. Remediate per plan | [TST-1](#tst-1-no-tests), [SEC-1](#sec-1-unsafe-checkpoint-loading) |
+
+---
+
+## 11. Overall Project Health
 
 | Dimension | Rating | Notes |
 |---|---|---|
 | Documentation & traceability | **Strong** | Changelogs, phase notebooks, team doc, rulebase |
-| Code quality | **Fair** | Hardcoded paths; no validation in train loop; no linting |
+| Code quality | **Fair** | Hardcoded paths; no validation in train loop |
 | Security | **Weak** | Unsafe `torch.load`; weights committed |
 | Dependency health | **Weak** | Unpinned; no dev requirements |
-| Architecture consistency | **Fair** | Flat utils + notebook duplication; no central config |
+| Architecture consistency | **Fair** | Flat utils + notebook duplication |
 | Test coverage | **None** | No tests, no pytest, no CI |
-| Performance | **Good enough** | Small dataset; minor loading/caching improvements only |
+| Performance | **Good enough** | Small dataset; minor improvements only |
 
-**One-line health:** A documentation-strong research branch whose engineering safeguards (tests, security hardening, dependency pinning, VCS hygiene) lag well behind the LAB2 codebase.
+Evidence for each dimension is in [§3](#3-code-quality)–[§8](#8-performance-bottlenecks).
 
 ---
 
-## 11. Prioritized Action Plan
+## 12. Prioritized Action Plan
 
 ### P0 — Fix now (security, reproducibility, verifiability)
-1. **Harden checkpoint loading** — add `weights_only=True` to `src/model_utils.py` (and any notebook `torch.load`), and stop loading untrusted files. *(SEC-1)*
-2. **Untrack binaries** — add `*.pth`, `*.db`, `*.html`, `*.png` to `.gitignore`; `git rm --cached` the 14 weights + 2 DBs (keep human-readable `.txt`/`.csv` metrics). *(ARC-2)*
-3. **Pin dependencies** — `pip freeze > requirements.lock`; add `requirements-dev.txt` with `pytest`. *(DEP-1, DEP-2)*
-4. **Add a minimal test suite** — `tests/` for `data_utils` (split, transforms), `train_utils` (1-epoch smoke), `eval_utils` (metrics), `model_utils` (save/load round-trip). *(TST-1)*
+- **P0.1** Add `weights_only=True` to `src/model_utils.py` and any notebook `torch.load` — addresses [SEC-1](#sec-1-unsafe-checkpoint-loading).
+- **P0.2** Add `*.pth`, `*.db`, `*.html`, `*.png` to `.gitignore`; `git rm --cached` the 14 weights + 2 DBs — addresses [ARC-2](#arc-2-tracked-binary-artifacts).
+- **P0.3** Pin `requirements.lock`; add `requirements-dev.txt` with `pytest` — addresses [DEP-1](#dep-1-unpinned-dependencies), [DEP-2](#dep-2-runtime-risk).
+- **P0.4** Create `tests/` (data_utils, train_utils smoke, eval_utils, model_utils round-trip) — addresses [TST-1](#tst-1-no-tests).
 
 ### P1 — Next iteration (raises confidence)
-5. **Root-relative paths** — centralize `PROJECT_ROOT` resolution; replace `'../outputs/...'` throughout `src/`. *(CQ-1)*
-6. **Validation + early stopping in `train_model`** with best-model persistence. *(CQ-2)*
-7. **Add CI** — GitHub Actions running `pytest` + a notebook smoke script on every PR. *(TST-2)*
+- **P1.1** Centralize `PROJECT_ROOT`; replace `'../outputs/...'` — [CQ-1](#cq-1-hardcoded-relative-paths).
+- **P1.2** Add validation + early stopping to `train_model` — [CQ-2](#cq-2-no-validation-tracking-in-the-training-loop).
+- **P1.3** Add CI running `pytest` + notebook smoke — [TST-2](#tst-2-no-ci-and-smoke-test-enforcement).
 
 ### P2 — Polish (when time permits)
-8. Adopt the LAB2 package layout (`src/data|models|training|eval`) and de-duplicate notebook logic. *(ARC-1)*
-9. Add `pyproject.toml` + `ruff`/`mypy`; enforce in CI. *(CQ-3)*
-10. Populate or remove `config/`; set explicit `num_workers`; cache recompute-heavy results. *(ARC-3, PERF-1, PERF-2)*
+- **P2.1** Add `pyproject.toml` + `ruff`/`mypy` — [CQ-3](#cq-3-no-linting-or-type-check-configuration).
+- **P2.2** Adopt the LAB2 package layout; de-duplicate notebook logic — [ARC-1](#arc-1-flat-src-with-duplicated-notebook-logic).
+- **P2.3** Populate or remove `config/` — [ARC-3](#arc-3-empty-config-directory).
+- **P2.4** Set explicit `num_workers`; cache recompute-heavy results — [PERF-1](#perf-1-single-threaded-data-loading), [PERF-2](#perf-2-recompute-heavy-notebooks).
 
----
-
-## 12. Notes & Scope
-
-- This audit inspects the **`LAB1-FashionMNIST-Classification/main`** branch state in git (HEAD `9d99b07`); it does not modify the working tree.
-- Findings reference LAB1's own artifacts only; LAB2 (`src/`, `tests/`, `agents/rules/*`) is audited separately in `docs/codebase-audit.md`.
-- The reference report link (Google Docs) was a placeholder and inaccessible from this environment; this document mirrors the local reference's structure, terminology, and detail level and is saved as `docs/codebase-audit-lab1.md` for upload to the shared Drive folder.
+Each item links back to its finding; the summary table is in [§2](#2-findings-summary).
