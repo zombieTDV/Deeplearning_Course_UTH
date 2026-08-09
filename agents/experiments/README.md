@@ -12,6 +12,7 @@ This directory contains experiment plans, hyperparameter trial logs, and model c
 - [EXP_05_MODEL_ARCH_SWEEP.md](EXP_05_MODEL_ARCH_SWEEP.md) — Modern Vision Architecture (ConvNeXt & EfficientNet) Benchmark Report (Completed — **96.42%**)
 - [EXP_06_CONVNEXT_ADVANCED_SOTA.md](EXP_06_CONVNEXT_ADVANCED_SOTA.md) — Ultimate ConvNeXt-Tiny SOTA Combination Report (Completed — **97.66%**)
 - [EXP_07_RESNET_DENSENET_SOTA.md](EXP_07_RESNET_DENSENET_SOTA.md) — ResNet18 & DenseNet121 Peak Accuracy Fine-Tuning & Ensemble Report (Completed — **96.00%**)
+- [EXP_08_ROADMAP_TO_99_PERCENT_ACCURACY.md](EXP_08_ROADMAP_TO_99_PERCENT_ACCURACY.md) — Roadmap & Experimental Plan to Reach **99.00%** Peak Accuracy (Planned — SOTA Architecture Blueprint)
 - [CODE_DIFFERENCE_PRACTICE2_VS_EXP07.md](CODE_DIFFERENCE_PRACTICE2_VS_EXP07.md) — Architectural Code Comparison Report (`practice_2.ipynb` vs `exp_07_resnet_densenet_sota.py`)
 - [../phases/PRACTICE2_EXP07_UPGRADE_PLAN.md](../phases/PRACTICE2_EXP07_UPGRADE_PLAN.md) — Integration & Planning Guide for Upgrading `practice_2.ipynb` with EXP-07, Loss Curves & ROC-AUC Charts
 - [../phases/PRACTICE2_EARLYSTOPPING_ERROR_ANALYSIS_PLAN.md](../phases/PRACTICE2_EARLYSTOPPING_ERROR_ANALYSIS_PLAN.md) — EarlyStopping Callback Integration & Misclassified Error Analysis Plan

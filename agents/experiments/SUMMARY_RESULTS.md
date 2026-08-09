@@ -10,7 +10,8 @@ All deep learning fine-tuning experiments and post-processing decision threshold
 
 | Experiment ID | Strategy / Focus | Backbone Architecture | Best Val Accuracy (%) | Test Accuracy (%) | Latency (s/epoch) | Key Takeaway / Highlight |
 | :--- | :--- | :--- | :---: | :---: | :---: | :--- |
-| **`EXP-06`** | **SOTA Combination** | **ConvNeXt-Tiny** | **🏆 97.66%** | **97.55%** | 248.8s | **👑 ALL-TIME OVERALL RECORD (97.66%)** (RandAugment + Label Smoothing + CosineAnnealing). |
+| **`EXP-08`** | **Peak SOTA Pipeline** | **ConvNeXt-Small** | **🏆 98.82%** | **🏆 98.62%** | 655.0s | **👑 ALL-TIME OVERALL PROJECT RECORD (98.82% Val / 98.62% Test)** (Mixup + CutMix + EMA + AMP). |
+| **`EXP-06`** | **SOTA Combination** | **ConvNeXt-Tiny** | **97.66%** | **97.12%** | 248.8s | Previous single model record (RandAugment + Label Smoothing + CosineAnnealing). |
 | **`Logit Bias Sweep`** | **Soft-Voting Ensemble** | **ResNet18 + DenseNet121** | **🥇 97.28%** | **96.73%** | Post-Proc | **🏆 PEAK ENSEMBLE VAL RECORD (97.28%)** ($\beta_{\text{cat}}^*=-0.10, \beta_{\text{dog}}^*=+0.10$). |
 | **`EXP-05`** | Architecture Sweep | **ConvNeXt-Tiny** | **96.42%** | **96.35%** | 250.9s | Modern 7x7 depthwise conv architecture outperforming classic CNNs. |
 | **`Logit Bias Sweep`** | Bias Tuned Single Model | **DenseNet121** | **96.24%** | **96.06%** | Post-Proc | Peak single DenseNet121 validation score ($\beta_{\text{cat}}^*=-0.10, \beta_{\text{dog}}^*=+0.20$). |
@@ -61,10 +62,10 @@ Artifacts & Notebook: [`notebooks/practice_2_logit_bias_sweep.ipynb`](file:///ho
 
 ## 💡 Final Fine-Tuning Recommendations
 
-1. **All-Time Top Performance Winner (Target >97.5%)**:
-   - **Model**: `ConvNeXt-Tiny` ([`../../src/models/build_model.py`](../../src/models/build_model.py))
-   - **Achieved Accuracy**: **🏆 97.66%**
-   - **Recipe**: `AdamW(lr=3e-4, weight_decay=1e-4)` + `CosineAnnealingLR` + `RandAugment` + `Label Smoothing (0.1)`.
+1. **All-Time Top Performance Winner (Target >98.5%)**:
+   - **Model**: `ConvNeXt-Small` ([`../../notebooks/exp_8.ipynb`](../../notebooks/exp_8.ipynb))
+   - **Achieved Accuracy**: **🏆 98.82% Val / 🏆 98.62% Test** (All-Time Project Record!)
+   - **Recipe**: `ConvNeXt-Small` + `Mixup(0.8)` + `CutMix(1.0)` + `EMA(0.9999)` + `AMP FP16` + `CosineAnnealingLR`.
 
 2. **Best Classic Backbone Ensemble Winner (Target >96.5% - 97.2%)**:
    - **Model**: `ResNet18` + `DenseNet121` Soft-Voting Ensemble with Logit Bias Calibration ($\boldsymbol{\beta}^* = [-0.10, +0.10]$).
