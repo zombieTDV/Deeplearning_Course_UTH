@@ -1,8 +1,10 @@
 # MD_CONVENTION.md
+
 Rules for any .md file the agent creates in this project. Condensed from
 MD_creation_guide.md — see that file for full rationale and examples.
 
 ## Required header (5 fields, in order)
+
 ```
 # <Title>
 
@@ -16,12 +18,14 @@ MD_creation_guide.md — see that file for full rationale and examples.
 ```
 
 ## Table of Contents
+
 - Place immediately after the header `---`, before first content section
 - Include all `##` and `###` headings; omit `####`+ unless critical
 - Anchor rule: lowercase, strip punctuation except hyphens, spaces→hyphens
 - Regenerate TOC whenever a section is added/removed
 
 ## Body formatting
+
 - `##` top-level sections, `###` subsections, `####` only if necessary
 - No vague headings ("Details", "Info")
 - Tables for structured comparisons; bullets for unordered items;
@@ -33,18 +37,20 @@ MD_creation_guide.md — see that file for full rationale and examples.
   (comparison table + narrative + limitations)
 
 ## Conventions
-| Rule | Requirement |
-|---|---|
-| Single-variable principle | One changed factor per experiment; state what's held constant |
-| File paths | Relative from project root |
-| Dates | `YYYY-MM-DD` |
-| Notebook refs | `notebooks/<category>/<experiment>/<filename>.ipynb` |
-| Output dirs | `outputs/<category>/<experiment>/` |
-| Separators | `---` after header and between major sections |
-| Variable docs | `> **Variable changed**: ...` / `> **Held constant**: ...` pair above each experiment |
-| Metric deltas | Show Δ columns in comparison tables; bold positive Δ |
+
+| Rule                      | Requirement                                                                                                                                                                                         |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Single-variable principle | One changed factor per experiment; state what's held constant                                                                                                                                       |
+| File paths                | Relative link (agents/OVERVIEW.md: for internal things in project), Cross-file anchor link (agents/OVERVIEW.md#installation: Jump to a heading in another file), Absolute URL (for external things) |
+| Dates                     | `YYYY-MM-DD`                                                                                                                                                                                      |
+| Notebook refs             | `notebooks/<category>/<experiment>/<filename>.ipynb`                                                                                                                                              |
+| Output dirs               | `outputs/<category>/<experiment>/`                                                                                                                                                                |
+| Separators                | `---` after header and between major sections                                                                                                                                                     |
+| Variable docs             | `> **Variable changed**: ...` / `> **Held constant**: ...` pair above each experiment                                                                                                           |
+| Metric deltas             | Show Δ columns in comparison tables; bold positive Δ                                                                                                                                              |
 
 ## Self-review before finalizing
+
 - [ ] All 5 header fields present
 - [ ] TOC anchors resolve
 - [ ] Metrics match source
