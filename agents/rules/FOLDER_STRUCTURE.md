@@ -68,5 +68,5 @@ project_root/
 - Exploratory/throwaway code stays in `notebooks/`, not `src/`
 - If actual folder structure diverges from this file, that's a
   CODEBASE_AUDIT.md finding, not something to silently "fix"
-- Before working on a phase, read the matching agents/phases/<phase>.md and
-  agents/progress/<phase>_STATUS.md yourself before asking the human for context.
+- Before working on a phase, read the matching agents/phases/<phase></phase>.md and
+  agents/progress/<phase></phase>_STATUS.md yourself before asking the human for context.

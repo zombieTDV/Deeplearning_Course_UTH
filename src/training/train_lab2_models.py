@@ -59,7 +59,7 @@ from src.training.train_model import train_model
 from src.utils.checkpoint_utils import find_latest_run_dir
 from src.utils.run_logger import RunLogger
 
-DEFAULT_EPOCHS = 20
+DEFAULT_EPOCHS = 30
 DEFAULT_SEED = 42
 RUNS_ROOT = PROJECT_ROOT / "experiments" / "runs"
 RESULTS_DIR = PROJECT_ROOT / "experiments" / "results"
