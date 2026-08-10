@@ -24,6 +24,24 @@ MD_creation_guide.md — see that file for full rationale and examples.
 - Anchor rule: lowercase, strip punctuation except hyphens, spaces→hyphens
 - Regenerate TOC whenever a section is added/removed
 
+## Mandatory cross-reference links
+
+- **Whenever a file, module, notebook, or artifact path is mentioned in
+  AI-generated Markdown, it MUST be a working cross-reference link** — never
+  bare text. This keeps documentation verifiable and drift-free.
+- Link form:
+  - Same tree: relative link from the document's location
+    (`src/training/train_model.py`, `notebooks/practice_2.ipynb`).
+  - Jump to a heading: cross-file anchor link
+    (`agents/rules/LOGGING_CHECKPOINT_RULES.md#5-resume-procedure`).
+  - External resources: absolute URL.
+- Rules and phase/progress docs must additionally cross-link the rule they
+  enforce (e.g. any logging-related doc links
+  [LOGGING_CHECKPOINT_RULES.md](LOGGING_CHECKPOINT_RULES.md)).
+- Notebook headers must include a `## References` block linking the rules,
+  scripts, and artifact locations they consume — see
+  [NOTEBOOK_HEADER_CONVENTION.md](NOTEBOOK_HEADER_CONVENTION.md).
+
 ## Body formatting
 
 - `##` top-level sections, `###` subsections, `####` only if necessary
@@ -41,10 +59,13 @@ MD_creation_guide.md — see that file for full rationale and examples.
 | Rule                      | Requirement                                                                                                                                                                                         |
 | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Single-variable principle | One changed factor per experiment; state what's held constant                                                                                                                                       |
-| File paths                | Relative link (agents/OVERVIEW.md: for internal things in project), Cross-file anchor link (agents/OVERVIEW.md#installation: Jump to a heading in another file), Absolute URL (for external things) |
+| Cross-reference links     | **Mandatory** — any file/notebook/path mention must be a working relative link (see [Mandatory cross-reference links](#mandatory-cross-reference-links))                                            |
+| File paths                | Relative link (`agents/OVERVIEW.md`: internal), Cross-file anchor link (`agents/OVERVIEW.md#installation`: jump to a heading), Absolute URL (external) — never bare text                             |
+| Notebook refs             | `notebooks/<category>/<experiment>/<filename>.ipynb`; link the notebook AND its consuming scripts/artifacts                                                                                         |
+| Output dirs               | `experiments/runs/<ts>_<run>/` (run state), `experiments/results/<experiment>/` (consolidated outputs) — see [LOGGING_CHECKPOINT_RULES.md](LOGGING_CHECKPOINT_RULES.md)                              |
+| Notebook headers          | First cell per [NOTEBOOK_HEADER_CONVENTION.md](NOTEBOOK_HEADER_CONVENTION.md): title, subtitle, roadmap table, **and `## References`** with links to rules/scripts/artifacts                          |
+| Results (5W1H)            | Every reported metric carries full 5W1H context — see [RESULTS_REPORTING.md](RESULTS_REPORTING.md)                                                                                                  |
 | Dates                     | `YYYY-MM-DD`                                                                                                                                                                                      |
-| Notebook refs             | `notebooks/<category>/<experiment>/<filename>.ipynb`                                                                                                                                              |
-| Output dirs               | `outputs/<category>/<experiment>/`                                                                                                                                                                |
 | Separators                | `---` after header and between major sections                                                                                                                                                     |
 | Variable docs             | `> **Variable changed**: ...` / `> **Held constant**: ...` pair above each experiment                                                                                                           |
 | Metric deltas             | Show Δ columns in comparison tables; bold positive Δ                                                                                                                                              |
@@ -53,5 +74,7 @@ MD_creation_guide.md — see that file for full rationale and examples.
 
 - [ ] All 5 header fields present
 - [ ] TOC anchors resolve
+- [ ] Every file/notebook/path mention is a working cross-reference link
+- [ ] Notebook headers contain `## References` links (if the doc discusses notebooks)
 - [ ] Metrics match source
-- [ ] File/notebook paths correct
+- [ ] File/notebook paths correct and current (no `docs/`, no `scratch/build_notebook.py`, no `outputs/` leftovers)

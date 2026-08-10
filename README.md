@@ -2,19 +2,78 @@
 
 ## Project Overview
 
-This project implements a modular, production-ready data pipeline and deep learning framework for computer vision tasks, specifically tailored for CIFAR-10 classification using pretrained PyTorch architectures (ResNet, DenseNet). The architecture strictly adheres to the Separation of Concerns (SoC) principle, dividing data processing, model building, training, evaluation, and AI Agent governance into decoupled layers.
+LAB2 implements a modular, production-ready computer-vision pipeline for CIFAR-10
+classification using pretrained PyTorch architectures (ResNet18, DenseNet121). It
+strictly follows Separation of Concerns (SoC): data processing, model building,
+training, evaluation, and AI-Agent governance are decoupled layers, and **all
+training runs as logged, resumable Python scripts** — notebooks are reserved for
+testing, demos, visualization and analysis.
 
 ---
 
-## 🏗️ System Architecture
+## 🏗️ Architecture Overview
 
-The overall pipeline flow is structured as follows:
+The lab is a layered pipeline. Each layer is a `src/` package with unit tests;
+state flows forward, artifacts flow backward for analysis:
 
+```mermaid
+flowchart LR
+    subgraph DATA["Data Layer (src/data)"]
+        A1["transforms.py<br/>(augmentation, 224x224)"] --> A2["dataloader.py<br/>(fixed split, data/raw)"]
+    end
+
+    subgraph MODEL["Model Layer (src/models)"]
+        B1["build_model.py<br/>(ResNet18 / DenseNet121,<br/>frozen / finetune / SOTA-LLRD)"]
+    end
+
+    subgraph TRAIN["Training Layer (src/training) — scripts only"]
+        C1["train_lab2_models.py<br/>(CLI entry point)"]
+        C2["train_model.py<br/>(loop, full-state checkpoints, resume)"]
+        C3["run_logger.py<br/>(real-time progress, logs, JSONL)"]
+    end
+
+    subgraph EVAL["Evaluation Layer (src/eval)"]
+        D1["evaluate_model.py<br/>(test metrics, per-class, confusion matrix)"]
+    end
+
+    subgraph EXP["Experiment Layer (src/experiments)"]
+        E1["benchmark_sota.py, stacking_mlp_train.py,<br/>moe_router_train.py, exp_01..07, plots"]
+    end
+
+    subgraph OUT["Artifacts (experiments/)"]
+        F1["runs/&lt;ts&gt;_&lt;run&gt;/<br/>checkpoints + logs + metrics"]
+        F2["results/ (JSON, NPZ) + plots/"]
+    end
+
+    subgraph NB["Analysis (notebooks/) — test/demo/visualize only"]
+        G1["practice_2.ipynb, error analysis,<br/>TTA, stacking, MoE, calibration"]
+    end
+
+    A2 --> B1 --> C1 --> C2 --> C3
+    C1 -->|"best/last checkpoints"| F1
+    C2 -->|"history JSONL + config"| F1
+    E1 -->|"loads checkpoints"| F1
+    E1 -->|"artifacts"| F2
+    D1 -->|"test metrics"| F2
+    NB -->|"loads artifacts"| F1
+    NB -->|"loads artifacts"| F2
+    NB -->|"reads rules"| GOV["agents/ (governance &amp; knowledge base)"]
 ```
-Dataset → Inspection → Statistics → Transforms → DataLoader → Models → Training → Evaluation
-                                                                             │
-                                                                 Agent AI Knowledge Base (agents/)
-```
+
+Key properties of the architecture:
+
+- **Script-only training** — every training loop lives in `src/training/*.py` /
+  `src/experiments/*_train.py`; notebooks only load artifacts and analyze.
+- **Full logging & resumability** — every run persists model + optimizer +
+  scheduler + RNG state + history + config (see
+  [agents/rules/LOGGING_CHECKPOINT_RULES.md](agents/rules/LOGGING_CHECKPOINT_RULES.md)).
+- **Real-time monitoring** — zero-dependency console progress always on; optional
+  TensorBoard via `--tb`.
+- **Structured storage** — one run directory per experiment run
+  (`experiments/runs/<ts>_<run>/`), JSONL histories, NPZ for large arrays,
+  gzip rotation for logs.
+- **5W1H reporting** — every reported metric carries full context
+  ([agents/rules/RESULTS_REPORTING.md](agents/rules/RESULTS_REPORTING.md)).
 
 ---
 
@@ -23,141 +82,131 @@ Dataset → Inspection → Statistics → Transforms → DataLoader → Models �
 ```
 Deeplearning_Course_UTH/
 │
-├── agents/                   # Agent AI Knowledge Base & Behavioral Control Layer
-│   ├── README.md             # Navigation guide & entry point for AI Agent
-│   ├── OVERVIEW.md           # Project roadmap, goals & phase overview
-│   ├── PURPOSE.md            # Exercise brief & technical objectives
-│   │
-│   ├── rules/                # System conventions, rules & AI philosophy
-│   │   ├── AGENT_AI.md       # Agent AI behavior, guidelines & prompt layer
-│   │   ├── CODEBASE_AUDIT.md # Pre-task codebase audit checklist
-│   │   ├── FOLDER_STRUCTURE.md # Repository directory source of truth
-│   │   ├── MD_CONVENTION.md  # Documentation formatting standards
-│   │   ├── NAMING_CONVENTION.md # Naming conventions for code & files
-│   │   └── NOTEBOOK_HEADER_CONVENTION.md # Jupyter notebook header standard
-│   │
-│   ├── phases/               # Stage-specific pipeline documentation
-│   │   ├── DATA_PREP.md      # Data preparation & split policy
-│   │   ├── DATASET.md        # Dataset specifications & loaders
-│   │   ├── DATALOADER.md     # DataLoader creation & optimization
-│   │   ├── INSPECTION.md     # Data validation & quality checks
-│   │   ├── STATISTICS.md     # Dataset statistics computation
-│   │   ├── TRANSFORMS.md     # Augmentation & transform pipelines
-│   │   ├── MODEL.md          # Pretrained ResNet/DenseNet adaptation
-│   │   ├── TRAINING_INFO.md  # Training loop & hyperparameter sweeps
-│   │   └── EVAL.md           # Test evaluation & metrics reporting
-│   │
-│   ├── templates/            # Standard templates & checklists
-│   │   ├── PHASE_DOC_TEMPLATE.md
-│   │   ├── PROGRESS_STATUS_TEMPLATE.md
-│   │   └── SMOKE_TEST_CHECKLIST.md
-│   │
-│   ├── progress/             # Live progress status per phase
-│   │   ├── DATA_PREP_STATUS.md
-│   │   ├── MODEL_STATUS.md
-│   │   ├── TRAINING_STATUS.md
-│   │   └── EVAL_STATUS.md
-│   │
-│   ├── experiments/          # Experiment reports, status & SOTA benchmarks
-│   │   ├── SUMMARY_RESULTS.md # Final experiment comparison report
-│   │   └── LOGIT_BIAS_SWEEP_STATUS.md # Decision threshold optimization status
-│   │
-│   └── references/           # External guides & technical documentation
-│       └── OPTUNA_DB_GUIDE.md
+├── agents/                    # AI Agent knowledge base & behavioral control
+│   ├── README.md              # Navigation guide & architecture overview
+│   ├── rules/                 # Conventions: naming, folder structure, MD,
+│   │                          #   logging/checkpoints, 5W1H reporting, audits
+│   ├── phases/                # Stage-specific pipeline documentation
+│   ├── templates/             # Standard templates & checklists
+│   ├── progress/              # Live progress status per phase
+│   ├── experiments/           # Experiment reports & SOTA benchmarks
+│   ├── bugs/                  # Documented bug reports (BUG-01, BUG-02)
+│   └── references/            # External guides
 │
 ├── configs/
-│   └── data.yaml             # Centralized configuration for data pipeline
+│   └── data.yaml              # Centralized data configuration
 │
-├── data/                     # Primary Data Pipeline (Single Source of Truth)
-│   ├── external/             # Raw dataset storage (CIFAR-10)
-│   ├── processed/            # Processed data, statistics & persisted split
-│   ├── dataset.py            # Dataset loading & split handling
-│   ├── inspection.py         # Quality checks & label verification
-│   ├── statistics.py         # Mean & Std computation
-│   ├── transforms.py         # Training & evaluation transform pipelines
-│   ├── dataloader.py         # DataLoader builder functions
-│   └── config.py             # Configuration loader
+├── data/                      # Dataset storage (single source of truth)
+│   ├── raw/                   # CIFAR-10 batch files
+│   └── processed/             # Fixed train/val split (seed 42)
 │
-├── src/                      # Core Deep Learning Modules
-│   ├── models/               # Pretrained model setup (ResNet18, DenseNet121)
-│   ├── training/             # Training loop, optimizers & TensorBoard logging
-│   ├── eval/                 # Test metrics, confusion matrix & reporting
-│   ├── scratch/              # Notebook builders & temporary test scripts
-│   ├── experiments/          # Python experiment execution scripts
-│   └── utils/                # Helper utilities
+├── src/                       # Core modules (SoC layers)
+│   ├── data/                  # Transforms, dataloader, statistics
+│   ├── models/                # Pretrained model builders (incl. SOTA LLRD)
+│   ├── training/              # Training loop, full-state checkpoints, CLI
+│   ├── eval/                  # Test metrics, confusion matrices, reporting
+│   ├── experiments/           # Benchmark / stacking / MoE / EXP-01..07 scripts
+│   └── utils/                 # run_logger, checkpoint_utils, misc helpers
 │
-├── notebooks/                # Exploratory & Deliverable Jupyter Notebooks
-│   ├── practice_2.ipynb      # Main deliverable notebook
-│   └── practice_2_logit_bias_sweep.ipynb # Logit bias & threshold sweep notebook
+├── notebooks/                 # Analysis & demos ONLY (no training)
+│   ├── practice_2.ipynb       # Main deliverable (analysis of the 6 variants)
+│   ├── practice_2_tta.ipynb            # Test-time augmentation analysis
+│   ├── practice_2_stacking_mlp.ipynb   # Stacking meta-model analysis
+│   ├── practice_2_moe.ipynb            # Mixture-of-experts analysis
+│   ├── practice_2_error_analysis.ipynb # Confusion + misclassified-grid analysis
+│   ├── practice_2_logit_bias_sweep.ipynb
+│   └── practice_2_calibration_verification.ipynb
 │
-├── experiments/              # Run outputs, checkpoints, plots & results JSON
+├── experiments/               # Run artifacts
+│   ├── runs/<ts>_<run>/       # checkpoints/ logs/ metrics/ tensorboard/
+│   ├── results/               # JSON / NPZ metrics (+ README with 5W1H)
+│   ├── plots/                 # Generated figures
+│   └── checkpoints/           # LEGACY flat checkpoints (read-only fallback)
 │
-├── tests/                    # Unit tests & smoke tests
-├── requirements.txt          # Dependency requirements
-└── README.md                 # Project root documentation
+├── tests/                     # Unit tests
+├── requirements.txt
+└── README.md
 ```
-
----
-
-## 🤖 Agent AI Control & Knowledge Base
-
-The repository includes a dedicated AI Agent system in `agents/`:
-
-- **System Conventions**: All configuration files for the AI Agent use uppercase names with lowercase `.md` extension (`README.md`, `AGENT_AI.md`, `CODEBASE_AUDIT.md`) for instant recognition and visual highlighting.
-- **Behavior Layer**: [agents/rules/AGENT_AI.md](agents/rules/AGENT_AI.md) acts as the memory and second brain for AI coding assistants.
-- **Audit Procedure**: Before multi-file tasks, the AI agent executes [agents/rules/CODEBASE_AUDIT.md](agents/rules/CODEBASE_AUDIT.md) to prevent documentation drift.
-- **Phase Execution**: Pipeline stages are documented in [agents/phases/](agents/phases/) and tracked live in [agents/progress/](agents/progress/).
-
----
-
-## ⚙️ Data Pipeline Workflow
-
-1. **Dataset** (`data/dataset.py`): Download CIFAR-10 & load dataset splits.
-2. **Inspection** (`data/inspection.py`): Validate data integrity & class balance.
-3. **Statistics** (`data/statistics.py`): Compute & persist dataset mean/std.
-4. **Transforms** (`data/transforms.py`): Augmentation pipeline (224x224 resize for pretrained models).
-5. **DataLoader** (`data/dataloader.py`): Batching with persistent single-split policy.
 
 ---
 
 ## 🚀 Quick Start
 
-### Installation
+### 1. Install
 
 ```bash
-# 1. Create virtual environment
 python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scriptsctivate
-
-# 2. Install PyTorch with CUDA support
+.venv\Scripts\activate          # Windows  (source .venv/bin/activate on Linux)
 pip install torch torchvision --index-url https://download.pytorch.org/whl/cu130
-
-# 3. Install project dependencies
 pip install -r requirements.txt
 ```
 
-### Running the Data Pipeline
-
-```python
-from src.data.dataset import download_cifar10
-from src.data.dataloader import get_cifar10_loaders
-
-# Download dataset (auto-downloads if missing)
-download_cifar10()
-
-# Create DataLoaders (returns train, val, test)
-train_loader, val_loader, test_loader = get_cifar10_loaders(batch_size=64)
-```
-
-### Running Tests
+### 2. Train (script-only, logged & resumable)
 
 ```bash
-# Run unit tests
+# Train all 6 variants (ResNet18/DenseNet121 × frozen/finetune/sota)
+python -m src.training.train_lab2_models
+
+# Subset / explicit config / monitoring
+python -m src.training.train_lab2_models --modes frozen finetune --epochs 20 --seed 42
+python -m src.training.train_lab2_models --tb            # + TensorBoard monitoring
+
+# Resume an interrupted run exactly where it stopped
+python -m src.training.train_lab2_models --resume
+
+# Meta-model experiments (also script-only)
+python -m src.experiments.stacking_mlp_train
+python -m src.experiments.moe_router_train
+```
+
+Every run writes `experiments/runs/<ts>_<run>/` with `checkpoints/`
+(`<run>_best.pt`, `<run>_last.pt`), `logs/`, `metrics/` (config + JSONL history)
+and optional `tensorboard/`. Naming, format, and the resume procedure are
+defined in [agents/rules/LOGGING_CHECKPOINT_RULES.md](agents/rules/LOGGING_CHECKPOINT_RULES.md).
+
+### 3. Analyze in notebooks
+
+Notebooks load the artifacts (checkpoints, `registry.json`, `results/*`) and
+only test / demo / visualize / analyze:
+
+```bash
+jupyter notebook notebooks/practice_2.ipynb
+```
+
+### 4. Run tests
+
+```bash
 pytest tests/ -v
 ```
 
 ---
 
+## 📊 Results & Reporting
+
+- Results files are indexed and described in
+  [experiments/results/README.md](experiments/results/README.md) (every metric
+  carries a 5W1H description).
+- Experiment reports: [agents/experiments/SUMMARY_RESULTS.md](agents/experiments/SUMMARY_RESULTS.md).
+- Cost/latency is measured with **params (M), latency (ms), throughput (img/s)**
+  — GFLOPs was removed as unstable and uninformative
+  (see [agents/rules/RESULTS_REPORTING.md](agents/rules/RESULTS_REPORTING.md)).
+
+---
+
+## 🤖 Agent AI Control & Knowledge Base
+
+- **Behavior Layer**: [agents/rules/AGENT_AI.md](agents/rules/AGENT_AI.md) is the
+  memory and second brain for AI coding assistants.
+- **Audit Procedure**: [agents/rules/CODEBASE_AUDIT.md](agents/rules/CODEBASE_AUDIT.md)
+  runs before multi-file tasks; baseline report in
+  [agents/codebase-audit-report.md](agents/codebase-audit-report.md).
+- **Key rules**: [LOGGING_CHECKPOINT_RULES.md](agents/rules/LOGGING_CHECKPOINT_RULES.md),
+  [RESULTS_REPORTING.md](agents/rules/RESULTS_REPORTING.md),
+  [FOLDER_STRUCTURE.md](agents/rules/FOLDER_STRUCTURE.md),
+  [NAMING_CONVENTION.md](agents/rules/NAMING_CONVENTION.md).
+
+---
+
 ## 📜 License
 
-This repository is developed as part of the Deep Learning Course at UTH.
+Developed as part of the Deep Learning Course at UTH.

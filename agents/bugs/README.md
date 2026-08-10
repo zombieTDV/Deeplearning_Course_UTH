@@ -2,6 +2,18 @@
 
 This directory contains documented bug reports, runtime error analysis, and resolution guides encountered during the project lifecycle.
 
+## 🏗️ Architecture Overview
+
+Bugs are reported against specific pipeline layers and tracked to resolution:
+
+```
+Component (src/data, src/training, notebooks) → BUG-<n> report
+    → Root cause → Fix (committed) → Status (Resolved)
+```
+
+Each report follows `BUG_TEMPLATE.md` and links the affected modules. Bug IDs are
+referenced from the codebase audit report and progress docs.
+
 ## 📋 Bug Index
 
 | Bug ID | Title & Summary | Component / Module | Severity | Status |

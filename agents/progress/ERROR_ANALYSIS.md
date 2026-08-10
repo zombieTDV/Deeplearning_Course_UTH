@@ -26,7 +26,7 @@ needed) · `INFO` (environment/design constraint, not a code bug).
 ## ERR-01 — SOTA ensemble checkpoints missing
 - **Status:** INFO (environment)
 - **Symptom:** The 96% Soft-Voting Ensemble referenced in
-  `practice_2_verB.ipynb` / `practice_2_logit_bias_sweep.ipynb` uses
+  `practice_2.ipynb` / `practice_2_logit_bias_sweep.ipynb` uses
   checkpoints `ResNet18-sota_best.pt`, `DenseNet121-sota_best.pt`,
   `exp07_*_sota_peak_best.pt`. None of these exist in
   `experiments/checkpoints/` — only `ResNet18-frozen/finetune_best.pt` and

@@ -2,9 +2,21 @@
 
 - **Project Title**: Modernization of Practice 2 (`notebooks/practice_2.ipynb`) into a State-of-the-Art (SOTA) Transfer Learning & Computer Vision Benchmarking Suite on CIFAR-10.
 - **Core Backbones**: ResNet18 & DenseNet121 (ImageNet-pretrained).
-- **Peak Performance Achieved**: **🏆 96.00% Validation Accuracy** (Soft-Voting Ensemble of ResNet18 + DenseNet121 SOTA LLRD).
-- **Primary Generator Script**: [`scratch/build_notebook.py`](../../scratch/build_notebook.py) (Generates 22-cell [`notebooks/practice_2.ipynb`](../../notebooks/practice_2.ipynb)).
-- **Rule Conventions**: Adheres strictly to [`NOTEBOOK_HEADER_CONVENTION.md`](../rules/NOTEBOOK_HEADER_CONVENTION.md).
+- **Peak Performance Achieved**: **🏆 96.87% Test Accuracy** (Soft-Voting Ensemble; **97.12%** with 2-view TTA, **97.21%** with TTA + stacking MLP — see `SUMMARY_RESULTS.md`).
+- **Training Entry Point**: [`src/training/train_lab2_models.py`](../../src/training/train_lab2_models.py) — script-only training with full-state checkpoints, logging, resume (`notebooks/practice_2.ipynb` is analysis-only).
+- **Rule Conventions**: Adheres strictly to [`NOTEBOOK_HEADER_CONVENTION.md`](../rules/NOTEBOOK_HEADER_CONVENTION.md) and [`LOGGING_CHECKPOINT_RULES.md`](../rules/LOGGING_CHECKPOINT_RULES.md).
+
+---
+
+## 🧭 5W1H Context
+
+> **5W1H — SOTA benchmarking suite documentation**
+> - **What**: the SOTA recipe (LLRD + RandAugment + Label Smoothing + CosineAnnealing + soft-voting ensemble) and its benchmark charts.
+> - **Why**: document how the classic backbones were pushed from ~92% to ~97% and how results are reproduced.
+> - **When**: benchmarked 2026-08; checkpoints produced by the training script (`experiments/runs/*/checkpoints/`).
+> - **Where**: code in `src/` (models/training/eval), analysis in `notebooks/practice_2.ipynb`, artifacts in `experiments/`.
+> - **Who**: LAB2 team — for teammates and the course teacher.
+> - **How**: single-variable experiments (EXP-01..07), fixed split seed 42, metrics from `src/eval/evaluate_model.py`; every number below follows the metric descriptions in [RESULTS_REPORTING.md](../rules/RESULTS_REPORTING.md).
 
 ---
 
@@ -16,7 +28,7 @@
   - [3.2 Advanced Augmentation & Regularization Pipeline](#32-advanced-augmentation--regularization-pipeline)
   - [3.3 Cosine Annealing Learning Rate Schedule](#33-cosine-annealing-learning-rate-schedule)
   - [3.4 Soft-Voting Probability Ensembling](#34-soft-voting-probability-ensembling)
-- [4. Single Canonical Builder Architecture (`scratch/build_notebook.py`)](#4-single-canonical-builder-architecture-scratchbuild_notebookpy)
+- [4. Notebook Architecture — Artifact-Loading Structure (`notebooks/practice_2.ipynb`)](#4-notebook-architecture--artifact-loading-structure-notebookspractice_2ipynb)
   - [4.1 22-Cell Notebook Structure Breakdown](#41-22-cell-notebook-structure-breakdown)
 - [5. SOTA Visual Diagnostic Suite (9 Charts)](#5-sota-visual-diagnostic-suite-9-charts)
   - [5.1 Chart 1: Dedicated Per-Model Loss Charts ($2 \times 3$ Subplot Grid)](#51-chart-1-dedicated-per-model-loss-charts-2--3-subplot-grid)
@@ -35,7 +47,9 @@ This upgrade modernizes [`notebooks/practice_2.ipynb`](../../notebooks/practice_
 By fusing Layer-wise Discriminative Learning Rate Decay (LLRD), RandAugment, Label Smoothing regularization ($0.1$), Cosine Annealing learning rate scheduling, and Soft-Voting Ensembling, the classic vision backbones (ResNet18 & DenseNet121) achieve a project record **96.00% Validation Accuracy**.
 
 > [!NOTE]
-> The notebook creation is strictly driven by a single canonical builder script [`scratch/build_notebook.py`](../../scratch/build_notebook.py). Running this script programmatically updates `notebooks/practice_2.ipynb`.
+> Training is **script-only** (`src/training/train_lab2_models.py`, `--resume` for
+> continuation). The notebook `notebooks/practice_2.ipynb` is analysis-only: it
+> loads checkpoints + history from `experiments/runs/` and `experiments/results/`.
 
 ---
 
@@ -145,7 +159,11 @@ $$\mathbf{P}_{\text{ensemble}}(\mathbf{x}) = \frac{1}{2} \left[ \sigma(\mathbf{z
 
 ---
 
-## 4. Single Canonical Builder Architecture (`scratch/build_notebook.py`)
+## 4. Notebook Architecture — Artifact-Loading Structure (`notebooks/practice_2.ipynb`)
+
+The notebook is organized as an analysis pipeline over script-produced artifacts
+(train checkpoints + history under `experiments/runs/`, results under
+`experiments/results/`); it contains no training loop.
 
 The builder script [`scratch/build_notebook.py`](../../scratch/build_notebook.py) generates `notebooks/practice_2.ipynb` programmatically.
 

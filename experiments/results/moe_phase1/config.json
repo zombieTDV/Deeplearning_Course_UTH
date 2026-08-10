@@ -1,0 +1,16 @@
+{
+  "run_name": "moe_phase1",
+  "router": "MLP [20->64->2], softmax gate T=2.0",
+  "epochs": 40,
+  "seed": 0,
+  "lr": 0.001,
+  "regularizers": {
+    "alpha": 0.1,
+    "ent_w": 0.1,
+    "gate_T": 2.0
+  },
+  "train_split": "validation only (leakage-free w.r.t. test)",
+  "val_acc": 97.0,
+  "description": "What: train a per-input soft router over the two frozen SOTA experts (Phase 1 MoE). Why: test whether learned gating beats fixed 0.5/0.5 soft-voting. How: gate temperature 2.0 + entropy regularizer + load-balancing loss, Adam lr=1e-3, 40 epochs, validation split only. When/Where: reproduced by this script; artifacts in experiments/results/moe_phase1/. Who: LAB2 team.",
+  "timestamp": "2026-08-10T10:10:01"
+}

@@ -6,6 +6,24 @@ All deep learning fine-tuning experiments and post-processing decision threshold
 
 ---
 
+## 🧭 5W1H Context (read before any number below)
+
+> **5W1H — LAB2 experiment benchmark report**
+> - **What**: validation/test accuracy, F1, and epoch latency of every experiment (EXP-01..07 + logit-bias sweep) on CIFAR-10.
+> - **Why**: select the best recipe for the LAB2 deliverable (accuracy vs cost trade-off) and document reproducibility.
+> - **When**: runs executed 2026-07..08; validation metrics measured per epoch on the fixed 5k split (seed 42), test metrics on the official 10k split.
+> - **Where**: artifacts in `experiments/results/*.json` + `experiments/plots/*.png`; notebook `notebooks/practice_2_logit_bias_sweep.ipynb`; run on CUDA GPU (RTX 4060 Laptop).
+> - **Who**: LAB2 team — for teammates and the course teacher.
+> - **How**: each experiment varies one factor (see `agents/experiments/EXP_*.md`); all runs use the fixed `data/processed/cifar10_split_seed42.json` split; metrics computed with `src/eval/evaluate_model.py`.
+
+**Metric meanings** (per [agents/rules/RESULTS_REPORTING.md](../rules/RESULTS_REPORTING.md)):
+`Best Val Accuracy` = top-1 on the 5k validation split at the best epoch (model selection);
+`Test Accuracy` = top-1 on the 10k official test split (generalization);
+`Latency (s/epoch)` = wall-clock training time per epoch on the CUDA GPU (cost).
+Deltas (`+x.xx%`) are measured against the ResNet18 baseline of the same experiment family.
+
+---
+
 ## 📊 Empirical Summary Comparison Matrix
 
 | Experiment ID | Strategy / Focus | Backbone Architecture | Best Val Accuracy (%) | Test Accuracy (%) | Latency (s/epoch) | Key Takeaway / Highlight |
@@ -38,7 +56,7 @@ By applying Class-Logit Bias Offsets $\boldsymbol{\beta} = [0, 0, 0, \beta_{\tex
 - **DenseNet121**: Validation accuracy improved from **96.16%** to **96.24%** ($\beta_{\text{cat}}^* = -0.10, \beta_{\text{dog}}^* = +0.20$).
 - **Soft-Voting Ensemble**: Validation accuracy reached an all-time classic backbone record of **97.28%** ($\beta_{\text{cat}}^* = -0.10, \beta_{\text{dog}}^* = +0.10$).
 
-Artifacts & Notebook: [`notebooks/practice_2_logit_bias_sweep.ipynb`](file:///home/bush/Desktop/Deeplearning_Course_UTH/notebooks/practice_2_logit_bias_sweep.ipynb) & [`experiments/results/logit_bias_sweep_results.json`](file:///home/bush/Desktop/Deeplearning_Course_UTH/experiments/results/logit_bias_sweep_results.json).
+Artifacts & Notebook: [`notebooks/practice_2_logit_bias_sweep.ipynb`](../../notebooks/practice_2_logit_bias_sweep.ipynb) & [`experiments/results/logit_bias_sweep_results.json`](../../experiments/results/logit_bias_sweep_results.json).
 
 ---
 

@@ -1,32 +1,35 @@
-# Legacy Data Module
+# src/data — Data Pipeline Layer
 
-**⚠️ LEGACY - DEPRECATED - DO NOT EXTEND**
+## Architecture Overview (LAB2)
 
-This directory contains legacy data loading code for backward compatibility only.
-
-## Status
-
-- **Deprecated**: This module is deprecated and should not be used for new development.
-- **Do Not Extend**: Do not implement new functionality in this directory.
-- **Migration**: All new data pipeline development must occur in the `data/` directory at the project root.
-
-## Migration Path
-
-New data pipeline implementation is located at:
+The data layer is the first stage of the LAB2 pipeline:
 
 ```
-data/
-├── dataset.py
-├── inspection.py
-├── statistics.py
-├── transforms.py
-└── dataloader.py
+data/raw (CIFAR-10) → transforms.py → dataloader.py → train/val/test loaders
+                          │
+data/processed/cifar10_split_seed42.json  (fixed 45k/5k/10k split, seed 42)
 ```
 
-## Backward Compatibility
+- **transforms.py** — augmentation pipelines: standard ImageNet resize/normalize,
+  plus the advanced SOTA pipeline (RandAugment + RandomErasing) for training.
+  Also exposes `IMAGENET_MEAN`/`IMAGENET_STD` constants.
+- **dataloader.py** — the **canonical loader**. `get_cifar10_loaders()` reads the
+  persisted split file (generated once, reused forever), gates downloads via
+  `_cifar10_present()`, and returns `(train, val, test)` DataLoaders.
+- **statistics.py / inspection.py** — dataset statistics and validation helpers.
+- **config.py** — configuration loader.
+- **load_cifar10.py / dataset.py** — **legacy** duplicates, kept for backward
+  compatibility only; new code must import from `dataloader.py`/`transforms.py`.
 
-The existing `load_cifar10.py` is preserved for backward compatibility with existing code that depends on it. However, all new code should import from the `data/` package instead.
+Data is stored once under `data/raw/` (single source of truth) — no re-download
+and no duplicate copies under `data/external/`.
 
-## Future
+## Usage
 
-This directory will be removed once all dependent code has been migrated to the new data pipeline.
+```python
+from src.data.dataloader import get_cifar10_loaders
+train_loader, val_loader, test_loader = get_cifar10_loaders(batch_size=64)
+```
+
+See [agents/phases/DATA_PREP.md](../../agents/phases/DATA_PREP.md) and
+[agents/phases/DATALOADER.md](../../agents/phases/DATALOADER.md).

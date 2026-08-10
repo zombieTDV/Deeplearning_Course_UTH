@@ -3,8 +3,8 @@ dataset.py — CIFAR-10 dataset download, loading, and verification.
 
 Usage:
     from data.dataset import download_cifar10, load_cifar10_dataset
-    download_cifar10(root="data/external/CIFAR-10")
-    train_set, test_set = load_cifar10_dataset(root="data/external/CIFAR-10")
+    download_cifar10(root="data/raw")
+    train_set, test_set = load_cifar10_dataset(root="data/raw")
 """
 
 from __future__ import annotations
@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 # Constants
 # ---------------------------------------------------------------------------
 _PROJECT_ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_DATA_ROOT = str(_PROJECT_ROOT / "data" / "external" / "CIFAR-10")
+DEFAULT_DATA_ROOT = str(_PROJECT_ROOT / "data" / "raw")
 
 
 # ---------------------------------------------------------------------------
@@ -39,7 +39,8 @@ def download_cifar10(root: str = DEFAULT_DATA_ROOT) -> None:
 
     Args:
         root: Directory where the dataset will be stored.
-              Defaults to data/external/CIFAR-10.
+              Defaults to the canonical ``data/raw`` root used by
+              ``src.data.dataloader``.
 
     Raises:
         RuntimeError: If download fails.

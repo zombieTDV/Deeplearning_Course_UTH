@@ -36,8 +36,8 @@ logger = logging.getLogger(__name__)
 # Constants
 # ---------------------------------------------------------------------------
 _PROJECT_ROOT = Path(__file__).resolve().parents[2]
-# CIFAR-10 is stored under data/raw (where load_cifar10.py downloads it). Using
-# the same root avoids re-downloading a second copy into data/external every run.
+# Single canonical data root: every loader (canonical and legacy) points at
+# data/raw — data/external was retired to avoid duplicate dataset copies.
 DEFAULT_DATA_ROOT = str(_PROJECT_ROOT / "data" / "raw")
 SPLIT_FILE = str(_PROJECT_ROOT / "data" / "processed" / "cifar10_split_seed42.json")
 SPLIT_SEED = 42

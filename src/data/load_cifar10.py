@@ -51,8 +51,10 @@ logger = logging.getLogger(__name__)
 # regardless of the current working directory at runtime.
 _PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
-# Default paths (can be overridden by config)
-DEFAULT_DATA_ROOT = str(_PROJECT_ROOT / "data" / "external" / "CIFAR-10")
+# Default paths (can be overridden by config). The legacy loader now points at
+# the canonical data/raw root (same as src/data/dataloader.py) so there is a
+# single copy of the dataset — data/external was retired.
+DEFAULT_DATA_ROOT = str(_PROJECT_ROOT / "data" / "raw")
 DEFAULT_SPLIT_FILE = str(_PROJECT_ROOT / "data" / "processed" / "cifar10_split_seed42.json")
 DEFAULT_SPLIT_SEED = 42
 DEFAULT_TRAIN_RATIO = 0.9  # 45k train / 5k val out of 50k

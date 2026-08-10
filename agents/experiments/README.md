@@ -2,6 +2,24 @@
 
 This directory contains experiment plans, hyperparameter trial logs, and model comparison documentation in `.md` format.
 
+## 🏗️ Architecture Overview
+
+Experiments are the **research layer** between training and reporting:
+
+```
+Training scripts (src/training, src/experiments/*_train.py)
+        │  full-state checkpoints + JSONL history (experiments/runs/)
+        ▼
+This folder: plans, status, results — every number carries 5W1H context
+        │
+        ▼
+Summary reports (SUMMARY_RESULTS.md) → teacher/team presentations
+```
+
+Rules: results must follow the 5W1H principle
+([agents/rules/RESULTS_REPORTING.md](../rules/RESULTS_REPORTING.md)); training
+never happens in notebooks ([LOGGING_CHECKPOINT_RULES.md](../rules/LOGGING_CHECKPOINT_RULES.md)).
+
 ## 📋 Experiments Index
 
 - [CIFAR_STEM_EXPERIMENT.md](CIFAR_STEM_EXPERIMENT.md) — Native 32x32 Conv Stem Adaptation vs 224x224 Upsampling Baseline Experiment (Completed)

@@ -157,8 +157,8 @@ Severity totals feed the [risk analysis §10](#10-detailed-risk-analysis); polic
 
 ### ARC-3: Agent docs reference stale layout
 - **Severity:** Low
-- **Description:** Several `agents/` and `docs/` files reference `data/external/CIFAR-10` and pre-fix notebook structure.
-- **Affected:** `agents/`, `docs/`
+- **Description:** Several `agents/` files reference the removed `docs/` tree (now consolidated into `agents/rules|phases|progress|templates|references|experiments`), `data/external/CIFAR-10`, and pre-fix notebook structure.
+- **Affected:** `agents/`
 - **Remediation:** Sweep docs for stale paths — [Action P2.2](#12-prioritized-action-plan).
 
 ---
@@ -226,7 +226,7 @@ Assessed against `agents/rules/*` (naming, folder structure, MD convention, note
 | Policy / procedure | Compliance | Evidence / gap | Related finding |
 |---|---|---|---|
 | NAMING_CONVENTION | **Partial** | snake_case/verb-first compliant; some notebooks miss `NN_` prefix | [CQ-4](#cq-4-duplicate-sota-model-building-logic) |
-| FOLDER_STRUCTURE | **Partial** | Top-level layout matches; several undocumented files (`docs/md_convention.md`, root `purpose.md`) | [ARC-3](#arc-3-agent-docs-reference-stale-layout) |
+| FOLDER_STRUCTURE | **Partial** | Top-level layout matches; a few undocumented files (`src/data/load_cifar10.py`, root `purpose.md`) | [ARC-3](#arc-3-agent-docs-reference-stale-layout) |
 | MD_CONVENTION | **Partial** | New docs have header + TOC; older docs partial | [ARC-3](#arc-3-agent-docs-reference-stale-layout) |
 | NOTEBOOK_HEADER_CONVENTION | **Partial** | Headers present; output-persistence & cell-independence rules added but not fully applied | [PERF-4](#perf-4-notebooks-not-fully-partial-run-safe) |
 | AGENT_AI (docs/logging) | **Compliant** | `agents/` phase/status/experiment docs maintained | — |

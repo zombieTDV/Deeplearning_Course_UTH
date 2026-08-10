@@ -148,6 +148,67 @@ def build_densenet121(
     return model
 
 
+# ---------------------------------------------------------------------------
+# SOTA (EXP-07) builders & Layer-wise Discriminative Learning Rate (LLRD)
+#
+# "sota" starts from the frozen layout and additionally unfreezes deep feature
+# blocks (layer3/layer4 for ResNet18, denseblock3/4 + norm5 for DenseNet121),
+# trained with per-param-group LLRD rates (head > tail > stem).
+# ---------------------------------------------------------------------------
+def build_resnet18_full_sota(
+    num_classes: int = 10,
+    device: torch.device | None = None,
+) -> nn.Module:
+    """Build ResNet18 with deep feature unfreezing (layer3 + layer4 + fc)."""
+    model = build_resnet18(num_classes=num_classes, mode="frozen", device=device)
+    set_parameter_requires_grad(model.layer3, True)
+    set_parameter_requires_grad(model.layer4, True)
+    set_parameter_requires_grad(model.fc, True)
+    return model
+
+
+def build_densenet121_full_sota(
+    num_classes: int = 10,
+    device: torch.device | None = None,
+) -> nn.Module:
+    """Build DenseNet121 with deep feature unfreezing
+    (denseblock3 + denseblock4 + norm5 + classifier)."""
+    model = build_densenet121(num_classes=num_classes, mode="frozen", device=device)
+    set_parameter_requires_grad(model.features.denseblock3, True)
+    set_parameter_requires_grad(model.features.denseblock4, True)
+    set_parameter_requires_grad(model.features.norm5, True)
+    set_parameter_requires_grad(model.classifier, True)
+    return model
+
+
+def get_resnet18_lrd_param_groups(
+    model: nn.Module,
+    base_lr: float = 3e-4,
+    weight_decay: float = 1e-4,
+) -> list[dict]:
+    """Layer-wise Discriminative Learning Rates for ResNet18 (head > tail > stem)."""
+    return [
+        {"params": model.fc.parameters(), "lr": base_lr, "weight_decay": weight_decay},
+        {"params": model.layer4.parameters(), "lr": base_lr * 0.3, "weight_decay": weight_decay},
+        {"params": model.layer3.parameters(), "lr": base_lr * 0.09, "weight_decay": weight_decay},
+    ]
+
+
+def get_densenet121_lrd_param_groups(
+    model: nn.Module,
+    base_lr: float = 3e-4,
+    weight_decay: float = 1e-4,
+) -> list[dict]:
+    """Layer-wise Discriminative Learning Rates for DenseNet121
+    (head > tail > stem)."""
+    return [
+        {"params": model.classifier.parameters(), "lr": base_lr, "weight_decay": weight_decay},
+        {"params": model.features.norm5.parameters(), "lr": base_lr * 0.3, "weight_decay": weight_decay},
+        {"params": model.features.denseblock4.parameters(), "lr": base_lr * 0.3, "weight_decay": weight_decay},
+        {"params": model.features.denseblock3.parameters(), "lr": base_lr * 0.09, "weight_decay": weight_decay},
+    ]
+
+
 def build_resnet18_cifar_stem(
     num_classes: int = 10,
     mode: str = "finetune",

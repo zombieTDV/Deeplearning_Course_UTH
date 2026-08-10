@@ -31,7 +31,7 @@ The `dataset.py` module provides functions for downloading, loading, and verifyi
 Downloads CIFAR-10 dataset to the specified directory.
 
 **Parameters:**
-- `root` (str): Directory where the dataset will be stored. Defaults to `data/external/CIFAR-10`.
+- `root` (str): Directory where the dataset will be stored. Defaults to `data/raw`.
 
 **Returns:**
 - None
@@ -43,7 +43,7 @@ Downloads CIFAR-10 dataset to the specified directory.
 ```python
 from data.dataset import download_cifar10
 
-download_cifar10(root="data/external/CIFAR-10")
+download_cifar10(root="data/raw")
 ```
 
 ### `load_cifar10_dataset(root: str = DEFAULT_DATA_ROOT, train: bool = True, transform: object | None = None) -> Dataset`
@@ -95,7 +95,7 @@ print(f"Samples: {info['num_samples']}")
 
 ## Expected Outputs
 
-- Downloaded CIFAR-10 dataset in `data/external/CIFAR-10/`
+- Downloaded CIFAR-10 dataset in `data/raw/`
 - Loaded dataset objects ready for transformation and batching
 - Dataset metadata including class names and sample counts
 
@@ -104,7 +104,7 @@ print(f"Samples: {info['num_samples']}")
 - The dataset is downloaded only once and cached locally
 - CIFAR-10 contains 50,000 training images and 10,000 test images
 - Each image is 32x32 RGB with 10 classes
-- The default data root is `data/external/CIFAR-10`
+- The default data root is `data/raw` (single canonical copy; `data/external` retired)
 
 ## Integration
 
