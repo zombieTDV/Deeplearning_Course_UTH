@@ -24,6 +24,8 @@ build/
 /experiments/checkpoints/*.pt
 !/experiments/checkpoints/.gitkeep
 /experiments/runs/
+# Regenerable binary arrays (feature/probability caches) — scripts rebuild them
+/experiments/results/**/*.npz
 /experiments/tb_logs/
 /experiments/*.db
 /experiments/*.sqlite

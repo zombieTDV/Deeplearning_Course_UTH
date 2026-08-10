@@ -59,6 +59,7 @@ Overall health: **Good structure and process; low reproducibility and weak autom
 | DEP-4 | Dependencies | **Low** | Bleeding-edge runtime | [5. Dependency Health](#5-dependency-health) |
 | CQ-3 | Code quality | **Low** | `scratch/build_notebook.py` drifts | [3. Code Quality](#3-code-quality) |
 | ARC-3 | Architecture | **Low** | Agents/docs reference stale data location | [6. Architecture Consistency](#6-architecture-consistency) |
+| ARC-4 | Architecture | **Medium** | Binary artifacts (.pt / .npz) risk repo bloat | [6. Architecture Consistency](#6-architecture-consistency) |
 | SEC-1 | Security | **Low** | Checkpoint loading — mitigated | [4. Security Vulnerabilities](#4-security-vulnerabilities) |
 | TST-4 | Testing | **Low** | Tests depend on local data/network | [7. Test Coverage](#7-test-coverage) |
 | PERF-3 | Performance | **Low** | Triple in-memory CIFAR-10 instances | [8. Performance Bottlenecks](#8-performance-bottlenecks) |
@@ -160,6 +161,17 @@ Severity totals feed the [risk analysis §10](#10-detailed-risk-analysis); polic
 - **Description:** Several `agents/` files reference the removed `docs/` tree (now consolidated into `agents/rules|phases|progress|templates|references|experiments`), `data/external/CIFAR-10`, and pre-fix notebook structure.
 - **Affected:** `agents/`
 - **Remediation:** Sweep docs for stale paths — [Action P2.2](#12-prioritized-action-plan).
+
+### ARC-4: Binary artifacts (.pt / .npz) risk repo bloat
+- **Severity:** Medium
+- **Description:** Full-size model checkpoints (`ResNet18-*_best.pt`, `DenseNet121-*_best.pt`) are 28–45 MB each (~220 MB total). Committing them directly to git bloats every clone/CI run and provides no dedup/versioning benefit for regenerable binaries. They are correctly gitignored under `experiments/checkpoints/*.pt` and `experiments/runs/` (per [`agents/rules/LOGGING_CHECKPOINT_RULES.md`](rules/LOGGING_CHECKPOINT_RULES.md)). However, regenerable `experiments/results/**/*.npz` feature/probability arrays (~5.6 MB) were tracked; they change on every rerun, adding binary churn to history. Small meta-model state dicts (`router_phase1.pt`, `mlp_*.pt`, ~10 KB each) are stable and acceptable to keep in git.
+- **Affected:** `experiments/results/**/*.npz`, `experiments/checkpoints/*.pt`, `.gitignore`
+- **Artifact-storage policy (recommended):**
+  - **In git (small, stable):** source, configs, JSON/JSONL metrics, and state dicts < ~1 MB (meta-model weights).
+  - **git-lfs or external store (large/regenerable):** full-size model checkpoints, feature/probability arrays (`*.npz`), TensorBoard logs — keyed by run dir + git commit.
+  - **Never** commit `experiments/checkpoints/*.pt` or `experiments/runs/` (full-state checkpoints live there and are already gitignored).
+  - Regenerable binaries are re-created by the training scripts per `LOGGING_CHECKPOINT_RULES.md`; record each artifact's location + commit in its run `config.json`.
+- **Remediation:** Enforce via `.gitignore` (ignore `experiments/results/**/*.npz`) and untrack already-committed `*.npz`; adopt git-lfs (installed 3.6.1) if large binaries must be versioned — [Action P1.7](#p1--next-iteration-raises-confidence).
 
 ---
 
@@ -279,6 +291,7 @@ Evidence for each dimension is in [§3](#3-code-quality)–[§8](#8-performance-
 - **P1.4** Move SOTA builders into `src/models/build_model.py` — [CQ-4](#cq-4-duplicate-sota-model-building-logic).
 - **P1.5** Cache experiment features to `.npy` — [PERF-2](#perf-2-experiments-recompute-features-each-run).
 - **P1.6** Make `practice_2.ipynb` partial-run safe (checkpoint-gated training, persisted metrics) — [PERF-4](#perf-4-notebooks-not-fully-partial-run-safe).
+- **P1.7** Enforce an artifact-storage policy: never commit full-size `.pt` to git (use git-lfs / external store keyed by run dir + commit); gitignore regenerable `experiments/results/**/*.npz`; keep only small state dicts + JSON in-repo — [ARC-4](#arc-4-binary-artifacts-pt--npz-risk-repo-bloat).
 
 ### P2 — Polish (when time permits)
 - **P2.1** Add `pyproject.toml` + `ruff`/`mypy` — [CQ-5](#cq-5-no-linting-or-type-check-configuration).
