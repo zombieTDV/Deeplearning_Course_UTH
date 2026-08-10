@@ -13,10 +13,8 @@ import logging
 from pathlib import Path
 from typing import Any
 
-import torch
 import torchvision
 from torch.utils.data import Dataset
-
 
 # ---------------------------------------------------------------------------
 # Logger
@@ -47,7 +45,7 @@ def download_cifar10(root: str = DEFAULT_DATA_ROOT) -> None:
     """
     logger.info(f"Downloading CIFAR-10 dataset to {root}")
     Path(root).mkdir(parents=True, exist_ok=True)
-    
+
     try:
         # Download both train and test sets
         torchvision.datasets.CIFAR10(root=root, train=True, download=True)
@@ -81,7 +79,7 @@ def load_cifar10_dataset(
         RuntimeError: If dataset is not found and auto_download is False.
     """
     logger.debug(f"Loading CIFAR-10 dataset from {root} (train={train})")
-    
+
     # Check if dataset exists
     data_path = Path(root)
     if not data_path.exists():
@@ -90,7 +88,7 @@ def load_cifar10_dataset(
             download_cifar10(root=root)
         else:
             raise RuntimeError(f"Dataset not found at {root} and auto_download is False")
-    
+
     return torchvision.datasets.CIFAR10(
         root=root,
         train=train,

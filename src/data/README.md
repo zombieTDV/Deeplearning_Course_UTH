@@ -22,7 +22,7 @@ data/processed/cifar10_split_seed42.json  (fixed 45k/5k/10k split, seed 42)
   compatibility only; new code must import from `dataloader.py`/`transforms.py`.
 
 Data is stored once under `data/raw/` (single source of truth) — no re-download
-and no duplicate copies under `data/external/`.
+and no duplicate copies under an external data directory.
 
 ## Usage
 
@@ -30,6 +30,17 @@ and no duplicate copies under `data/external/`.
 from src.data.dataloader import get_cifar10_loaders
 train_loader, val_loader, test_loader = get_cifar10_loaders(batch_size=64)
 ```
+
+## Performance notes
+
+- **`num_workers` is 0 by default** (main-process loading) — the safe choice on
+  Python 3.14, where multiprocess workers caused `BrokenPipeError`
+  ([BUG-01](../../agents/bugs/BUG_01_DATALOADER_BROKEN_PIPE_PYTHON314.md)).
+  Set it explicitly (or edit `configs/data.yaml`) to re-enable workers on a
+  stable runtime.
+- Loaders build **two** raw CIFAR-10 instances (one train shared by train/val
+  via `_ApplyTransform`, one test) instead of three — see
+  `src/data/dataloader.py`.
 
 See [agents/phases/DATA_PREP.md](../../agents/phases/DATA_PREP.md) and
 [agents/phases/DATALOADER.md](../../agents/phases/DATALOADER.md).

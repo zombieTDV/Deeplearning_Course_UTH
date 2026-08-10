@@ -5,18 +5,18 @@ Usage:
     from data.inspection import count_images, check_distribution, verify_labels
     from data.inspection import print_dataset_statistics, plot_class_distributions
     from data.dataset import load_cifar10_dataset
-    
+
     train_set = load_cifar10_dataset(train=True)
     val_set = load_cifar10_dataset(train=False)
     test_set = load_cifar10_dataset(train=False)
-    
+
     count = count_images(train_set)
     dist = check_distribution(train_set)
     verify_labels(train_set)
-    
+
     # Print statistics table
     print_dataset_statistics(train_set, val_set, test_set)
-    
+
     # Plot class distributions for all splits
     plot_class_distributions(train_set, val_set, test_set)
 """
@@ -25,14 +25,12 @@ from __future__ import annotations
 
 import logging
 from collections import Counter
-from pathlib import Path
 from typing import Any
 
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
 from torch.utils.data import Dataset, Subset
-
 
 # ---------------------------------------------------------------------------
 # Logger
@@ -95,16 +93,16 @@ def check_distribution(dataset: Dataset) -> dict[str, int]:
     """
     logger.debug("Checking class distribution")
     targets = _get_targets_from_dataset(dataset)
-    
+
     class_counts = Counter(targets.tolist())
-    
+
     # Map to class names if available
     if hasattr(dataset, 'classes'):
         class_names = dataset.classes
         dist = {class_names[i]: class_counts[i] for i in sorted(class_counts.keys())}
     else:
         dist = {str(k): v for k, v in sorted(class_counts.items())}
-    
+
     logger.debug(f"Class distribution: {dist}")
     return dist
 
@@ -123,15 +121,15 @@ def verify_labels(dataset: Dataset) -> dict[str, Any]:
     """
     logger.debug("Verifying label integrity")
     targets = _get_targets_from_dataset(dataset)
-    
+
     unique_labels = torch.unique(targets)
     num_classes = len(unique_labels)
     label_range = (int(unique_labels.min()), int(unique_labels.max()))
-    
+
     # Check if labels are contiguous from 0
     expected_labels = torch.arange(num_classes)
     valid_labels = torch.equal(unique_labels.sort().values, expected_labels)
-    
+
     result = {
         'num_classes': num_classes,
         'label_range': label_range,
@@ -158,7 +156,7 @@ def detect_corrupted_images(dataset: Dataset, num_samples: int = 100) -> dict[st
     logger.debug(f"Checking {num_samples} samples for corruption")
     corrupted_indices = []
     checked = min(num_samples, len(dataset))
-    
+
     for i in range(checked):
         try:
             image, label = dataset[i]
@@ -169,7 +167,7 @@ def detect_corrupted_images(dataset: Dataset, num_samples: int = 100) -> dict[st
                 corrupted_indices.append(i)
         except Exception:
             corrupted_indices.append(i)
-    
+
     result = {
         'checked': checked,
         'corrupted': len(corrupted_indices),
@@ -198,17 +196,17 @@ def check_image_shapes(dataset: Dataset, num_samples: int = 100) -> dict[str, An
     logger.debug(f"Checking image shapes for {num_samples} samples")
     shapes = []
     checked = min(num_samples, len(dataset))
-    
+
     for i in range(checked):
         image, _ = dataset[i]
         if isinstance(image, torch.Tensor):
             shapes.append(tuple(image.shape))
         else:
             shapes.append(str(type(image)))
-    
+
     unique_shapes = set(shapes)
     consistent = len(unique_shapes) == 1
-    
+
     result = {
         'checked': checked,
         'unique_shapes': unique_shapes,
@@ -235,7 +233,7 @@ def print_dataset_statistics(
     n_train = len(train_dataset)
     n_val = len(val_dataset)
     n_test = len(test_dataset)
-    
+
     # Get number of classes from the dataset
     if hasattr(train_dataset, 'classes'):
         n_classes = len(train_dataset.classes)
@@ -245,11 +243,11 @@ def print_dataset_statistics(
         n_classes = 10  # CIFAR-10 default
         if class_names is None:
             class_names = [f"Class {i}" for i in range(n_classes)]
-    
+
     avg_train = n_train // n_classes
     avg_val = n_val // n_classes
     avg_test = n_test // n_classes
-    
+
     print("\n" + "=" * 70)
     print(f"{'Dataset':<15} {'Samples':>12} {'Classes':>10} {'Avg Samples/Class':>20}")
     print("=" * 70)
@@ -288,45 +286,45 @@ def plot_class_distributions(
         n_classes = 10  # CIFAR-10 default
         if class_names is None:
             class_names = [f"Class {i}" for i in range(n_classes)]
-    
+
     # Count labels for each dataset
     def get_counts(dataset: Dataset) -> list[int]:
         targets = _get_targets_from_dataset(dataset)
         counter = Counter(targets.tolist())
         return [counter[i] for i in range(n_classes)]
-    
+
     train_counts = get_counts(train_dataset)
     val_counts = get_counts(val_dataset)
     test_counts = get_counts(test_dataset)
-    
+
     # Prepare datasets for plotting
     datasets = [
         ("Train Set", train_counts, len(train_dataset)),
         ("Validation Set", val_counts, len(val_dataset)),
         ("Test Set", test_counts, len(test_dataset)),
     ]
-    
+
     # Create figure with three vertically stacked subplots
     fig, axes = plt.subplots(nrows=3, ncols=1, figsize=figsize)
     bar_colors = plt.cm.tab10(np.linspace(0, 1, n_classes))
-    
+
     for idx, (name, counts, total) in enumerate(datasets):
         ax = axes[idx]
         bars = ax.bar(class_names, counts, color=bar_colors,
                       edgecolor="black", linewidth=0.6)
-        
+
         # Add value labels above each bar
-        for bar, count in zip(bars, counts):
-            ax.text(bar.get_x() + bar.get_width() / 2, 
+        for bar, count in zip(bars, counts, strict=False):
+            ax.text(bar.get_x() + bar.get_width() / 2,
                     bar.get_height() + max(counts) * 0.02,
                     f"{count:,}", ha="center", va="bottom", fontsize=9)
-        
+
         ax.set_ylabel("Number of samples")
         ax.set_title(f"CIFAR-10 Class Distribution — {name} ({total:,} samples)")
         ax.set_ylim(0, max(counts) * 1.12)
         ax.set_xticks(range(n_classes))
         ax.set_xticklabels(class_names, rotation=45, ha="right")
         ax.grid(True, alpha=0.3, axis="y")
-    
+
     plt.tight_layout()
     plt.show()

@@ -26,6 +26,8 @@ build/
 /experiments/runs/
 # Regenerable binary arrays (feature/probability caches) — scripts rebuild them
 /experiments/results/**/*.npz
+# Regenerable model weights (meta-model state dicts) — scripts rebuild them
+/experiments/results/**/*.pt
 /experiments/tb_logs/
 /experiments/*.db
 /experiments/*.sqlite

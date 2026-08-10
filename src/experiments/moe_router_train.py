@@ -39,7 +39,7 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.data.transforms import IMAGENET_MEAN, IMAGENET_STD
-from src.models.build_model import build_resnet18, build_densenet121
+from src.models.build_model import build_densenet121, build_resnet18
 from src.utils.checkpoint_utils import find_best_checkpoint, load_model_weights
 from src.utils.feature_extraction import base_features_per_expert
 from src.utils.run_logger import RunLogger
@@ -116,7 +116,6 @@ def train_router_soft(p1, p2, y, p1_val, p2_val, y_val, device, epochs=40,
     Y = torch.tensor(y, dtype=torch.long)
     V1 = torch.tensor(p1_val, dtype=torch.float32).to(device)
     V2 = torch.tensor(p2_val, dtype=torch.float32).to(device)
-    VY = torch.tensor(y_val, dtype=torch.long).to(device)
     best = 0.0
     for ep in range(epochs):
         idx = torch.randperm(len(P1), generator=torch.Generator().manual_seed(seed + ep))

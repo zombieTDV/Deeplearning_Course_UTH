@@ -35,25 +35,23 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import sys
 import time
 from pathlib import Path
 
 import numpy as np
 import torch
-import torch.nn as nn
 import torchvision
 import torchvision.transforms as transforms
+from sklearn.metrics import classification_report, confusion_matrix
 from torch.utils.data import DataLoader
-from sklearn.metrics import confusion_matrix, classification_report
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.models.build_model import build_resnet18, build_densenet121
 from src.eval.evaluate_model import load_checkpoint
+from src.models.build_model import build_densenet121, build_resnet18
 
 CIFAR10_CLASSES = ["airplane", "automobile", "bird", "cat", "deer",
                    "dog", "frog", "horse", "ship", "truck"]
@@ -93,7 +91,6 @@ def collect_predictions(model, loader, device):
 
 def metrics_from_preds(name, logits, targets, num_classes=10):
     """Full-test metrics: accuracy, per-class P/R/F1, confusion matrix."""
-    probs = torch.softmax(torch.tensor(logits), dim=1).numpy()
     preds = np.argmax(logits, axis=1)
     acc = (preds == targets).mean() * 100.0
     cm = confusion_matrix(targets, preds, labels=list(range(num_classes)))

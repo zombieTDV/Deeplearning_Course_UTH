@@ -3,8 +3,8 @@
 
 dataset:
   name: "CIFAR-10"
-  root: "data/external/CIFAR-10"
-  download: true
+  root: "data/raw"          # single canonical copy (external data dir retired)
+  download: true            # gated in dataloader: only when data/raw is empty
   num_classes: 10
 
 image:
@@ -43,7 +43,9 @@ dataloader:
   batch_size: 64
   shuffle_train: true
   shuffle_eval: false
-  num_workers: 2
+  # 0 = main-process loading: safe on Python 3.14 (see BUG-01 BrokenPipeError).
+  # Set >0 on a stable runtime to enable multiprocess loading.
+  num_workers: 0
   pin_memory: true
   persistent_workers: false
   drop_last: false

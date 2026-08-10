@@ -13,10 +13,10 @@ Usage:
 
 from __future__ import annotations
 
+import numpy as np
 import torch
 import torch.nn as nn
 from sklearn.metrics import confusion_matrix as sk_cm
-import numpy as np
 
 CIFAR10_CLASSES = [
     "airplane", "automobile", "bird", "cat", "deer",

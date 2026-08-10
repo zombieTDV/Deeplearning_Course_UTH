@@ -2,18 +2,16 @@
 config.py — Configuration loader for data pipeline.
 
 Usage:
-    from data.config import load_config
+    from src.data.config import load_config
     config = load_config("configs/data.yaml")
 """
 
 from __future__ import annotations
 
-import os
 from pathlib import Path
 from typing import Any
 
 import yaml
-
 
 # ---------------------------------------------------------------------------
 # Constants
@@ -39,13 +37,13 @@ def load_config(config_path: str | Path = "configs/data.yaml") -> dict[str, Any]
         yaml.YAMLError: If YAML parsing fails.
     """
     config_path = Path(config_path)
-    
+
     if not config_path.exists():
         raise FileNotFoundError(f"Configuration file not found: {config_path}")
-    
-    with open(config_path, 'r') as f:
+
+    with open(config_path) as f:
         config = yaml.safe_load(f)
-    
+
     return config
 
 
@@ -60,7 +58,7 @@ def get_dataset_config(config: dict[str, Any] | None = None) -> dict[str, Any]:
     """
     if config is None:
         config = load_config()
-    
+
     return config.get('dataset', {})
 
 
@@ -79,9 +77,9 @@ def get_normalization_config(
     """
     if config is None:
         config = load_config()
-    
+
     norm_config = config.get('normalization', {})
-    
+
     if use_imagenet:
         return norm_config.get('imagenet', {'mean': [0.5, 0.5, 0.5], 'std': [0.5, 0.5, 0.5]})
     else:
@@ -99,7 +97,7 @@ def get_dataloader_config(config: dict[str, Any] | None = None) -> dict[str, Any
     """
     if config is None:
         config = load_config()
-    
+
     return config.get('dataloader', {})
 
 
@@ -121,9 +119,9 @@ def get_transform_config(
     """
     if config is None:
         config = load_config()
-    
+
     transforms_config = config.get('transforms', {})
-    
+
     if split == "train":
         return transforms_config.get('train', {})
     elif split == "eval":

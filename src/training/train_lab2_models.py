@@ -48,12 +48,12 @@ if str(PROJECT_ROOT) not in sys.path:
 from src.data.dataloader import get_cifar10_loaders
 from src.data.transforms import get_advanced_train_transform, get_eval_transform
 from src.models.build_model import (
-    build_resnet18,
     build_densenet121,
-    build_resnet18_full_sota,
     build_densenet121_full_sota,
-    get_resnet18_lrd_param_groups,
+    build_resnet18,
+    build_resnet18_full_sota,
     get_densenet121_lrd_param_groups,
+    get_resnet18_lrd_param_groups,
 )
 from src.training.train_model import train_model
 from src.utils.checkpoint_utils import find_latest_run_dir

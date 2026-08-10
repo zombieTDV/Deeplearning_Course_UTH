@@ -41,7 +41,7 @@ flowchart LR
     end
 
     subgraph OUT["Artifacts (experiments/)"]
-        F1["runs/&lt;ts&gt;_&lt;run&gt;/<br/>checkpoints + logs + metrics"]
+        F1["runs/<ts>_<run>/<br/>checkpoints + logs + metrics"]
         F2["results/ (JSON, NPZ) + plots/"]
     end
 
@@ -57,7 +57,7 @@ flowchart LR
     D1 -->|"test metrics"| F2
     NB -->|"loads artifacts"| F1
     NB -->|"loads artifacts"| F2
-    NB -->|"reads rules"| GOV["agents/ (governance &amp; knowledge base)"]
+    NB -->|"reads rules"| GOV["agents/ (governance & knowledge base)"]
 ```
 
 Key properties of the architecture:

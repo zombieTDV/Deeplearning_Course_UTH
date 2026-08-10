@@ -53,7 +53,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import sys
 import time
 from pathlib import Path
@@ -69,8 +68,8 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.models.build_model import build_resnet18, build_densenet121
 from src.eval.evaluate_model import load_checkpoint
+from src.models.build_model import build_densenet121, build_resnet18
 
 # cat=3, dog=5 (CIFAR-10 class order)
 CAT_IDX, DOG_IDX = 3, 5

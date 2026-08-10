@@ -16,8 +16,8 @@ Training-state logs and checkpoints live in `experiments/runs/`, NOT here.
 | `feature_level_tta.json` | **What**: TTA (2-view) and top-block-unfreeze experiments on the ensemble. **Why**: measures the +0.25% TTA gain. **How**: see `src/experiments/feature_level_tta.py`. |
 | `logit_bias_sweep_results.json` | **What**: 2D grid search of cat/dog logit biases (val) + zero-leakage test benchmark. **Why**: decision-threshold optimization. **Where**: `notebooks/practice_2_logit_bias_sweep.ipynb`. |
 | `resnet_densenet_sota_ensemble_results.json` | **What**: ensemble evaluation metrics (isolated/cross cat-dog breakdown). |
-| `stacking_mlp/` | **What**: stacking meta-model artifacts — `stacking_mlp_artifacts.npz` (val/test features + ensemble & MLP test probabilities), `mlp_{notta,tta}.pt`, `config.json`, `history.jsonl`. **Why**: notebook analysis of the 97.21% best configuration without re-training. **How**: `python -m src.experiments.stacking_mlp_train`. |
-| `moe_phase1/` | **What**: Phase-1 soft-router artifacts — `moe_phase1_artifacts.npz` (expert probabilities + gates), `router_phase1.pt`, `config.json`, `history.jsonl`. **Why**: MoE router analysis without re-training. **How**: `python -m src.experiments.moe_router_train`. |
+| `stacking_mlp/` | **What**: stacking meta-model artifacts — `stacking_mlp_artifacts.npz` (val/test features + ensemble & MLP test probabilities), `mlp_{notta,tta}.pt`, `config.json`, `history.jsonl`. **Why**: notebook analysis of the 97.21% best configuration without re-training. **How**: `python -m src.experiments.stacking_mlp_train`. **Note**: `.npz`/`.pt` are regenerable by that script and are gitignored (kept out of git). |
+| `moe_phase1/` | **What**: Phase-1 soft-router artifacts — `moe_phase1_artifacts.npz` (expert probabilities + gates), `router_phase1.pt`, `config.json`, `history.jsonl`. **Why**: MoE router analysis without re-training. **How**: `python -m src.experiments.moe_router_train`. **Note**: `.npz`/`.pt` are regenerable by that script and are gitignored (kept out of git). |
 
 ## Storage rules
 

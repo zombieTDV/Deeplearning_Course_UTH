@@ -27,7 +27,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import sys
 import time
 from pathlib import Path
@@ -37,15 +36,15 @@ import torch
 import torch.nn as nn
 import torchvision
 import torchvision.transforms as transforms
+from sklearn.metrics import classification_report, confusion_matrix
 from torch.utils.data import DataLoader, Subset
-from sklearn.metrics import confusion_matrix, classification_report
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.models.build_model import build_resnet18, build_densenet121
 from src.eval.evaluate_model import load_checkpoint
+from src.models.build_model import build_densenet121, build_resnet18
 
 CIFAR10_CLASSES = ["airplane", "automobile", "bird", "cat", "deer",
                    "dog", "frog", "horse", "ship", "truck"]
@@ -253,12 +252,11 @@ def main():
 
     # ---- Summary vs baseline ----
     base = results_full[0]["accuracy"]
-    base_iso = results_iso[0]["isolated_acc"]
     base_cross = results_iso[0]["cross_confusions"]
     print("\n=== Summary (vs baseline) ===")
     print(f"{'Method':34s} {'full_acc':>9s} {'dFull':>7s} {'isolated':>9s} "
           f"{'cross_conf':>10s}")
-    for rf, ri in zip(results_full, results_iso):
+    for rf, ri in zip(results_full, results_iso, strict=False):
         print(f"{rf['name']:34s} {rf['accuracy']:8.2f}% "
               f"{rf['accuracy']-base:+6.2f}% {ri['isolated_acc']:8.2f}% "
               f"{ri['cross_confusions']:>9d} "

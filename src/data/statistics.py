@@ -4,7 +4,7 @@ statistics.py — Compute and manage dataset statistics for normalization.
 Usage:
     from data.statistics import compute_dataset_statistics, save_statistics, load_statistics
     from data.dataset import load_cifar10_dataset
-    
+
     train_set = load_cifar10_dataset(train=True)
     mean, std = compute_dataset_statistics(train_set)
     save_statistics(mean, std, "data/processed/dataset_statistics.json")
@@ -20,7 +20,6 @@ from typing import Any
 
 import torch
 from torch.utils.data import Dataset
-
 
 # ---------------------------------------------------------------------------
 # Logger
@@ -56,27 +55,27 @@ def compute_dataset_statistics(
     logger.info(f"Computing dataset statistics with batch_size={batch_size}")
     if device is None:
         device = torch.device('cpu')
-    
+
     # Load dataset into memory for efficient computation
     loader = torch.utils.data.DataLoader(dataset, batch_size=batch_size, num_workers=0)
-    
+
     sum_ = torch.zeros(3).to(device)
     sum_sq = torch.zeros(3).to(device)
     count = 0
-    
+
     for images, _ in loader:
         images = images.to(device)
         # images shape: (batch, channels, height, width)
         batch_sum = images.sum(dim=[0, 2, 3])  # sum over batch, height, width
         batch_sum_sq = (images ** 2).sum(dim=[0, 2, 3])
-        
+
         sum_ += batch_sum
         sum_sq += batch_sum_sq
         count += images.size(0) * images.size(2) * images.size(3)
-    
+
     mean = sum_ / count
     std = torch.sqrt((sum_sq / count) - (mean ** 2))
-    
+
     logger.debug(f"Computed mean: {mean.tolist()}, std: {std.tolist()}")
     return mean.cpu(), std.cpu()
 
@@ -98,12 +97,12 @@ def save_statistics(
         mean = mean.tolist()
     if isinstance(std, torch.Tensor):
         std = std.tolist()
-    
+
     stats = {
         'mean': mean,
         'std': std,
     }
-    
+
     Path(filepath).parent.mkdir(parents=True, exist_ok=True)
     with open(filepath, 'w') as f:
         json.dump(stats, f, indent=2)
@@ -123,9 +122,9 @@ def load_statistics(filepath: str = DEFAULT_STATS_FILE) -> dict[str, Any]:
         FileNotFoundError: If the statistics file does not exist.
     """
     logger.debug(f"Loading statistics from {filepath}")
-    with open(filepath, 'r') as f:
+    with open(filepath) as f:
         stats = json.load(f)
-    
+
     logger.debug(f"Loaded statistics: {stats}")
     return stats
 
@@ -154,11 +153,11 @@ def get_normalization_transform(
         stats = load_statistics(stats_file)
         mean = stats['mean'] if mean is None else mean
         std = stats['std'] if std is None else std
-    
+
     if isinstance(mean, torch.Tensor):
         mean = mean.tolist()
     if isinstance(std, torch.Tensor):
         std = std.tolist()
-    
+
     logger.debug(f"Normalization parameters: mean={mean}, std={std}")
     return mean, std

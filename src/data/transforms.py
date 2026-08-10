@@ -4,7 +4,7 @@ transforms.py — Transform pipelines for CIFAR-10 preprocessing and augmentatio
 Usage:
     from data.transforms import get_train_transform, get_eval_transform
     from data.statistics import load_statistics
-    
+
     train_transform = get_train_transform(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
     eval_transform = get_eval_transform(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
 """
@@ -15,7 +15,6 @@ import logging
 from typing import Any
 
 import torchvision.transforms as transforms
-
 
 # ---------------------------------------------------------------------------
 # Logger
@@ -75,23 +74,23 @@ def get_train_transform(
         mean = IMAGENET_MEAN
     if std is None:
         std = IMAGENET_STD
-    
+
     transform_list = []
-    
+
     # Resize with high-quality interpolation and anti-aliasing
     transform_list.append(transforms.Resize(resize_size, interpolation=interpolation, antialias=True))
-    
+
     if augmentation:
         # Data augmentation
         if random_horizontal_flip:
             transform_list.append(transforms.RandomHorizontalFlip())
-        
+
         if random_crop:
             transform_list.append(transforms.RandomCrop(crop_size, padding=random_crop_padding))
-        
+
         if random_rotation > 0:
             transform_list.append(transforms.RandomRotation(random_rotation))
-        
+
         if color_jitter and any(v > 0 for v in color_jitter.values()):
             transform_list.append(transforms.ColorJitter(
                 brightness=color_jitter.get('brightness', 0),
@@ -99,11 +98,11 @@ def get_train_transform(
                 saturation=color_jitter.get('saturation', 0),
                 hue=color_jitter.get('hue', 0),
             ))
-    
+
     # Convert to tensor and normalize
     transform_list.append(transforms.ToTensor())
     transform_list.append(transforms.Normalize(mean=mean, std=std))
-    
+
     return transforms.Compose(transform_list)
 
 
@@ -129,13 +128,13 @@ def get_eval_transform(
         mean = IMAGENET_MEAN
     if std is None:
         std = IMAGENET_STD
-    
+
     transform_list = [
         transforms.Resize(resize_size, interpolation=interpolation, antialias=True),
         transforms.ToTensor(),
         transforms.Normalize(mean=mean, std=std),
     ]
-    
+
     return transforms.Compose(transform_list)
 
 
@@ -168,7 +167,7 @@ def get_cifar10_transforms(
     logger.debug(f"Getting CIFAR-10 transforms (use_cifar10_stats={use_cifar10_stats})")
     mean = CIFAR10_MEAN if use_cifar10_stats else IMAGENET_MEAN
     std = CIFAR10_STD if use_cifar10_stats else IMAGENET_STD
-    
+
     train_transform = get_train_transform(
         mean=mean, std=std, augmentation=augmentation,
         interpolation=interpolation,
@@ -179,13 +178,13 @@ def get_cifar10_transforms(
         color_jitter=color_jitter,
     )
     eval_transform = get_eval_transform(mean=mean, std=std, interpolation=interpolation)
-    
+
     return train_transform, eval_transform
 
 
 class CustomTransform:
     """Base class for custom transforms."""
-    
+
     def __call__(self, img: Any) -> Any:
         """Apply transform to image."""
         raise NotImplementedError("Subclasses must implement __call__")
@@ -234,14 +233,14 @@ def get_transform_config(
             "augmentation": True,
         },
     }
-    
+
     if config_name not in configs:
         logger.error(f"Unknown config '{config_name}'")
         raise ValueError(
             f"Unknown config '{config_name}'. "
             f"Available: {list(configs.keys())}"
         )
-    
+
     return configs[config_name]
 
 
@@ -260,7 +259,7 @@ def get_advanced_train_transform(
 
     transform_list = []
     transform_list.append(transforms.Resize(resize_size))
-    
+
     if use_randaugment:
         transform_list.append(transforms.RandAugment(num_ops=2, magnitude=9))
     else:
