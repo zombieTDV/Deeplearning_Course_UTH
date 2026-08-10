@@ -69,8 +69,8 @@ REGISTRY_PATH = RUNS_ROOT / "registry.json"
 VARIANTS = [
     ("ResNet18-frozen",    "frozen",   build_resnet18,         1e-3, 0.0, False, False),
     ("DenseNet121-frozen", "frozen",   build_densenet121,      1e-3, 0.0, False, False),
-    ("ResNet18-finetune",  "finetune", build_resnet18,         1e-4, 0.0, False, False),
-    ("DenseNet121-finetune", "finetune", build_densenet121,    1e-4, 0.0, False, False),
+    ("ResNet18-finetune",  "finetune", build_resnet18,         1e-3, 0.0, False, False),
+    ("DenseNet121-finetune", "finetune", build_densenet121,    1e-3, 0.0, False, False),
     ("ResNet18-sota",      "sota",     build_resnet18_full_sota, 3e-4, 0.1, True, True),
     ("DenseNet121-sota",   "sota",     build_densenet121_full_sota, 3e-4, 0.1, True, True),
 ]
