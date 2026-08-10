@@ -8,6 +8,17 @@
 
 ---
 
+> **AI-era audit perspective (read first):** In an Agent-AI-driven codebase,
+> strict lint / style / naming conformance is a **low-priority** signal — most
+> code is read and maintained by AI, which tolerates stylistic variance. Focus
+> findings on what actually matters: **correctness, reproducibility, security,
+> and runtime behavior**. Lint-only items (whitespace, import order, line
+> length, unused-import nits) are informational at most and must never block a
+> release. If a lint gate exists (e.g. ruff), treat it as a hygiene helper for
+> humans, not as an audit acceptance criterion.
+
+---
+
 ## Table of Contents
 
 - [1. Executive Summary](#1-executive-summary)
@@ -46,6 +57,11 @@ Cross-reference: severity totals by area → [risk analysis §10](#10-detailed-r
 ---
 
 ## 3. Code Quality
+
+> **Scoring guidance:** per the AI-era perspective above, treat pure lint/style
+> issues as **Info** (or omit them). Reserve Medium+ for duplication with real
+> drift risk, dead code that breaks behavior, or maintainability that blocks
+> correctness/reproducibility.
 
 ### `<ID>-1`: <Short title>
 - **Severity:** [Critical | High | Medium | Low | Info]
@@ -150,6 +166,9 @@ Cross-reference: per-dimension evidence in [§3](#3-code-quality)–[§8](#8-per
 
 ### P2 — Polish (when time permits)
 - **P2.1** <action> — addresses [<ID>-x](#2-findings-summary)
+
+> Lint/tooling actions (ruff, mypy, CI niceties) belong here at most — per the
+> AI-era perspective, they are hygiene for humans, never blocking criteria.
 
 Cross-reference: each item links back to its finding; the summary table is in [§2](#2-findings-summary).
 
