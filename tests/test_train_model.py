@@ -102,3 +102,55 @@ def test_resume_past_budget_is_noop(tmp_path):
     assert r2.get("already_complete") is True
     assert r2["completed_epochs"] == 2
     assert len(r2["train_losses"]) == 2
+
+
+def _hist(n):
+    return {"train_losses": [float(i) for i in range(n)],
+            "val_losses": [float(i) for i in range(n)],
+            "train_accs": [float(i) for i in range(n)],
+            "val_accs": [float(i) for i in range(n)]}
+
+
+def test_resume_respects_early_stop(tmp_path):
+    """A run that already early-stopped must not silently continue past it."""
+    lg = RunLogger("es", runs_root=tmp_path)
+    m, o = _model(), torch.optim.Adam(_model().parameters(), lr=1e-3)
+    save_checkpoint(lg.checkpoint_dir / "es_last.pt", model=m, optimizer=o, epoch=18,
+                    global_step=100, best_val_loss=1.0, best_val_acc=90.0, best_epoch=17,
+                    history=_hist(18), config={"run_name": "es"}, early_stop_triggered=True)
+    lg.close()
+
+    lg2 = RunLogger("es", runs_root=tmp_path)
+    m2, o2 = _model(), torch.optim.Adam(_model().parameters(), lr=1e-3)
+    res = train_model(m2, _tiny_loader(), _tiny_loader(), nn.CrossEntropyLoss(), o2,
+                      torch.device("cpu"), num_epochs=20, run_name="es",
+                      logger=lg2, seed=42, resume_from=lg.run_dir, early_stopping=True)
+    lg2.close()
+    assert res.get("early_stopped_complete") is True
+    assert res["completed_epochs"] == 18     # halted at the stop epoch
+    assert res["best_epoch"] == 17           # best epoch preserved
+
+
+def test_force_resume_from_best_continues(tmp_path):
+    """--force-resume rewinds to the best epoch with a fresh early-stopping budget."""
+    lg = RunLogger("fr", runs_root=tmp_path)
+    m, o = _model(), torch.optim.Adam(_model().parameters(), lr=1e-3)
+    save_checkpoint(lg.checkpoint_dir / "fr_best.pt", model=m, optimizer=o, epoch=17,
+                    global_step=90, best_val_loss=0.9, best_val_acc=92.0, best_epoch=17,
+                    history=_hist(17), config={"run_name": "fr"}, early_stop_triggered=True)
+    save_checkpoint(lg.checkpoint_dir / "fr_last.pt", model=m, optimizer=o, epoch=18,
+                    global_step=100, best_val_loss=0.9, best_val_acc=92.0, best_epoch=17,
+                    history=_hist(18), config={"run_name": "fr"}, early_stop_triggered=True)
+    lg.close()
+
+    lg2 = RunLogger("fr", runs_root=tmp_path)
+    m2, o2 = _model(), torch.optim.Adam(_model().parameters(), lr=1e-3)
+    res = train_model(m2, _tiny_loader(), _tiny_loader(), nn.CrossEntropyLoss(), o2,
+                      torch.device("cpu"), num_epochs=18, run_name="fr",
+                      logger=lg2, seed=42, resume_from=lg.run_dir,
+                      resume_from_best=True, early_stopping=True)
+    lg2.close()
+    assert res["resumed_from_best"] is True
+    assert res["completed_epochs"] == 18        # resumed at best_epoch+1 (17->18)
+    assert res["best_epoch"] == 17              # best floor preserved
+    assert len(res["train_losses"]) == 18       # 17 prior + 1 new epoch

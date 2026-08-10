@@ -108,6 +108,15 @@ To continue an interrupted run **exactly** where it stopped:
 4. Manual resume: pass the run directory or checkpoint path as `resume_from=` to `train_model(...)`; the procedure is identical.
 5. Do **not** resume from `_best.pt` — it only reflects the best-epoch snapshot (model weights + optimizer at that epoch), which is still resumable but loses the latest epoch's progress; prefer `_last.pt`.
 
+**Early stopping and resume:**
+- Every checkpoint records `early_stop_triggered`. If the last checkpoint was saved
+  on an early-stopped run, `--resume` **halts** (the run is complete) instead of
+  silently continuing past the early-stop point — it will not retrain epochs after
+  the stop.
+- To **continue from the best epoch** (rewind) with a fresh early-stopping budget,
+  use `--force-resume` (or `resume_from_best=True`): it loads `<run_name>_best.pt`,
+  resets the early-stopping counter, and resumes at `best_epoch + 1`.
+
 Interruption safety: `_last.pt` is written **after every epoch**, so at most one epoch of work is lost.
 
 ## 6. Metrics Storage & Compression

@@ -84,7 +84,11 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--epochs", type=int, default=DEFAULT_EPOCHS)
     p.add_argument("--seed", type=int, default=DEFAULT_SEED)
     p.add_argument("--resume", action="store_true",
-                   help="Continue every selected variant from its latest *_last.pt checkpoint.")
+                   help="Continue every selected variant from its latest *_last.pt checkpoint. "
+                        "If a run already early-stopped, resume halts (the run is complete).")
+    p.add_argument("--force-resume", action="store_true",
+                   help="Resume from the best epoch (*_best.pt) with a fresh early-stopping "
+                        "budget, overriding a completed early stop (rewind + continue).")
     p.add_argument("--tb", action="store_true",
                    help="Enable TensorBoard writers (lightweight console/file logging is always on).")
     p.add_argument("--max-batches", type=int, default=0,
@@ -237,7 +241,8 @@ def main() -> None:
             early_stopping=True, patience=4, min_delta=1e-4,
             logger=logger,
             resume_from=(find_latest_run_dir(run_name, runs_root=RUNS_ROOT)
-                         if args.resume else None),
+                         if (args.resume or args.force_resume) else None),
+            resume_from_best=args.force_resume,
             seed=args.seed, config=run_config, progress_every=1,
             max_batches_per_epoch=args.max_batches,
         )

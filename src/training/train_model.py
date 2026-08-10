@@ -281,6 +281,7 @@ def save_checkpoint(
     history: dict,
     config: dict | None = None,
     early_stop_counter: int = 0,
+    early_stop_triggered: bool = False,
 ) -> str:
     """Save a full training state (model + optimizer + scheduler + RNG + history).
 
@@ -298,6 +299,7 @@ def save_checkpoint(
         "best_val_acc": float(best_val_acc),
         "best_epoch": int(best_epoch),
         "early_stop_counter": int(early_stop_counter),
+        "early_stop_triggered": bool(early_stop_triggered),
         "model_state_dict": model.state_dict(),
         "optimizer_state_dict": optimizer.state_dict() if optimizer is not None else None,
         "scheduler_state_dict": scheduler.state_dict() if scheduler is not None else None,
@@ -354,6 +356,7 @@ def train_model(
     min_delta: float = 1e-4,
     logger: RunLogger | None = None,
     resume_from: str | Path | None = None,
+    resume_from_best: bool = False,
     seed: int | None = None,
     config: dict | None = None,
     progress_every: int = 1,
@@ -374,10 +377,15 @@ def train_model(
         progress_every:  Report batch progress every N batches (0 disables).
         max_batches_per_epoch: Cap batches per epoch (0 = unlimited). Used by
                          smoke tests / CI to validate the loop cheaply.
+        resume_from_best: If resuming, load ``<run>_best.pt`` (rewind to the best
+                         epoch) instead of ``<run>_last.pt``, reset the
+                         early-stopping budget, and continue from best_epoch + 1.
+                         Also overrides an already early-stopped run.
 
     Returns dict with keys: run_name, num_epochs, train_losses, val_losses,
     train_accs, val_accs, best_val_loss, best_val_acc, best_epoch,
-    best_state_path, last_state_path, resume_from, completed_epochs.
+    best_state_path, last_state_path, resume_from, completed_epochs,
+    resumed_from_best.
     """
     if epochs is not None:
         num_epochs = epochs
@@ -402,16 +410,18 @@ def train_model(
     if resume_from is not None:
         resume_path = Path(resume_from)
         if resume_path.is_dir():
-            cand = resume_path / "checkpoints" / f"{run_name}_last.pt"
+            resume_name = f"{run_name}_{'best' if resume_from_best else 'last'}.pt"
+            cand = resume_path / "checkpoints" / resume_name
             resume_path = cand if cand.exists() else resume_path
         if not Path(resume_path).exists():
             raise FileNotFoundError(f"Resume checkpoint not found: {resume_path}")
         if Path(resume_path).is_dir():
             raise FileNotFoundError(
-                f"Cannot resume: no {run_name}_last.pt inside {resume_path}. "
-                "Point --resume at the latest run dir (see "
-                "agents/rules/LOGGING_CHECKPOINT_RULES.md#5-resume-procedure).")
+                f"Cannot resume: no {run_name}_{'best' if resume_from_best else 'last'}.pt "
+                f"inside {resume_path}. See "
+                "agents/rules/LOGGING_CHECKPOINT_RULES.md#5-resume-procedure.")
         resume_payload = load_checkpoint_state(resume_path, device=device)
+        was_early_stopped = bool(resume_payload.get("early_stop_triggered", False))
         start_epoch = int(resume_payload["epoch"]) + 1
         global_step = int(resume_payload.get("global_step", 0))
         model.load_state_dict(resume_payload["model_state_dict"])
@@ -425,6 +435,38 @@ def train_model(
         if logger is not None:
             logger.log(f"[resume] continuing {run_name} from epoch {start_epoch} "
                        f"(global_step={global_step}, src={resume_path})")
+
+        # Respect a completed early stop: an already-stopped run must not silently
+        # keep training. Use resume_from_best=True (--force-resume) to rewind to the
+        # best epoch and continue with a fresh early-stopping budget.
+        if was_early_stopped and not resume_from_best:
+            msg = (f"[resume] {run_name} already stopped early at epoch "
+                   f"{resume_payload['epoch']} (best epoch {resume_payload['best_epoch']}, "
+                   f"best_val_acc={resume_payload['best_val_acc']:.2f}%). Resume halted — "
+                   f"the run is complete. Use --force-resume to continue from the best "
+                   f"epoch with a fresh early-stopping budget.")
+            if logger is not None:
+                logger.log(msg)
+            else:
+                print(msg)
+            return {
+                "run_name": run_name,
+                "num_epochs": num_epochs,
+                "completed_epochs": start_epoch - 1,
+                "train_losses": resume_payload.get("history", {}).get("train_losses", []),
+                "val_losses": resume_payload.get("history", {}).get("val_losses", []),
+                "train_accs": resume_payload.get("history", {}).get("train_accs", []),
+                "val_accs": resume_payload.get("history", {}).get("val_accs", []),
+                "best_val_loss": float(resume_payload["best_val_loss"]),
+                "best_val_acc": float(resume_payload["best_val_acc"]),
+                "best_epoch": int(resume_payload["best_epoch"]),
+                "best_state_path": best_state_path,
+                "last_state_path": last_state_path,
+                "resume_from": str(resume_from),
+                "global_step": global_step,
+                "already_complete": True,
+                "early_stopped_complete": True,
+            }
 
     if start_epoch == 1:
         torch.manual_seed(seed if seed is not None else 42)
@@ -455,7 +497,11 @@ def train_model(
     early_stopper = EarlyStopping(patience=patience, min_delta=min_delta) if early_stopping else None
     if resume_payload is not None and early_stopper is not None:
         early_stopper.best_loss = best_val_loss
-        early_stopper.counter = int(resume_payload.get("early_stop_counter", 0))
+        if resume_from_best:
+            # Rewinding to the best epoch -> fresh early-stopping budget.
+            early_stopper.counter = 0
+        else:
+            early_stopper.counter = int(resume_payload.get("early_stop_counter", 0))
         # Snapshot the resumed weights so an early stop triggered after resume
         # can still restore a best-weight snapshot instead of being skipped.
         early_stopper.best_state_dict = {k: v.cpu().clone() for k, v in model.state_dict().items()}
@@ -540,29 +586,29 @@ def train_model(
                 f"[{elapsed:.1f}s]"
             )
 
-        # --- Checkpoint: every-epoch state; best file = copy of last (one save) ---
+        # --- Checkpoint + Early Stopping (one save; terminal state is flagged) ---
         is_best = val_loss < best_val_loss
         if is_best:
             best_val_loss, best_val_acc, best_epoch = val_loss, val_acc, epoch
+        stopped = bool(early_stopper is not None and early_stopper(val_loss, model))
         save_checkpoint(last_state_path, model=model, optimizer=optimizer,
                         scheduler=scheduler, epoch=epoch, global_step=global_step,
                         best_val_loss=best_val_loss, best_val_acc=best_val_acc,
                         best_epoch=best_epoch, history=history, config=run_config,
-                        early_stop_counter=early_stopper.counter if early_stopper else 0)
+                        early_stop_counter=early_stopper.counter if early_stopper else 0,
+                        early_stop_triggered=stopped)
         if is_best:
             shutil.copyfile(last_state_path, best_state_path)
 
-        # --- Early Stopping Check ---
-        if early_stopper is not None:
-            if early_stopper(val_loss, model):
-                if logger is not None:
-                    logger.log(f"[EarlyStopping] Triggered at epoch {epoch}. "
-                               f"Restoring best model weights...")
-                else:
-                    print(f"\n  [EarlyStopping] Triggered at epoch {epoch}. Restoring best model weights...")
-                if early_stopper.best_state_dict is not None:
-                    model.load_state_dict(early_stopper.best_state_dict)
-                break
+        if stopped:
+            if logger is not None:
+                logger.log(f"[EarlyStopping] Triggered at epoch {epoch}. "
+                           f"Restoring best model weights...")
+            else:
+                print(f"\n  [EarlyStopping] Triggered at epoch {epoch}. Restoring best model weights...")
+            if early_stopper.best_state_dict is not None:
+                model.load_state_dict(early_stopper.best_state_dict)
+            break
 
         completed_epochs = epoch
     if logger is not None:
@@ -585,4 +631,5 @@ def train_model(
         "last_state_path": last_state_path,
         "resume_from": str(resume_from) if resume_from else None,
         "global_step": global_step,
+        "resumed_from_best": resume_from_best,
     }
