@@ -9,6 +9,7 @@ phase stays in this single file.
 ## Header
 
 - **Title:** <Short phase name, e.g. "Data Preparation">
+- **Execution order:** <Sequential index in the roadmap, e.g. "1 of 8" — identifies the order of execution>
 - **Date created:** YYYY-MM-DD
 - **Last updated:** YYYY-MM-DD
 - **Description:** <One sentence: what this phase is.>
