@@ -214,7 +214,7 @@ def main() -> None:
             "label_smoothing": smoothing,
             "advanced_augmentation": use_adv,   # RandAugment + RandomErasing
             "scheduler": "CosineAnnealingLR" if use_cosine else None,
-            "early_stopping": {"patience": 4, "min_delta": 1e-4},
+            "early_stopping": {"patience": 5, "min_delta": 1e-3},
             "dataset": "CIFAR-10 (data/raw), fixed split seed=42 (45k/5k/10k)",
             "description": (  # 5W1H: what/why/when/where/who/how
                 f"What: train {run_name} on CIFAR-10. "
@@ -227,7 +227,7 @@ def main() -> None:
                 f"Who: LAB2 team. When: reproducibility run — full state logged."),
         }
 
-        model = builder(num_classes=10, device=device)
+        model = builder(num_classes=10, mode=mode, device=device)
         criterion = nn.CrossEntropyLoss(label_smoothing=smoothing)
         optimizer = _build_optimizer(model, mode, lr, weight_decay=1e-4)
         scheduler = (torch.optim.lr_scheduler.CosineAnnealingLR(

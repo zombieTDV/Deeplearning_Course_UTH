@@ -2,8 +2,8 @@ Model                     Mode       Test Loss    Test Acc   Best Val Acc  Class
 ------------------------------------------------------------------------------------------
 ResNet18-frozen           frozen     0.5596       80.89    % nan         % 65.2-92.0%
 DenseNet121-frozen        frozen     0.5018       82.91    % nan         % 71.3-92.4%
-ResNet18-finetune         finetune   0.5847       79.87    % nan         % 68.9-90.7%
-DenseNet121-finetune      finetune   0.5256       82.00    % nan         % 67.8-89.7%
-ResNet18-sota             SOTA Peak  0.2312       95.63    % nan         % 90.3-97.8%
-DenseNet121-sota          SOTA Peak  0.2067       96.09    % nan         % 92.2-98.5%
-Soft-Voting Ensemble 🏆    Ensemble   0.2025       96.71    % nan         % 93.2-98.8%
+ResNet18-finetune         finetune   0.2474       92.16    % nan         % 82.9-96.9%
+DenseNet121-finetune      finetune   0.2582       91.45    % nan         % 86.4-96.0%
+ResNet18-sota             SOTA Peak  0.2450       95.37    % nan         % 88.3-98.5%
+DenseNet121-sota          SOTA Peak  0.2104       96.16    % nan         % 93.1-98.6%
+Soft-Voting Ensemble 🏆    Ensemble   0.2113       96.79    % nan         % 93.3-99.2%

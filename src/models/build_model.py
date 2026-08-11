@@ -157,9 +157,15 @@ def build_densenet121(
 # ---------------------------------------------------------------------------
 def build_resnet18_full_sota(
     num_classes: int = 10,
+    mode: str = "sota",
     device: torch.device | None = None,
 ) -> nn.Module:
-    """Build ResNet18 with deep feature unfreezing (layer3 + layer4 + fc)."""
+    """Build ResNet18 with deep feature unfreezing (layer3 + layer4 + fc).
+
+    ``mode`` is accepted for signature compatibility with ``build_resnet18``
+    (train_lab2_models passes the variant mode); it is ignored — this builder
+    always produces the full-SOTA unfreeze layout.
+    """
     model = build_resnet18(num_classes=num_classes, mode="frozen", device=device)
     set_parameter_requires_grad(model.layer3, True)
     set_parameter_requires_grad(model.layer4, True)
@@ -169,10 +175,16 @@ def build_resnet18_full_sota(
 
 def build_densenet121_full_sota(
     num_classes: int = 10,
+    mode: str = "sota",
     device: torch.device | None = None,
 ) -> nn.Module:
     """Build DenseNet121 with deep feature unfreezing
-    (denseblock3 + denseblock4 + norm5 + classifier)."""
+    (denseblock3 + denseblock4 + norm5 + classifier).
+
+    ``mode`` is accepted for signature compatibility with ``build_densenet121``
+    (train_lab2_models passes the variant mode); it is ignored — this builder
+    always produces the full-SOTA unfreeze layout.
+    """
     model = build_densenet121(num_classes=num_classes, mode="frozen", device=device)
     set_parameter_requires_grad(model.features.denseblock3, True)
     set_parameter_requires_grad(model.features.denseblock4, True)
