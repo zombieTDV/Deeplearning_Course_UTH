@@ -76,7 +76,8 @@ agents/
 │   └── BUG_02_PRACTICE2_TRAIN_MODEL_TEST_LOSSES_KEYERROR.md
 │
 └── references/                    # External guides & technical reference notes
-    └── OPTUNA_DB_GUIDE.md         # Guide for Optuna hyperparameter tracking DB
+    ├── OPTUNA_DB_GUIDE.md         # Guide for Optuna hyperparameter tracking DB
+    └── GIT_AND_RELEASE_BEST_PRACTICES.md  # Git commits, CI, releases & approval gate
 ```
 
 ---
