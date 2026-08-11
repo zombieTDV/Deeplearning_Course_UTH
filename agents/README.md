@@ -41,6 +41,7 @@ agents/
 ├── README.md                      # Entry point & navigation guide (this file)
 ├── OVERVIEW.md                    # Core project overview, goals & phase roadmap
 ├── PURPOSE.md                     # Original project brief & requirements
+├── PROJECT_ROADMAP.md             # Execution plan: milestones, phases, tasks, timeline
 ├── HOW_TO_SETUP_AI_AGENT.md       # Step-by-step agent workflow setup
 ├── ML_PIPELINE_REFERENCE_v3.md    # End-to-end ML pipeline reference (steps 1-18+)
 │
@@ -63,7 +64,6 @@ agents/
 │
 ├── templates/                     # Standard templates & checklists for agents
 │   ├── PROJECT_ROADMAP_TEMPLATE.md  # Roadmap skeleton (milestones, phases, tasks)
-│   ├── PHASE_DOC_TEMPLATE.md        # Template for writing new phase documentation
 │   ├── PROGRESS_STATUS_TEMPLATE.md  # Template for tracking task status
 │   ├── CODEBASE_AUDIT_TEMPLATE.md   # Reusable audit report skeleton
 │   └── SMOKE_TEST_CHECKLIST.md      # Pre-run smoke test verification checklist

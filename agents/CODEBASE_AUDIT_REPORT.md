@@ -40,6 +40,7 @@ session (`agents/OVERVIEW.md`, `agents/phases/PHASE_TEMPLATE.md` modified;
 - [10. Detailed Risk Analysis](#10-detailed-risk-analysis)
 - [11. Overall Project Health](#11-overall-project-health)
 - [12. Prioritized Action Plan](#12-prioritized-action-plan)
+- [Appendix — Resolution Log](#appendix--resolution-log)
 
 ---
 
@@ -392,3 +393,22 @@ Cross-reference: each item links back to its finding; the summary table is in
 - [X] Cross-reference links between related sections resolve (summary ↔ detail ↔ action plan)
 - [X] Metrics match source; file/notebook paths relative to project root
 - [X] Dates in `YYYY-MM-DD`; `---` separators between major sections
+
+---
+
+## Appendix — Resolution Log
+
+Actions taken 2026-08-11 to resolve the findings of this audit (fix commit
+on branch `LAB3_HuggingFace`):
+
+| Action | Findings addressed | Status |
+|---|---|---|
+| P0.1 — provision `.venv` (HF stack + pytest); update `requirements.txt`; add `requirements.lock` | [DEP-1](#2-findings-summary), [TST-1](#2-findings-summary) | Resolved |
+| P0.2 — annotate the six `src/` layer READMEs as planned | [ARC-1](#2-findings-summary), [TST-2](#2-findings-summary), [SEC-1](#2-findings-summary) | Resolved |
+| P1.1 — update [FOLDER_STRUCTURE.md](rules/FOLDER_STRUCTURE.md) + [agents/README.md](README.md) listings (approved) | [ARC-2](#2-findings-summary) | Resolved |
+| P1.2 — canonicalize `run_logger.py`/`checkpoint_utils.py` ownership to `src/utils/` | [AQ-1](#2-findings-summary) | Resolved |
+| P1.3 — create 8 `agents/progress/*_STATUS.md` stubs | [AQ-3](#2-findings-summary) | Resolved |
+| P1.4 — version pins + `requirements.lock` | [DEP-2](#2-findings-summary) | Resolved |
+| P2.1 — remove unused `needs_data` marker from [conftest.py](../tests/conftest.py) | [AQ-2](#2-findings-summary) | Resolved |
+| P2.2 — delete `templates/PHASE_DOC_TEMPLATE.md` | [ARC-3](#2-findings-summary) | Resolved |
+| P2.3 — fill root [README.md](../README.md) placeholders | [AQ-4](#2-findings-summary) | Resolved |

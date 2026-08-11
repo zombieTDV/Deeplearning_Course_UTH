@@ -13,3 +13,7 @@ What belongs here:
   ([agents/rules/RESULTS_REPORTING.md](../../agents/rules/RESULTS_REPORTING.md)).
 
 See [agents/phases/EVAL.md](../../agents/phases/EVAL.md).
+
+> **Status:** planned (roadmap Phase 7); `evaluate_model.py` not implemented
+> yet — audit finding `ARC-1`
+> ([agents/CODEBASE_AUDIT_REPORT.md](../../agents/CODEBASE_AUDIT_REPORT.md)).

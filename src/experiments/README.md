@@ -14,3 +14,8 @@ live here as CLI scripts: `python -m src.experiments.<experiment>`.
   [EXPERIMENT_TEMPLATE.md](../../agents/experiments/EXPERIMENT_TEMPLATE.md).
 - Smoke-test before real runs
   ([SMOKE_TEST_CHECKLIST.md](../../agents/templates/SMOKE_TEST_CHECKLIST.md)).
+
+> **Status:** experiment scripts are **planned** (roadmap Phase 4 —
+> [BASELINE.md](../../agents/phases/BASELINE.md), and later phases); none
+> implemented yet — audit finding `ARC-1`
+> ([agents/CODEBASE_AUDIT_REPORT.md](../../agents/CODEBASE_AUDIT_REPORT.md)).

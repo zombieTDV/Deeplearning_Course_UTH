@@ -29,3 +29,9 @@ train_loader, val_loader, test_loader = get_loaders(batch_size=64)
   [agents/ML_PIPELINE_REFERENCE_v3.md](../../agents/ML_PIPELINE_REFERENCE_v3.md) §10).
 
 See [agents/phases/DATA_PREP.md](../../agents/phases/DATA_PREP.md).
+
+> **Status:** all modules above are **planned** (roadmap Phases 2–3 —
+> [DATA_PREP.md](../../agents/phases/DATA_PREP.md),
+> [FEATURE_SPLIT.md](../../agents/phases/FEATURE_SPLIT.md)); none are
+> implemented yet. Audit finding `ARC-1` (see
+> [agents/CODEBASE_AUDIT_REPORT.md](../../agents/CODEBASE_AUDIT_REPORT.md)).

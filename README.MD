@@ -1,8 +1,8 @@
-# [PROJECT_NAME]
+# Practice 3 — Get Started with Hugging Face
 
 ## Project Overview
 
-[PROJECT_NAME] implements a modular deep-learning pipeline. It strictly follows
+Practice 3 — Get Started with Hugging Face implements a modular deep-learning pipeline. It strictly follows
 Separation of Concerns (SoC): data processing, model building, training,
 evaluation, and AI-Agent governance are decoupled layers, and **all training
 runs as logged, resumable Python scripts** — notebooks are reserved for
@@ -32,7 +32,7 @@ flowchart LR
     subgraph TRAIN["Training Layer (src/training) — scripts only"]
         C1["<feature>_train.py (CLI entry point)"]
         C2["train_model.py (loop, full-state checkpoints, resume)"]
-        C3["run_logger.py (real-time progress, logs, JSONL)"]
+        C3["run_logger.py (src/utils — real-time progress, logs, JSONL)"]
     end
 
     subgraph EVAL["Evaluation Layer (src/eval)"]
@@ -68,6 +68,9 @@ Key properties of the architecture:
 - **Script-only training** — every training loop lives in
   `src/training/*.py` / `src/experiments/*_train.py`; notebooks only load
   artifacts and analyze.
+- **Implementation status** — all `src/` modules are **planned** (they land
+  in roadmap Phases 3–7); the scaffold is governance-ready. See
+  [agents/CODEBASE_AUDIT_REPORT.md](agents/CODEBASE_AUDIT_REPORT.md) `ARC-1`.
 - **Full logging & resumability** — every run persists model + optimizer +
   scheduler + RNG state + history + config (see
   [agents/rules/LOGGING_CHECKPOINT_RULES.md](agents/rules/LOGGING_CHECKPOINT_RULES.md)).
@@ -82,7 +85,7 @@ Key properties of the architecture:
 ## 📁 Repository Structure
 
 ```
-[PROJECT_NAME]/
+Practice 3 — Get Started with Hugging Face/
 │
 ├── agents/                    # AI Agent knowledge base & behavioral control
 │   ├── README.md              # Navigation guide & architecture overview
@@ -188,4 +191,4 @@ pytest tests/ -v
 
 ## 📜 License
 
-[Fill in — license, course, or organization context]
+Coursework — deep learning course (Practice 3: Get Started with Hugging Face)

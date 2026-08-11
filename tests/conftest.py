@@ -1,16 +1,6 @@
-"""Pytest fixtures: skip data-dependent tests when data/raw is absent.
+"""Pytest fixtures for the project test suite.
 
-Allows CI (and fresh checkouts) to run the synthetic unit suite without the
-dataset present.
+Currently no shared fixtures are needed. Data-dependent tests added in later
+phases (roadmap Phases 2–3) will introduce their own skipif markers here when
+tests that consume them exist — do not add data fixtures before then.
 """
-from pathlib import Path
-
-import pytest
-
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-DATA_RAW = PROJECT_ROOT / "data" / "raw"
-
-needs_data = pytest.mark.skipif(
-    not DATA_RAW.exists() or not any(DATA_RAW.iterdir()),
-    reason="data/raw is absent — data-dependent test skipped",
-)

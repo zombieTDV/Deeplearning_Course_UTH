@@ -10,6 +10,7 @@ project_root/
 │   ├── README.md          # Index & guide for Agent AI
 │   ├── OVERVIEW.md        # Core project overview & roadmap
 │   ├── PURPOSE.md         # Original brief & requirements
+│   ├── PROJECT_ROADMAP.md  # Execution plan: milestones, phases, tasks, timeline
 │   ├── HOW_TO_SETUP_AI_AGENT.md  # Agent workflow setup guide
 │   ├── rules/             # Guidelines & standards for Agent AI
 │   │   ├── AGENT_AI.md    # Agent AI philosophy & behavior rules
@@ -20,10 +21,9 @@ project_root/
 │   │   └── NOTEBOOK_HEADER_CONVENTION.md
 │   ├── phases/            # Phase & pipeline documentation
 │   │   ├── PHASE_TEMPLATE.md
-│   │   └── <PHASE>.md     # e.g. DATA_PREP.md, MODEL.md, TRAINING_INFO.md, EVAL.md
+│   │   └── <PHASE>.md     # SETUP, DATA_PREP, FEATURE_SPLIT, BASELINE, MODEL, TRAINING_INFO, EVAL, REPORT
 │   ├── templates/         # Document & checklist templates
 │   │   ├── PROJECT_ROADMAP_TEMPLATE.md
-│   │   ├── PHASE_DOC_TEMPLATE.md
 │   │   ├── PROGRESS_STATUS_TEMPLATE.md
 │   │   ├── CODEBASE_AUDIT_TEMPLATE.md
 │   │   └── SMOKE_TEST_CHECKLIST.md

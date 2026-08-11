@@ -15,3 +15,7 @@ What belongs here:
   training loop.
 
 See [agents/phases/MODEL.md](../../agents/phases/MODEL.md).
+
+> **Status:** planned (roadmap Phase 5); `build_model.py` not implemented yet —
+> audit finding `ARC-1`
+> ([agents/CODEBASE_AUDIT_REPORT.md](../../agents/CODEBASE_AUDIT_REPORT.md)).
