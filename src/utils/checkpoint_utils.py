@@ -25,6 +25,11 @@ import torch
 import torch.nn as nn
 
 
+def _announce(resource: str, path) -> None:
+    """Print the full path of a loaded/required resource (consistent logging)."""
+    print(f"[load] {resource} -> {path if path is not None else 'NOT FOUND'}")
+
+
 def find_best_checkpoint(
     run_name: str,
     runs_root: str | Path = "experiments/runs",
@@ -80,6 +85,7 @@ def find_best_checkpoint(
         if legacy.exists():
             best = legacy
 
+    _announce(f"best checkpoint [{run_name}]", best)
     return best
 
 
@@ -107,6 +113,8 @@ def find_latest_run_dir(
                 mtime = ck.stat().st_mtime
                 if mtime > best_mtime:
                     best, best_mtime = run_dir, mtime
+    _announce(f"latest run dir [{run_name}]",
+              best / "checkpoints" / f"{run_name}_last.pt" if best else None)
     return best
 
 
@@ -120,6 +128,7 @@ def load_model_weights(
     New full-state checkpoints (see ``train_model.save_checkpoint``) contain a
     ``model_state_dict`` key; legacy checkpoints are bare state dicts.
     """
+    _announce("model weights", Path(path))
     state: Any = torch.load(path, map_location=device, weights_only=True)
     if isinstance(state, dict) and "model_state_dict" in state:
         model.load_state_dict(state["model_state_dict"])

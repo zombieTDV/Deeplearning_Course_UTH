@@ -320,6 +320,7 @@ def load_checkpoint_state(
     device: torch.device | None = None,
 ) -> dict:
     """Load a full training-state checkpoint (safe ``weights_only=True``)."""
+    print(f"[load] checkpoint state -> {Path(path)}")
     return torch.load(path, map_location=device, weights_only=True)
 
 

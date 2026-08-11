@@ -188,6 +188,7 @@ def get_cifar10_loaders(
 
     logger.info(f"Creating CIFAR-10 DataLoaders with batch_size={batch_size} "
                 f"num_workers={num_workers} root={data_root}")
+    print(f"[load] CIFAR-10 dataset root -> {Path(data_root)}")
     from src.data.transforms import get_eval_transform, get_train_transform
 
     split = _ensure_split()
