@@ -1,0 +1,32 @@
+[project]
+name = "project-name"
+version = "0.1.0"
+description = "Deep learning project — script-only training, full-state checkpointing, analysis notebooks."
+requires-python = ">=3.11"
+
+# pytest settings live in pytest.ini (single source of truth).
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+# Frozen one-shot experiment scripts carry legacy lint debt; they are not part
+# of the maintained architecture (src/utils|training|data|models|eval + tests).
+extend-exclude = [
+    "src/experiments/exp_*.py",
+    "src/experiments/plot_*.py",
+]
+
+[tool.ruff.lint]
+# E/F/W: pycodestyle+pyflakes, I: isort, UP: pyupgrade, B: bugbear
+select = ["E", "F", "W", "I", "UP", "B"]
+ignore = ["E501"]  # long lines allowed; docstrings carry the detail
+
+[tool.ruff.lint.per-file-ignores]
+# CLI scripts bootstrap sys.path before importing src.* modules (E402)
+"src/training/*.py" = ["E402"]
+"src/experiments/*.py" = ["E402"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_unused_ignores = true
+ignore_missing_imports = true

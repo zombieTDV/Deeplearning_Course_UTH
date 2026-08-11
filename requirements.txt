@@ -1,5 +1,13 @@
+# Top-level runtime/dev dependencies for the project.
+# Exact versions can be pinned in requirements.lock (pip freeze) for reproducibility.
 pandas
 numpy
-tabulate
 matplotlib
 tensorboard
+torch
+torchvision
+pillow
+pyyaml
+optuna
+scikit-learn
+pytest
