@@ -49,12 +49,12 @@ execution plan lives in [PROJECT_ROADMAP.md](PROJECT_ROADMAP.md).
 
 1. [phases/SETUP.md](phases/SETUP.md) — environment, HF stack, problem framing — **Done**
 2. [phases/DATA_PREP.md](phases/DATA_PREP.md) — IMDB EDA, cleaning/imbalance N/A checks — **Done**
-3. [phases/FEATURE_SPLIT.md](phases/FEATURE_SPLIT.md) — tokenization, train/val/test split, leakage rules — To Do
+3. [phases/FEATURE_SPLIT.md](phases/FEATURE_SPLIT.md) — tokenization, train/val/test split, leakage rules — **Done**
 4. [phases/BASELINE.md](phases/BASELINE.md) — Ex 1 zero-shot baseline + majority-class floor — **Done**
-5. [phases/MODEL.md](phases/MODEL.md) — model selection rationale, training config — To Do
-6. [phases/TRAINING_INFO.md](phases/TRAINING_INFO.md) — Trainer finetuning, checkpoints, resume — To Do
-7. [phases/EVAL.md](phases/EVAL.md) — test evaluation, metrics, optional seed experiments — To Do
-8. [phases/REPORT.md](phases/REPORT.md) — error analysis, notebook, final 5W1H report — To Do
+5. [phases/MODEL.md](phases/MODEL.md) — model selection rationale, training config — **Done**
+6. [phases/TRAINING_INFO.md](phases/TRAINING_INFO.md) — Trainer finetuning, checkpoints, resume — **Done**
+7. [phases/EVAL.md](phases/EVAL.md) — test evaluation, metrics, optional seed experiments — **Done**
+8. [phases/REPORT.md](phases/REPORT.md) — error analysis, notebook, final 5W1H report — **Done**
 
 ## Known constraints
 
