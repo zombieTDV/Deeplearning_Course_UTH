@@ -25,6 +25,7 @@
   - NAMING_CONVENTION.md
   - FOLDER_STRUCTURE.md
   - Run smoke test for every scripts before true running.
+  - **Mandatory Bug Documentation Rule:** Every time a bug or environment failure is encountered and fixed, the Agent MUST immediately write a documented `.md` bug report under `agents/bugs/` using `agents/bugs/BUG_TEMPLATE.md` and register it in `agents/bugs/README.md`.
 - Codebase_audit.md (I didn't sure what is this files, from what i heard, it related to telling the AI to align with the plan, everything we setup before it doing anything)
 - For a given Task:
 

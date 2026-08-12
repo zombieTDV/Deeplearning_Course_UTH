@@ -11,12 +11,13 @@ This script implements Exercise 1 of Practice 3:
 
 import argparse
 import json
-import os
+import random
 import time
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any
 
+import numpy as np
 import torch
 from datasets import load_dataset
 from transformers import AutoTokenizer, pipeline
@@ -24,9 +25,6 @@ from transformers import AutoTokenizer, pipeline
 
 def set_seed(seed: int = 42) -> None:
     """Set random seed for reproducibility across torch, cuda, and Python stdlib."""
-    import random
-    import numpy as np
-
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
@@ -36,7 +34,7 @@ def set_seed(seed: int = 42) -> None:
 
 def demonstrate_tokenization_and_pipeline(
     sample_text: str, model_name: str, device_id: int
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Demonstrate tokenization (Exercise 1 Step 3) and pipeline inference (Step 4)."""
     print("\n" + "=" * 60)
     print(" EXERCISE 1: TOKENIZATION & ZERO-SHOT SENTIMENT PIPELINE DEMO")
@@ -82,7 +80,7 @@ def evaluate_imdb_baseline(
     batch_size: int = 32,
     max_samples: int = None,
     device_id: int = 0,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Evaluate zero-shot pipeline on IMDB test split alongside majority-class baseline floor."""
     print("Loading IMDB test dataset via Hugging Face `datasets`...")
     dataset = load_dataset("stanfordnlp/imdb", split="test")
@@ -123,7 +121,7 @@ def evaluate_imdb_baseline(
         batch_labels = labels[i : i + batch_size]
         results = clf(batch_texts)
 
-        for res_list, target in zip(results, batch_labels):
+        for res_list, target in zip(results, batch_labels, strict=False):
             # res_list contains scores for both classes, e.g. [{'label': 'POSITIVE', 'score': 0.99}, ...]
             pos_score = 0.0
             pred_label = 0
@@ -180,7 +178,6 @@ def evaluate_imdb_baseline(
     tb_dir = Path("experiments/runs/baseline_zero_shot/tensorboard")
     tb_dir.mkdir(parents=True, exist_ok=True)
     writer = SummaryWriter(log_dir=str(tb_dir))
-    
     writer.add_scalar("Baseline/Zero_Shot_Accuracy", zero_shot_acc, 0)
     writer.add_scalar("Baseline/Majority_Floor_Accuracy", majority_class_acc, 0)
     writer.add_scalar("Baseline/Zero_Shot_ROC_AUC", roc_auc, 0)

@@ -11,15 +11,14 @@ Performs Exploratory Data Analysis (EDA) on the IMDB sentiment dataset:
 
 import json
 from pathlib import Path
-from typing import Dict, Any
+from typing import Any
 
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 from datasets import load_dataset
 
 
-def run_imdb_eda() -> Dict[str, Any]:
+def run_imdb_eda() -> dict[str, Any]:
     print("Loading [`stanfordnlp/imdb`](https://huggingface.co/datasets/stanfordnlp/imdb) dataset...")
     dataset = load_dataset("stanfordnlp/imdb")
 
@@ -38,7 +37,6 @@ def run_imdb_eda() -> Dict[str, Any]:
     test_neg = len(test_labels) - test_pos
 
     train_word_counts = [len(text.split()) for text in train_ds["text"]]
-    test_word_counts = [len(text.split()) for text in test_ds["text"]]
 
     # 1. Plot Label Distribution
     plots_dir = Path("experiments/plots")
