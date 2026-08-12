@@ -22,6 +22,7 @@ docs.
 | :---: | :--- | :--- | :---: | :---: |
 | `BUG-01` | [PyTorch CUDA Version Pin Failure on GitHub Actions CI/CD](BUG_01_CICD_TORCH_CUDA_REQUIREMENTS_FAIL.md) | `requirements.txt` | High | Resolved ✅ |
 | `BUG-02` | [Ruff Linter Import & Type Hinting Violations](BUG_02_RUFF_LINT_ERRORS_FIX.md) | `src/data/eda_imdb.py`, `src/experiments/...` | Medium | Resolved ✅ |
+| `BUG-03` | [PyTest Import & Missing `data/raw` Directory on CI](BUG_03_PYTEST_IMPORT_AND_DATA_RAW_DIR_MISSING.md) | `pytest.ini`, `.gitignore` | High | Resolved ✅ |
 
 ---
 

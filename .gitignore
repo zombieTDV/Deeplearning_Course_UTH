@@ -9,9 +9,12 @@ build/
 .kilo
 
 # Data — raw/processed/external data stays local
-/data/raw/
-/data/processed/
-/data/external/
+/data/raw/*
+!/data/raw/.gitkeep
+/data/processed/*
+!/data/processed/.gitkeep
+/data/external/*
+!/data/external/.gitkeep
 /data/*.tar.gz
 /data/*.zip
 /data/*.pt
