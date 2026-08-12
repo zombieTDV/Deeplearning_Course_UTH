@@ -56,6 +56,7 @@ agents/
 │   ├── NAMING_CONVENTION.md       # Naming rules for files, code & experiments
 │   ├── NOTEBOOK_HEADER_CONVENTION.md # Standardized headers for Jupyter notebooks
 │   ├── LOGGING_CHECKPOINT_RULES.md  # Logging, checkpoint format, resume procedure
+│   ├── PYTORCH_FRAMEWORK_RULES.md   # PyTorch framework usage & architecture rules
 │   └── RESULTS_REPORTING.md         # 5W1H rules for every reported result
 │
 ├── phases/                        # Step-by-step pipeline & phase specifications

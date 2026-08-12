@@ -18,7 +18,8 @@ project_root/
 │   │   ├── FOLDER_STRUCTURE.md
 │   │   ├── MD_CONVENTION.md
 │   │   ├── NAMING_CONVENTION.md
-│   │   └── NOTEBOOK_HEADER_CONVENTION.md
+│   │   ├── NOTEBOOK_HEADER_CONVENTION.md
+│   │   └── PYTORCH_FRAMEWORK_RULES.md
 │   ├── phases/            # Phase & pipeline documentation
 │   │   ├── PHASE_TEMPLATE.md
 │   │   └── <PHASE>.md     # SETUP, DATA_PREP, FEATURE_SPLIT, BASELINE, MODEL, TRAINING_INFO, EVAL, REPORT
