@@ -54,8 +54,7 @@ In this exercise, you will:
   an English sentence; Ex 2 uses IMDB + `distilbert-base-uncased` only. Out of
   scope: other datasets/models, non-binary classification, deployment/serving,
   hyperparameter sweeps, non-English samples.
-- **Constraints**: GPU with 8GB VRAM — target ≤6GB usage where possible, ceiling
-  8GB. English-only sample sentences.
+- **Constraints**: Multi-GPU machine environment (1 machine with 8GB VRAM, 1 machine with 4GB VRAM) — target ≤3.5GB usage (strict ceiling 4GB for compatibility, ceiling 8GB on higher machines). English-only sample sentences.
 - **Audience/context**: Coursework submission — scripts under `src/`, a
   demo/analysis notebook, and repo-compliant run artifacts under
   `experiments/runs/`.
@@ -68,7 +67,7 @@ finetune `distilbert-base-uncased` on the IMDB binary sentiment dataset using
 the HF `Trainer`, then evaluate and report test accuracy with full 5W1H
 context. All training runs from scripts under `src/` with artifacts
 (checkpoints, config, history, logs) auto-persisted per repo rules, targeting
-≤6GB VRAM (ceiling 8GB).
+≤3.5GB VRAM (strictly fitting within 4GB VRAM machines).
 
 ---
 

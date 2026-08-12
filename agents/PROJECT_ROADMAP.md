@@ -76,7 +76,7 @@
 | Sponsor / product owner | Course instructor (coursework submission) |
 | Start date | 2026-08-11 |
 | Target end date | 2026-09-07 *(assumed — no deadline given in the brief; adjust in §10)* |
-| Key constraints | GPU with 8 GB VRAM, target ≤6 GB usage (ceiling 8 GB); English-only samples; HF dependencies (`transformers`, `datasets`, `evaluate`) to be added to `requirements.txt`; script-only training (no training in notebooks). |
+| Key constraints | Multi-GPU team hardware (8 GB + 4 GB machines): target ≤3.5 GB VRAM usage (ceiling 4 GB); English-only samples; HF dependencies (`transformers`, `datasets`, `evaluate`) pinned in `requirements.txt`; script-only training (no training in notebooks). |
 
 ### Pipeline alignment
 
@@ -110,7 +110,7 @@ marked **N/A** with a documented rationale instead of being silently skipped.
 
 | Milestone | Target date | Deliverable / definition of done | Status | Owner |
 |---|---|---|---|---|
-| M1 — Environment & framing | 2026-08-13 | HF stack installed & GPU verified (≤6 GB target); [SETUP.md](phases/SETUP.md) written; problem framing locked | `[ ]` | Learner + AI agent |
+| M1 — Environment & framing | 2026-08-13 | HF stack installed & GPU verified (≤3.5 GB target); [SETUP.md](phases/SETUP.md) written; problem framing locked | `[ ]` | Learner + AI agent |
 | M2 — Ex 1 baseline | 2026-08-17 | Zero-shot sentiment pipeline runs on sample English sentences; baseline + majority-class metrics recorded (reference floor) | `[ ]` | AI agent |
 | M3 — Data pipeline ready | 2026-08-21 | IMDB loaded, tokenized, split (train/val/test) verified; [FEATURE_SPLIT.md](phases/FEATURE_SPLIT.md) documents leakage rules | `[ ]` | AI agent |
 | M4 — Finetuned model | 2026-08-28 | Full finetune run complete; `experiments/runs/<ts>_<run>/` contains checkpoints (`<run>_best.pt`, `<run>_last.pt`), logs, config, history JSONL | `[ ]` | Learner (launch) |
@@ -144,7 +144,7 @@ marked **N/A** with a documented rationale instead of being silently skipped.
 
 | Task ID | Phase | Description (what + acceptance) | Owner / role | Effort | Dependencies | Priority | Status |
 |---|---|---|---|---|---|---|---|
-| `T1` | Phase 1 | Install HF stack (`transformers`, `datasets`, `evaluate`) into `.venv`; pin versions in `requirements.txt`; verify imports + GPU/VRAM check (≤6 GB target, 8 GB ceiling). **Accept:** imports pass, VRAM reported | Learner | `0.5d` | `—` | `P0` | `[ ]` |
+| `T1` | Phase 1 | Install HF stack (`transformers`, `datasets`, `evaluate`) into `.venv`; pin versions in `requirements.txt`; verify imports + GPU/VRAM check (≤3.5 GB target, 4 GB ceiling). **Accept:** imports pass, VRAM reported | Learner | `0.5d` | `—` | `P0` | `[ ]` |
 | `T2` | Phase 1 | Lock problem framing (supervised binary sentiment classification; Ex 1 baseline vs Ex 2 finetune per [PURPOSE.md](PURPOSE.md)) and write [SETUP.md](phases/SETUP.md). **Accept:** reviewed and approved | AI agent (draft) + Learner (review) | `0.5d` | `T1` | `P0` | `[ ]` |
 | `T3` | Phase 2 | EDA on IMDB via `datasets`: label balance, review-length stats, sample inspection; record in [DATA_PREP.md](phases/DATA_PREP.md) (pipeline §3). **Accept:** EDA numbers recorded | AI agent | `0.5d` | `T2` | `P1` | `[ ]` |
 | `T4` | Phase 2 | Confirm cleaning & imbalance stages: IMDB pre-cleaned (missing values/outliers **N/A**) and balanced 50/50 — verify + document rationale (§4–§5, §8). **Accept:** N/A rationale documented | AI agent | `0.5d` | `T3` | `P2` | `[ ]` |
@@ -154,7 +154,7 @@ marked **N/A** with a documented rationale instead of being silently skipped.
 | `T8` | Phase 5 | Model selection rationale in [MODEL.md](phases/MODEL.md): `distilbert-base-uncased` justified against alternatives on compute/VRAM/accuracy (No Free Lunch, §12). **Accept:** rationale documented | AI agent | `0.5d` | `T3`, `T6` | `P1` | `[ ]` |
 | `T9` | Phase 5 | Define training args (learning rate, epochs, batch size, weight decay, `max_length`) with bias-variance reasoning; write `configs/config_imdb_sentiment.yaml` (§13–§15). **Accept:** every hyperparameter logged with each run | AI agent + Learner | `0.5d` | `T8` | `P0` | `[ ]` |
 | `T10` | Phase 6 | Finetuning CLI [imdb_sentiment_train.py](../src/training/imdb_sentiment_train.py): HF `Trainer`, full-state checkpoints (`<run>_best.pt`, `<run>_last.pt`), `--epochs/--seed/--resume/--force-resume/--tb/--smoke` per [LOGGING_CHECKPOINT_RULES.md](rules/LOGGING_CHECKPOINT_RULES.md). **Accept:** resume + auto-persistence implemented | AI agent | `2d` | `T6`, `T9` | `P0` | `[ ]` |
-| `T11` | Phase 6 | Smoke test finetuning on a tiny subset per [SMOKE_TEST_CHECKLIST.md](templates/SMOKE_TEST_CHECKLIST.md); verify VRAM ≤6 GB. **Accept:** smoke passes, VRAM reported | AI agent | `0.5d` | `T10` | `P0` | `[ ]` |
+| `T11` | Phase 6 | Smoke test finetuning on a tiny subset per [SMOKE_TEST_CHECKLIST.md](templates/SMOKE_TEST_CHECKLIST.md); verify VRAM ≤3.5 GB. **Accept:** smoke passes, VRAM reported | AI agent | `0.5d` | `T10` | `P0` | `[ ]` |
 | `T12` | Phase 6 | Full finetune run on GPU; artifacts (checkpoints, logs, config, history JSONL) auto-persisted to `experiments/runs/<ts>_<run>/`. **Accept:** complete run dir per logging rules | Learner (launch) + AI agent (monitor) | `1d` | `T11` | `P0` | `[ ]` |
 | `T13` | Phase 7 | Evaluation script [evaluate_model.py](../src/eval/evaluate_model.py): accuracy (primary), confusion matrix, per-class precision/recall/F1 on the held-out test set, evaluated once (§16; balanced classes → ROC-AUC optional). **Accept:** metrics reported with 5W1H per [RESULTS_REPORTING.md](rules/RESULTS_REPORTING.md) | AI agent | `1d` | `T12` | `P0` | `[ ]` |
 | `T14` | Phase 7 | Single-variable experiments (e.g. one lr or epoch delta) with optional μ±σ across 2–3 seeds; K-Fold CV explicitly **N/A** and documented (§17–§18). **Accept:** one variable changed per run; deltas vs baseline | Learner | `1d` | `T13` | `P2` | `[ ]` |
@@ -265,7 +265,7 @@ M6 (deliverables)                               ◆
 
 | Risk | Likelihood | Impact | Priority | Mitigation | Owner |
 |---|---|---|---|---|---|
-| R1 — VRAM exceeds 6 GB during finetuning on the 8 GB GPU | M | M | High | Gradient accumulation + small batch size; fp16 if supported; monitor with `nvidia-smi` during smoke test (`T11`); fall back to shorter `max_length` or smaller subset | Learner |
+| R1 — VRAM exceeds 3.5 GB during finetuning on 4 GB team machines | M | M | High | Gradient accumulation + small batch size (8–16); fp16; monitor with `nvidia-smi` during smoke test (`T11`); fall back to shorter `max_length` or smaller subset | Learner |
 | R2 — IMDB download blocked (network/firewall) | M | H | High | Use `datasets` cache; set `HF_ENDPOINT` mirror; pre-cache to `data/external/`; last resort: documented smaller subset | AI agent |
 | R3 — HF API drift / version incompatibility (`Trainer`, `pipeline` signatures) | M | M | Medium | Pin versions in `requirements.txt` at `T1`; follow docs matching pinned versions; smoke test before full run | AI agent |
 | R4 — Finetuned model underperforms or overfits vs baseline | M | M | Medium | Compare to baseline floor (`T7`); bias-variance diagnosis of train/val gap (§13); adjust one hyperparameter at a time (`T14`) | Learner |

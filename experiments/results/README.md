@@ -9,8 +9,8 @@ Training-state logs and checkpoints live in `experiments/runs/`, NOT here.
 
 | File | 5W1H description |
 |---|---|
-| `<experiment>.json` | **What**: <metrics> on <split>. **Why**: <question it answers>. **When**: written by <script> on <date/run>. **Where**: <path>. **Who**: <author> → <audience>. **How**: <protocol, seed, leakage notes>. |
-| `<experiment>/` | **What**: <artifacts — npz/pt/config/history>. **Why**: <analysis without re-training>. **How**: `python -m src.experiments.<experiment>`. **Note**: `.npz`/`.pt` are regenerable by that script and gitignored. |
+| [`baseline_imdb_sentiment.json`](baseline_imdb_sentiment.json) | **What**: zero-shot baseline metrics on the IMDB test split (25,000 samples): accuracy 89.07%, majority-class floor 50.00%, ROC-AUC 0.9587. **Why**: reference floor for Exercise 2 finetuning deltas. **When**: 2026-08-12, by [`src/experiments/baseline_imdb_sentiment.py`](../../src/experiments/baseline_imdb_sentiment.py). **Where**: this file + [`experiments/plots/baseline_zero_shot_roc_curve.png`](../plots/baseline_zero_shot_roc_curve.png). **Who**: bush-le + AI agent → coursework. **How**: HF pipeline `distilbert-base-uncased-finetuned-sst-2-english`, GPU, seed 42, no training; test evaluated once. |
+| [`imdb_dataset_eda.json`](imdb_dataset_eda.json) | **What**: IMDB EDA statistics — per-split counts, label balance (50/50), review-length word-count stats. **Why**: documents dataset geometry before preprocessing (pipeline §3). **When**: 2026-08-12, by [`src/data/eda_imdb.py`](../../src/data/eda_imdb.py). **Where**: this file + [`experiments/plots/imdb_label_distribution.png`](../plots/imdb_label_distribution.png), [`experiments/plots/imdb_review_length_distribution.png`](../plots/imdb_review_length_distribution.png). **Who**: bush-le → coursework. **How**: `datasets.load_dataset("stanfordnlp/imdb")`; no test-set statistics used in training. |
 
 ## Storage rules
 

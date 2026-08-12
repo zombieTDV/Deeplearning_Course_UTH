@@ -7,9 +7,9 @@
 - **Title:** Baseline Model (Exercise 1 — Zero-Shot Sentiment Analysis)
 - **Execution order:** 4 of 8
 - **Date created:** 2026-08-11
-- **Last updated:** 2026-08-11
-- **Description:** Deliver Exercise 1 — run a pretrained Hugging Face sentiment pipeline on sample sentences and record baseline metrics (including the majority-class floor) as the reference for Exercise 2.
-- **Status:** To Do
+- **Last updated:** 2026-08-12
+- **Description:** Deliver Exercise 1 — run a pretrained Hugging Face sentiment pipeline ([`distilbert-base-uncased-finetuned-sst-2-english`](https://huggingface.co/distilbert-base-uncased-finetuned-sst-2-english)) on sample sentences and record baseline metrics (including the majority-class floor) on [`stanfordnlp/imdb`](https://huggingface.co/datasets/stanfordnlp/imdb) as the reference for Exercise 2.
+- **Status:** Done
 
 ## Background
 

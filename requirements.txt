@@ -4,7 +4,7 @@ pandas
 numpy
 matplotlib
 tensorboard
-# PyTorch with CUDA: install these two via the cu130 index
+# PyTorch with CUDA: wheels are NOT on PyPI — install via the cu130 index (see agents/bugs/BUG_01)
 #   pip install torch==2.13.0+cu130 torchvision==0.28.0+cu130 --index-url https://download.pytorch.org/whl/cu130
 # (plain `pip install torch` resolves to the CPU wheel and must be avoided on GPU machines)
 torch==2.13.0+cu130

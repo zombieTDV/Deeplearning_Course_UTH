@@ -117,6 +117,7 @@ Practice 3 — Get Started with Hugging Face/
 │   └── utils/                 # run_logger, checkpoint_utils, misc helpers
 │
 ├── notebooks/                 # Analysis & demos ONLY (no training)
+├── scratch/                   # Generated-notebook build scripts
 │
 ├── experiments/               # Run artifacts
 │   ├── runs/<ts>_<run>/       # checkpoints/ logs/ metrics/ tensorboard/

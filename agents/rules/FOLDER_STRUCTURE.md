@@ -18,7 +18,8 @@ project_root/
 │   │   ├── FOLDER_STRUCTURE.md
 │   │   ├── MD_CONVENTION.md
 │   │   ├── NAMING_CONVENTION.md
-│   │   └── NOTEBOOK_HEADER_CONVENTION.md
+│   │   ├── NOTEBOOK_HEADER_CONVENTION.md
+│   │   └── PYTORCH_FRAMEWORK_RULES.md
 │   ├── phases/            # Phase & pipeline documentation
 │   │   ├── PHASE_TEMPLATE.md
 │   │   └── <PHASE>.md     # SETUP, DATA_PREP, FEATURE_SPLIT, BASELINE, MODEL, TRAINING_INFO, EVAL, REPORT
@@ -50,6 +51,7 @@ project_root/
 │   ├── experiments/       # python experiment execution scripts
 │   └── utils/
 ├── notebooks/             # exploratory & deliverable notebooks (no training)
+├── scratch/               # generated-notebook build scripts (e.g. build_notebook.py)
 ├── configs/
 ├── experiments/           # run outputs, checkpoints, plots, results
 └── tests/                 # smoke tests + unit tests

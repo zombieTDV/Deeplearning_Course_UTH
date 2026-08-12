@@ -13,13 +13,13 @@
 
 ## Background
 
-Exercise 1 step 1 requires installing the Hugging Face `transformers` library, and Exercise 2 adds `datasets` and `evaluate`. The repo's `requirements.txt` currently has no HF dependencies, so the first step is to add and verify them inside the existing `.venv`. The project constraint of an 8 GB VRAM GPU (target ≤6 GB) must be verified up front so later phases (batch size, model choice) stay within budget. This phase covers roadmap tasks T1–T2 and milestone M1.
+Exercise 1 step 1 requires installing the Hugging Face `transformers` library, and Exercise 2 adds `datasets` and `evaluate`. The repo's `requirements.txt` currently has no HF dependencies, so the first step is to add and verify them inside the existing `.venv`. The project constraint of multi-GPU team hardware (8 GB and 4 GB machines, target ≤3.5 GB VRAM) must be verified up front so later phases (batch size, model choice) stay within budget. This phase covers roadmap tasks T1–T2 and milestone M1.
 
 ## Goals / Purpose
 
 - What "done" looks like, concretely:
   - HF stack imports cleanly inside `.venv`.
-  - GPU/VRAM reported (≤6 GB target, 8 GB ceiling).
+  - GPU/VRAM reported (≤3.5 GB target, 4 GB ceiling).
   - Problem framing locked (supervised binary sentiment classification; Ex 1 = zero-shot baseline, Ex 2 = finetune).
   - This phase doc written and reviewed.
 - What this phase explicitly does NOT try to solve:
@@ -27,7 +27,7 @@ Exercise 1 step 1 requires installing the Hugging Face `transformers` library, a
 
 ## Input / Output
 
-- **Input:** `requirements.txt`, `.venv`, GPU (8 GB VRAM).
+- **Input:** `requirements.txt`, `.venv`, GPU(s) (8 GB + 4 GB team machines).
 - **Output:** updated `requirements.txt` with pinned HF versions; verified environment; VRAM report; this doc.
 
 ## How to do it (general plan)
@@ -51,7 +51,7 @@ Exercise 1 step 1 requires installing the Hugging Face `transformers` library, a
 
 - Pin HF versions in `requirements.txt` at T1 to avoid API drift in later phases (roadmap risk R3).
 - Ensure the installed `torch` build matches the CUDA driver.
-- Target VRAM ≤6 GB: this constrains batch size and `max_length` in [FEATURE_SPLIT.md](FEATURE_SPLIT.md) and [TRAINING_INFO.md](TRAINING_INFO.md) (roadmap risk R1).
+- Target VRAM ≤3.5 GB: this constrains batch size and `max_length` in [FEATURE_SPLIT.md](FEATURE_SPLIT.md) and [TRAINING_INFO.md](TRAINING_INFO.md) (roadmap risk R1).
 - File and run naming follows [NAMING_CONVENTION.md](../rules/NAMING_CONVENTION.md).
 
 ## Links

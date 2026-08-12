@@ -1,0 +1,27 @@
+{
+  "dataset_name": "stanfordnlp/imdb",
+  "splits": {
+    "train": {
+      "total": 25000,
+      "negative": 12500,
+      "positive": 12500
+    },
+    "test": {
+      "total": 25000,
+      "negative": 12500,
+      "positive": 12500
+    }
+  },
+  "review_length_word_count_stats": {
+    "mean": 233.7872,
+    "median": 174.0,
+    "std": 173.72955740506563,
+    "pct_95": 598.0,
+    "max": 2470,
+    "min": 10
+  },
+  "plots": {
+    "label_distribution": "experiments/plots/imdb_label_distribution.png",
+    "review_length_distribution": "experiments/plots/imdb_review_length_distribution.png"
+  }
+}

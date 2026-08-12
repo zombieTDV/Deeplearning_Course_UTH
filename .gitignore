@@ -9,9 +9,12 @@ build/
 .kilo
 
 # Data — raw/processed/external data stays local
-/data/raw/
-/data/processed/
-/data/external/
+/data/raw/*
+!/data/raw/.gitkeep
+/data/processed/*
+!/data/processed/.gitkeep
+/data/external/*
+!/data/external/.gitkeep
 /data/*.tar.gz
 /data/*.zip
 /data/*.pt
@@ -20,7 +23,8 @@ build/
 # Experiment outputs (track plots, results & scripts; ignore heavy weights & DBs)
 /experiments/checkpoints/*.pt
 !/experiments/checkpoints/.gitkeep
-/experiments/runs/
+/experiments/runs/*
+!/experiments/runs/.gitkeep
 # Regenerable binary arrays (feature/probability caches) — scripts rebuild them
 /experiments/results/**/*.npz
 # Regenerable model weights (meta-model state dicts) — scripts rebuild them
