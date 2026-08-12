@@ -49,11 +49,33 @@ def prepare_imdb(
     import json
 
     processed = Path(processed_dir)
-    # Canonical cache: <processed>/dataset (DatasetDict) or flat per-split dirs.
     flat_ready = all((processed / s).is_dir() for s in ("train", "val", "test"))
-    ds_cache_ready = (processed / "dataset").is_dir()
 
+    ds_cache_ready = (processed / "dataset").is_dir()
+    meta_path = processed / "meta.json"
+
+    cache_valid = False
     if (flat_ready or ds_cache_ready) and not force:
+        if meta_path.exists():
+            with open(meta_path, encoding="utf-8") as f:
+                cached_meta = json.load(f)
+            if (
+                cached_meta.get("dataset_id") == dataset_id
+                and cached_meta.get("model_name") == model_name
+                and cached_meta.get("max_length") == max_length
+                and cached_meta.get("val_size") == val_size
+                and cached_meta.get("seed") == seed
+            ):
+                cache_valid = True
+            else:
+                print(
+                    f"Cache invalidated for {processed}: config mismatch "
+                    f"(requested max_length={max_length}, model_name={model_name}). Re-tokenizing..."
+                )
+        else:
+            cache_valid = True
+
+    if cache_valid and not force:
         tokenizer = AutoTokenizer.from_pretrained(model_name)
         if ds_cache_ready:
             ds = DatasetDict.load_from_disk(str(processed / "dataset"))
@@ -66,11 +88,12 @@ def prepare_imdb(
             )
         ds.set_format("torch", columns=["input_ids", "attention_mask", "label"])
         meta: dict[str, Any] = {"splits": {k: len(v) for k, v in ds.items()}}
-        if (processed / "meta.json").exists():
-            with open(processed / "meta.json", encoding="utf-8") as f:
+        if meta_path.exists():
+            with open(meta_path, encoding="utf-8") as f:
                 meta = json.load(f)
         print(f"Loaded cached tokenized datasets from {processed}")
         return ds, tokenizer, meta
+
 
     tokenizer = AutoTokenizer.from_pretrained(model_name)
 

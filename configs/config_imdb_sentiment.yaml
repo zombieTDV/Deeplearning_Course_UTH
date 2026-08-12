@@ -32,5 +32,5 @@ training:
   eval_strategy: "steps"   # Frequent step-wise validation
   eval_steps: 300          # Evaluate every 300 steps (~4 evaluations per epoch)
   logging_steps: 50
-  save_total_limit: 2
   vram_budget_gb: 3.5      # strict ceiling 4 GB across team machines
+

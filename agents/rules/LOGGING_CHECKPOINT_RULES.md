@@ -134,10 +134,11 @@ Interruption safety: `_last.pt` is written **after every epoch**, so at most one
 ## 7. Log Levels & Real-Time Monitoring
 
 - Every run writes to: console (live progress line: epoch, batch, loss, acc, lr, ETA), `<run_name>.log`, and `metrics/`.
-- Real-time monitoring options:
-  - **Lightweight (always on, zero dependencies)**: `RunLogger.progress()` single-line updates + `epoch_summary()` per epoch.
-  - **TensorBoard (optional)**: an opt-in `--tb` flag enables `SummaryWriter` per run (`runs/<ts>_<run>/tensorboard`); view with `tensorboard --logdir experiments/runs`.
+- Real-time experiment tracking:
+  - **TensorBoard (official tracking tool)**: TensorBoard (`torch.utils.tensorboard.SummaryWriter` / HF `report_to=["tensorboard"]`) is the canonical experiment tracking framework for all training loops and finetuning scripts (`experiments/runs/<ts>_<run>/tensorboard`). Enabled via `--tb` flag; view with `tensorboard --logdir experiments/runs`.
+  - **Lightweight console logger (always on, zero dependencies)**: `RunLogger.progress()` single-line updates + `epoch_summary()` per epoch.
 - Log lines are timestamped `[HH:MM:SS] [LEVEL] message`; levels: `INFO`, `TRAIN` (epoch summaries), `WARN`, `ERROR`.
+
 
 ## 8. Acceptance Checklist
 

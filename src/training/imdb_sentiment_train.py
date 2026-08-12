@@ -238,17 +238,24 @@ def _train(
         best_path, last_path = checkpoint_paths(run_dir, run_name)
         ckpt_path = best_path if force_resume else last_path
         ckpt = torch.load(ckpt_path, map_location="cpu", weights_only=True)
+        done_epochs = int(ckpt.get("epoch", 0))
+        remaining_epochs = max(0, t["epochs"] - done_epochs)
+        train_args.num_train_epochs = remaining_epochs
+
         trainer.model.load_state_dict(ckpt["model_state_dict"])
         trainer.create_optimizer_and_scheduler(num_training_steps=-1)
         trainer.optimizer.load_state_dict(ckpt["optimizer_state_dict"])
         if ckpt.get("scheduler_state_dict"):
             trainer.lr_scheduler.load_state_dict(ckpt["scheduler_state_dict"])
+
+        rng_info = ckpt.get("rng", {})
+        if "torch_seed" in rng_info:
+            set_seed(int(rng_info["torch_seed"]))
+
         callback.history = list(ckpt.get("history", []))
         callback.best = dict(ckpt.get("best_metrics", {})) or None
-        done_epochs = int(ckpt.get("epoch", 0))
-        remaining_epochs = max(0, t["epochs"] - done_epochs)
-        train_args.num_train_epochs = remaining_epochs
         logger.info(f"resumed from {ckpt_path} at epoch {done_epochs} (remaining {remaining_epochs})")
+
 
     trainer.train()
     # Ensure a final _last.pt reflects the last state / best metrics.
