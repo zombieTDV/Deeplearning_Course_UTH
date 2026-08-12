@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import nbformat as nbf
 
 nb = nbf.v4.new_notebook()
@@ -34,7 +36,8 @@ This notebook demonstrates and analyzes Exercise 1 of Practice 3:
 """)
 
 # Cell 2: Imports & Environment Setup
-imports_cell = nbf.v4.new_code_cell("""import json
+imports_cell = nbf.v4.new_code_cell("""import sys
+import json
 import time
 from pathlib import Path
 import numpy as np
@@ -43,6 +46,9 @@ from IPython.display import Image, display
 from transformers import AutoTokenizer, pipeline
 
 PROJECT_ROOT = Path("..").resolve()
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
 device_id = 0 if torch.cuda.is_available() else -1
 device_name = torch.cuda.get_device_name(0) if torch.cuda.is_available() else "CPU"
 
@@ -125,7 +131,7 @@ if not artifact_path.exists():
 else:
     with open(artifact_path, "r", encoding="utf-8") as f:
         data = json.load(f)
-    
+
     print("=" * 65)
     print(" PERSISTED 5W1H METADATA & BASELINE EVALUATION RESULTS")
     print("=" * 65)
@@ -136,7 +142,7 @@ else:
     print(f"Where: {meta['where']}")
     print(f"Why:   {meta['why']}")
     print(f"How:   {meta['how']}")
-    
+
     print("\\n--- Metric Summary ---")
     eval_m = data["evaluation"]
     print(f"Evaluated Test Samples:  {eval_m['num_test_samples']:,}")
@@ -156,7 +162,7 @@ if roc_plot_path.exists():
 
 nb.cells = [header_cell, imports_cell, eda_cell, tok_cell, pipe_cell, artifact_cell]
 
-output_path = "/home/bush/Desktop/Deeplearning_Course_UTH/notebooks/01_ex1_sentiment_baseline.ipynb"
+output_path = Path(__file__).resolve().parent.parent / "notebooks" / "01_ex1_sentiment_baseline.ipynb"
 with open(output_path, "w", encoding="utf-8") as f:
     nbf.write(nb, f)
 

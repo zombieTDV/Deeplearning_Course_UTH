@@ -7,9 +7,9 @@
 - **Title:** Evaluation & Validation
 - **Execution order:** 7 of 8
 - **Date created:** 2026-08-11
-- **Last updated:** 2026-08-11
+- **Last updated:** 2026-08-12
 - **Description:** Evaluate the finetuned model exactly once on the held-out IMDB test set (accuracy, confusion matrix, per-class precision/recall/F1) and run optional single-variable experiments with 5W1H reporting.
-- **Status:** To Do
+- **Status:** Done
 
 ## Background
 

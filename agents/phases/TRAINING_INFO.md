@@ -7,9 +7,9 @@
 - **Title:** Finetuning with the HF Trainer (Exercise 2)
 - **Execution order:** 6 of 8
 - **Date created:** 2026-08-11
-- **Last updated:** 2026-08-11
+- **Last updated:** 2026-08-12
 - **Description:** Implement the script-only finetuning CLI using the HF `Trainer` with full-state checkpoints, resume support, and logging per repo rules; smoke-test, then run the full finetune on GPU.
-- **Status:** To Do
+- **Status:** Done
 
 ## Background
 

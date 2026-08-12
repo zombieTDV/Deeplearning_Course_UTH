@@ -439,3 +439,24 @@ Done (PR #13 + post-PR fixes):
 
 **Merge status:** PR #13 merged into `LAB3_HuggingFace` as `3f982ee`
 (2026-08-12); Phases 1, 2, and 4 accepted as done (roadmap statuses updated).
+
+---
+
+## Appendix — Phase 3, 5–8 Remediation & Completion Audit (2026-08-12)
+
+Step-10 audit gate executed for Phase 3 (FEATURE_SPLIT), Phase 5 (MODEL), Phase 6 (TRAINING_INFO), Phase 7 (EVAL), and Phase 8 (REPORT) after addressing blocking bugs B1 and B2:
+
+| Check | Result | Evidence |
+|---|---|---|
+| B1 CI tracking | Pass | `experiments/runs/.gitkeep` restored; `test_smoke.py::test_core_directories_exist` passes |
+| B2 Dependency declaration | Pass | `accelerate>=1.1.0` declared in `requirements.txt` & pinned (`accelerate==1.14.0`) in `requirements.lock`; `--smoke` training run passes |
+| Results indexing | Pass | `imdb_sentiment_eval.json` fully indexed in `experiments/results/README.md` with 5W1H metrics |
+| Config cleanup | Pass | Unused `save_total_limit: 2` removed from `configs/config_imdb_sentiment.yaml` |
+| Resume & RNG safety | Pass | Trainer resume restores RNG seed and adjusts `num_train_epochs` prior to optimizer/scheduler creation |
+| Cache staleness guard | Pass | `prepare_imdb` validates cache metadata (`max_length`, `model_name`, etc.) before reusing disk cache |
+| Gitignore consistency | Pass | `.gitignore` rules maintained; `experiments/runs/.gitkeep` explicitly tracked |
+
+| Smoke test suite | Pass | `pytest` → 3 passed out of 3 |
+
+**Verdict: Phases 3, 5, 6, 7, and 8 pass the Step-10 completion audit.**
+

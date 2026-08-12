@@ -24,6 +24,8 @@ docs.
 | `BUG-02` | [Ruff Linter Import & Type Hinting Violations](BUG_02_RUFF_LINT_ERRORS_FIX.md) | `src/data/eda_imdb.py`, `src/experiments/...` | Medium | Resolved ✅ |
 | `BUG-03` | [PyTest Import & Missing `data/raw` Directory on CI](BUG_03_PYTEST_IMPORT_AND_DATA_RAW_DIR_MISSING.md) | `pytest.ini`, `.gitignore` | High | Resolved ✅ |
 | `BUG-04` | [Missing `experiments/runs` Directory on CI Runner](BUG_04_EXPERIMENTS_RUNS_DIR_MISSING_ON_CI.md) | `.gitignore` | High | Resolved ✅ |
+| `BUG-05` | [Missing `accelerate` Dependency in Clean Environment Training Pipeline](BUG_05_ACCELERATE_MISSING_IN_REQUIREMENTS.md) | `requirements.txt`, `requirements.lock` | High | Resolved ✅ |
+
 
 ---
 

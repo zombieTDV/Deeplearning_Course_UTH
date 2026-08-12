@@ -30,3 +30,4 @@ Add one row per experiment document, created from
 | ID | Title & Summary | Status | Link |
 |:--:|:---|:---:|:---|
 | `EXP-EX1-BASELINE` | Exercise 1 zero-shot sentiment pipeline & IMDB baseline floor | Done | [EX1_SENTIMENT_BASELINE.md](EX1_SENTIMENT_BASELINE.md) |
+| `EXP-EX2-FINETUNE` | Exercise 2 — HF `Trainer` finetune of `distilbert-base-uncased` on IMDB | To Do | [EX2_IMDB_FINETUNE.md](EX2_IMDB_FINETUNE.md) |
