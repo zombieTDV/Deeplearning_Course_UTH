@@ -4,11 +4,9 @@ pandas
 numpy
 matplotlib
 tensorboard
-# PyTorch with CUDA: install these two via the cu130 index
-#   pip install torch==2.13.0+cu130 torchvision==0.28.0+cu130 --index-url https://download.pytorch.org/whl/cu130
-# (plain `pip install torch` resolves to the CPU wheel and must be avoided on GPU machines)
-torch==2.13.0+cu130
-torchvision==0.28.0+cu130
+# PyTorch & Torchvision (Standard PyPI wheel compatibility)
+torch
+torchvision
 pillow
 pyyaml
 optuna
@@ -16,6 +14,6 @@ scikit-learn
 pytest
 
 # Hugging Face stack (Practice 3 — roadmap T1)
-transformers==5.15.0
-datasets==5.0.1
-evaluate==0.4.6
+transformers
+datasets
+evaluate

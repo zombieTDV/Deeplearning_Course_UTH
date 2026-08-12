@@ -20,7 +20,7 @@ docs.
 
 | Bug ID | Title & Summary | Component / Module | Severity | Status |
 | :---: | :--- | :--- | :---: | :---: |
-| `BUG-01` | <One-sentence title + link> | `src/...` | High | Resolved ✅ |
+| `BUG-01` | [PyTorch CUDA Version Pin Failure on GitHub Actions CI/CD](BUG_01_CICD_TORCH_CUDA_REQUIREMENTS_FAIL.md) | `requirements.txt` | High | Resolved ✅ |
 
 ---
 
