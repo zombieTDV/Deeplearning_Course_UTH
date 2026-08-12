@@ -2,38 +2,38 @@
   "metadata_5w1h": {
     "what": "Finetuned DistilBERT test-set evaluation (accuracy, ROC-AUC, confusion matrix, per-class P/R/F1)",
     "why": "Generalization benchmark on sealed IMDB test split vs Exercise 1 zero-shot floor",
-    "when": "2026-08-12T18:23:28.181868",
+    "when": "2026-08-12T22:41:30.655188",
     "where": "experiments/results/imdb_sentiment_eval.json | executed on cuda",
     "who": "bush-le + AI agent \u2014 coursework submission",
     "how": "single held-out evaluation pass, softmax probability output, no TTA"
   },
   "result": {
-    "checkpoint": "experiments/runs/20260812_175932_distilbert-finetune/checkpoints/distilbert-finetune_best.pt",
+    "checkpoint": "experiments/runs/20260812_222629_distilbert-finetune/checkpoints/distilbert-finetune_best.pt",
     "model": "distilbert-base-uncased",
     "num_test_samples": 25000,
-    "accuracy": 0.91188,
-    "roc_auc": 0.9699081759999999,
+    "accuracy": 0.90704,
+    "roc_auc": 0.9653027712000001,
     "confusion_matrix": {
-      "neg_neg": 11417,
-      "neg_pos": 1083,
-      "pos_neg": 1120,
-      "pos_pos": 11380
+      "neg_neg": 10921,
+      "neg_pos": 1579,
+      "pos_neg": 745,
+      "pos_pos": 11755
     },
     "per_class": {
       "neg": {
-        "precision": 0.9106644332774986,
-        "recall": 0.91336,
-        "f1": 0.9120102248671965,
+        "precision": 0.9361392079547403,
+        "recall": 0.87368,
+        "f1": 0.9038318298435819,
         "support": 12500
       },
       "pos": {
-        "precision": 0.9131027842413544,
-        "recall": 0.9104,
-        "f1": 0.9117493890958619,
+        "precision": 0.8815809209539524,
+        "recall": 0.9404,
+        "f1": 0.9100410311991949,
         "support": 12500
       }
     },
-    "f1_macro": 0.9118798069815293,
+    "f1_macro": 0.9069364305213884,
     "vram": {
       "peak_allocated_mb": 264.62,
       "peak_reserved_mb": 628.0,

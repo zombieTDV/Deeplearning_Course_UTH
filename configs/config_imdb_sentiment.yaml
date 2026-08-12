@@ -26,11 +26,16 @@ training:
   batch_size: 8            # small batch + gradient accumulation
   gradient_accumulation_steps: 2
   lr: 1.5e-5               # Reduced learning rate to stabilize loss and prevent overfitting
-  weight_decay: 0.05       # 5x stronger weight decay regularization
+  weight_decay: 0.10       # L2 weight decay regularization (EXP-03 / EXP-04)
+  classifier_dropout: 0.30 # Dropout on sequence classification head (EXP-04)
+  label_smoothing_factor: 0.10 # Soft label distribution to prevent overconfidence
+  early_stopping_patience: 3 # Halt training when validation loss stops improving (EXP-01)
+  lr_scheduler_type: "cosine" # Cosine learning rate decay scheduler (EXP-02)
   warmup_ratio: 0.1
   fp16: true               # mixed precision keeps VRAM ≤3.5 GB
   eval_strategy: "steps"   # Frequent step-wise validation
   eval_steps: 300          # Evaluate every 300 steps (~4 evaluations per epoch)
   logging_steps: 50
   vram_budget_gb: 3.5      # strict ceiling 4 GB across team machines
+
 
