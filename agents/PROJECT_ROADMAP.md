@@ -110,8 +110,8 @@ marked **N/A** with a documented rationale instead of being silently skipped.
 
 | Milestone | Target date | Deliverable / definition of done | Status | Owner |
 |---|---|---|---|---|
-| M1 — Environment & framing | 2026-08-13 | HF stack installed & GPU verified (≤3.5 GB target); [SETUP.md](phases/SETUP.md) written; problem framing locked | `[ ]` | Learner + AI agent |
-| M2 — Ex 1 baseline | 2026-08-17 | Zero-shot sentiment pipeline runs on sample English sentences; baseline + majority-class metrics recorded (reference floor) | `[ ]` | AI agent |
+| M1 — Environment & framing | 2026-08-13 | HF stack installed & GPU verified (≤3.5 GB target); [SETUP.md](phases/SETUP.md) written; problem framing locked | `[X]` | Learner + AI agent |
+| M2 — Ex 1 baseline | 2026-08-17 | Zero-shot sentiment pipeline runs on sample English sentences; baseline + majority-class metrics recorded (reference floor) | `[X]` | AI agent |
 | M3 — Data pipeline ready | 2026-08-21 | IMDB loaded, tokenized, split (train/val/test) verified; [FEATURE_SPLIT.md](phases/FEATURE_SPLIT.md) documents leakage rules | `[ ]` | AI agent |
 | M4 — Finetuned model | 2026-08-28 | Full finetune run complete; `experiments/runs/<ts>_<run>/` contains checkpoints (`<run>_best.pt`, `<run>_last.pt`), logs, config, history JSONL | `[ ]` | Learner (launch) |
 | M5 — Evaluation done | 2026-09-01 | Accuracy + confusion matrix + per-class P/R/F1 reported with full 5W1H; [EVAL.md](phases/EVAL.md) written | `[ ]` | AI agent |
@@ -126,10 +126,10 @@ marked **N/A** with a documented rationale instead of being silently skipped.
 
 | Phase | Description | Pipeline § | Input (from) | Output (feeds) | Phase doc | Status |
 |---|---|---|---|---|---|---|
-| Phase 1 — Setup & Problem Framing | Install HF stack, verify GPU/VRAM, lock paradigm (supervised binary sentiment classification) | Steps 1–2 | `requirements.txt`, GPU | Verified environment; [SETUP.md](phases/SETUP.md) | [SETUP.md](phases/SETUP.md) | `[ ]` |
-| Phase 2 — Data Survey & Cleaning | EDA on IMDB (label balance, review lengths, samples); confirm cleaning & imbalance stages are N/A | §3–§5, §8 | IMDB via `datasets` | EDA stats + N/A rationale in [DATA_PREP.md](phases/DATA_PREP.md) | [DATA_PREP.md](phases/DATA_PREP.md) | `[ ]` |
+| Phase 1 — Setup & Problem Framing | Install HF stack, verify GPU/VRAM, lock paradigm (supervised binary sentiment classification) | Steps 1–2 | `requirements.txt`, GPU | Verified environment; [SETUP.md](phases/SETUP.md) | [SETUP.md](phases/SETUP.md) | `[X]` |
+| Phase 2 — Data Survey & Cleaning | EDA on IMDB (label balance, review lengths, samples); confirm cleaning & imbalance stages are N/A | §3–§5, §8 | IMDB via `datasets` | EDA stats + N/A rationale in [DATA_PREP.md](phases/DATA_PREP.md) | [DATA_PREP.md](phases/DATA_PREP.md) | `[X]` |
 | Phase 3 — Feature Engineering & Split | Tokenization (FE for DL); IMDB train/test + validation carve; leakage golden rules | §6–§7, §9–§10 | IMDB dataset | Tokenized, split datasets; preprocessing verified | [FEATURE_SPLIT.md](phases/FEATURE_SPLIT.md) | `[ ]` |
-| Phase 4 — Baseline Model | Ex 1 zero-shot pipeline on sample sentences + majority-class floor; record baseline metrics | §11 | Phase 1 env | Baseline metrics (reference floor for deltas) | [BASELINE.md](phases/BASELINE.md) | `[ ]` |
+| Phase 4 — Baseline Model | Ex 1 zero-shot pipeline on sample sentences + majority-class floor; record baseline metrics | §11 | Phase 1 env | Baseline metrics (reference floor for deltas) | [BASELINE.md](phases/BASELINE.md) | `[X]` |
 | Phase 5 — Model Selection & Config | Justify `distilbert-base-uncased`; define training args with bias-variance reasoning | §12–§15 | Phase 2–3 data outputs | [MODEL.md](phases/MODEL.md); `configs/config_imdb_sentiment.yaml` | [MODEL.md](phases/MODEL.md) | `[ ]` |
 | Phase 6 — Train Model | Finetune via HF `Trainer` in a script-only CLI with full-state checkpoints, resume, logging | §15 | Phase 5 config | Run artifacts in `experiments/runs/<ts>_<run>/` | [TRAINING_INFO.md](phases/TRAINING_INFO.md) | `[ ]` |
 | Phase 7 — Evaluation & Validation | One held-out test evaluation: accuracy, confusion matrix, per-class P/R/F1; single-variable experiments; CV N/A | §16–§18 | Phase 6 checkpoints | Metrics with 5W1H; experiment deltas | [EVAL.md](phases/EVAL.md) | `[ ]` |
@@ -144,13 +144,13 @@ marked **N/A** with a documented rationale instead of being silently skipped.
 
 | Task ID | Phase | Description (what + acceptance) | Owner / role | Effort | Dependencies | Priority | Status |
 |---|---|---|---|---|---|---|---|
-| `T1` | Phase 1 | Install HF stack (`transformers`, `datasets`, `evaluate`) into `.venv`; pin versions in `requirements.txt`; verify imports + GPU/VRAM check (≤3.5 GB target, 4 GB ceiling). **Accept:** imports pass, VRAM reported | Learner | `0.5d` | `—` | `P0` | `[ ]` |
-| `T2` | Phase 1 | Lock problem framing (supervised binary sentiment classification; Ex 1 baseline vs Ex 2 finetune per [PURPOSE.md](PURPOSE.md)) and write [SETUP.md](phases/SETUP.md). **Accept:** reviewed and approved | AI agent (draft) + Learner (review) | `0.5d` | `T1` | `P0` | `[ ]` |
-| `T3` | Phase 2 | EDA on IMDB via `datasets`: label balance, review-length stats, sample inspection; record in [DATA_PREP.md](phases/DATA_PREP.md) (pipeline §3). **Accept:** EDA numbers recorded | AI agent | `0.5d` | `T2` | `P1` | `[ ]` |
-| `T4` | Phase 2 | Confirm cleaning & imbalance stages: IMDB pre-cleaned (missing values/outliers **N/A**) and balanced 50/50 — verify + document rationale (§4–§5, §8). **Accept:** N/A rationale documented | AI agent | `0.5d` | `T3` | `P2` | `[ ]` |
+| `T1` | Phase 1 | Install HF stack (`transformers`, `datasets`, `evaluate`) into `.venv`; pin versions in `requirements.txt`; verify imports + GPU/VRAM check (≤3.5 GB target, 4 GB ceiling). **Accept:** imports pass, VRAM reported | Learner | `0.5d` | `—` | `P0` | `[X]` |
+| `T2` | Phase 1 | Lock problem framing (supervised binary sentiment classification; Ex 1 baseline vs Ex 2 finetune per [PURPOSE.md](PURPOSE.md)) and write [SETUP.md](phases/SETUP.md). **Accept:** reviewed and approved | AI agent (draft) + Learner (review) | `0.5d` | `T1` | `P0` | `[X]` |
+| `T3` | Phase 2 | EDA on IMDB via `datasets`: label balance, review-length stats, sample inspection; record in [DATA_PREP.md](phases/DATA_PREP.md) (pipeline §3). **Accept:** EDA numbers recorded | AI agent | `0.5d` | `T2` | `P1` | `[X]` |
+| `T4` | Phase 2 | Confirm cleaning & imbalance stages: IMDB pre-cleaned (missing values/outliers **N/A**) and balanced 50/50 — verify + document rationale (§4–§5, §8). **Accept:** N/A rationale documented | AI agent | `0.5d` | `T3` | `P2` | `[X]` |
 | `T5` | Phase 3 | Tokenization pipeline: load `distilbert-base-uncased` tokenizer, map IMDB with padding/truncation (`max_length`); document as DL-equivalent feature engineering (§6–§7, §9). **Accept:** `Dataset.map` runs on train + test | AI agent | `1d` | `T4` | `P0` | `[ ]` |
 | `T6` | Phase 3 | Split handling: use IMDB built-in train/test; carve validation split for the `Trainer`; document leakage golden rules (tokenizer is static; test evaluated once, §10). **Accept:** splits verified, no test statistics in preprocessing | AI agent | `0.5d` | `T5` | `P0` | `[ ]` |
-| `T7` | Phase 4 | Ex 1 zero-shot baseline: script [baseline_imdb_sentiment.py](../src/experiments/baseline_imdb_sentiment.py) runs HF sentiment pipeline on sample sentences + majority-class baseline on IMDB test; record metrics as reference floor (§11). **Accept:** baseline metrics recorded with 5W1H | AI agent | `0.5d` | `T2` | `P0` | `[ ]` |
+| `T7` | Phase 4 | Ex 1 zero-shot baseline: script [baseline_imdb_sentiment.py](../src/experiments/baseline_imdb_sentiment.py) runs HF sentiment pipeline on sample sentences + majority-class baseline on IMDB test; record metrics as reference floor (§11). **Accept:** baseline metrics recorded with 5W1H | AI agent | `0.5d` | `T2` | `P0` | `[X]` |
 | `T8` | Phase 5 | Model selection rationale in [MODEL.md](phases/MODEL.md): `distilbert-base-uncased` justified against alternatives on compute/VRAM/accuracy (No Free Lunch, §12). **Accept:** rationale documented | AI agent | `0.5d` | `T3`, `T6` | `P1` | `[ ]` |
 | `T9` | Phase 5 | Define training args (learning rate, epochs, batch size, weight decay, `max_length`) with bias-variance reasoning; write `configs/config_imdb_sentiment.yaml` (§13–§15). **Accept:** every hyperparameter logged with each run | AI agent + Learner | `0.5d` | `T8` | `P0` | `[ ]` |
 | `T10` | Phase 6 | Finetuning CLI [imdb_sentiment_train.py](../src/training/imdb_sentiment_train.py): HF `Trainer`, full-state checkpoints (`<run>_best.pt`, `<run>_last.pt`), `--epochs/--seed/--resume/--force-resume/--tb/--smoke` per [LOGGING_CHECKPOINT_RULES.md](rules/LOGGING_CHECKPOINT_RULES.md). **Accept:** resume + auto-persistence implemented | AI agent | `2d` | `T6`, `T9` | `P0` | `[ ]` |
@@ -276,9 +276,10 @@ M6 (deliverables)                               ◆
 
 ## 10. Maintenance & Status
 
-- **Last updated:** 2026-08-11
+- **Last updated:** 2026-08-12
 - **Update cadence:** per milestone (per [HOW_TO_SETUP_AI_AGENT.md](HOW_TO_SETUP_AI_AGENT.md) Step 8–10)
 - **Who updates it:** Learner, with AI agent drafting updates
+- **Progress note:** Phases 1, 2, and 4 completed via PR #13 (merge `3f982ee`, 2026-08-12); next unstarted phase: Phase 3 — Feature Engineering & Split (T5–T6).
 
 > **How to keep it alive:** at each review, (1) tick off completed
 > milestones/tasks, (2) move new work into §5 with an ID, (3) re-check §6

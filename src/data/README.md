@@ -8,15 +8,18 @@ What belongs here:
 - `dataset.py` / `statistics.py` / `inspection.py` — dataset wrappers,
   statistics, and validation helpers.
 - `config.py` — configuration loader (reads `configs/config.yaml`).
+- `eda_imdb.py` — IMDB EDA: label balance, review-length stats, plots, and
+  statistics JSON (**implemented**, Phase 2 — Done).
 
-Data is stored once under `data/raw/` (single source of truth) — no
+Data is stored once under `data/raw/` (single source of truth), or in the
+Hugging Face cache for `datasets`-loaded data (e.g. `stanfordnlp/imdb`) — no
 re-download and no duplicate copies.
 
 ## Usage pattern
 
 ```python
 from src.data.dataloader import get_loaders
-train_loader, val_loader, test_loader = get_loaders(batch_size=64)
+train_loader, val_loader, test_loader = get_loaders(batch_size=16)
 ```
 
 ## Performance notes
@@ -30,8 +33,8 @@ train_loader, val_loader, test_loader = get_loaders(batch_size=64)
 
 See [agents/phases/DATA_PREP.md](../../agents/phases/DATA_PREP.md).
 
-> **Status:** all modules above are **planned** (roadmap Phases 2–3 —
-> [DATA_PREP.md](../../agents/phases/DATA_PREP.md),
-> [FEATURE_SPLIT.md](../../agents/phases/FEATURE_SPLIT.md)); none are
-> implemented yet. Audit finding `ARC-1` (see
-> [agents/CODEBASE_AUDIT_REPORT.md](../../agents/CODEBASE_AUDIT_REPORT.md)).
+> **Status:** `eda_imdb.py` is **implemented** (Phase 2 — Done, see
+> [DATA_PREP.md](../../agents/phases/DATA_PREP.md)). `transforms.py`,
+> `dataloader.py`, `dataset.py`, `statistics.py`, `inspection.py`, and
+> `config.py` are still **planned** (roadmap Phases 3+; audit finding `ARC-1`,
+> see [agents/CODEBASE_AUDIT_REPORT.md](../../agents/CODEBASE_AUDIT_REPORT.md)).

@@ -9,7 +9,7 @@
 - **Date created:** 2026-08-11
 - **Last updated:** 2026-08-11
 - **Description:** Install the Hugging Face stack (`transformers`, `datasets`, `evaluate`), verify GPU/VRAM limits, and lock the problem framing for Practice 3.
-- **Status:** To Do
+- **Status:** Done
 
 ## Background
 

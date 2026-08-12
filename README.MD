@@ -68,9 +68,11 @@ Key properties of the architecture:
 - **Script-only training** — every training loop lives in
   `src/training/*.py` / `src/experiments/*_train.py`; notebooks only load
   artifacts and analyze.
-- **Implementation status** — all `src/` modules are **planned** (they land
-  in roadmap Phases 3–7); the scaffold is governance-ready. See
-  [agents/CODEBASE_AUDIT_REPORT.md](agents/CODEBASE_AUDIT_REPORT.md) `ARC-1`.
+- **Implementation status** — `src/data/eda_imdb.py` and
+  `src/experiments/baseline_imdb_sentiment.py` are **implemented** (Exercise 1;
+  roadmap Phases 1, 2, 4 done); training/eval/model modules remain **planned**
+  (Phases 3, 5–7). See
+  [agents/CODEBASE_AUDIT_REPORT.md](agents/CODEBASE_AUDIT_REPORT.md).
 - **Full logging & resumability** — every run persists model + optimizer +
   scheduler + RNG state + history + config (see
   [agents/rules/LOGGING_CHECKPOINT_RULES.md](agents/rules/LOGGING_CHECKPOINT_RULES.md)).

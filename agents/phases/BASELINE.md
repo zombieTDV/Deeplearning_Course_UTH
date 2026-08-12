@@ -51,6 +51,16 @@ python -m src.experiments.baseline_imdb_sentiment --samples "I loved this film."
 - Record model id, checkpoint/date, seed, and split for every reported number (5W1H; §11.4).
 - The zero-shot vs finetuned accuracy delta is the headline of the final report (T18).
 
+## Results & evidence
+
+- Zero-shot accuracy **89.07%** vs majority-class floor **50.00%** on the IMDB
+  test split (25,000 samples); ROC-AUC **0.9587**; seed 42, GPU.
+- Artifacts:
+  [baseline_imdb_sentiment.json](../../experiments/results/baseline_imdb_sentiment.json),
+  [ROC curve plot](../../experiments/plots/baseline_zero_shot_roc_curve.png),
+  TensorBoard scalars in `experiments/runs/baseline_zero_shot/tensorboard/`.
+- Full 5W1H: [experiments/results/README.md](../../experiments/results/README.md).
+
 ## Links
 
 - Roadmap: [PROJECT_ROADMAP.md](../PROJECT_ROADMAP.md) (§4 Phase 4, §5 T7)

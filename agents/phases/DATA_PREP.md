@@ -52,6 +52,15 @@ load_dataset("imdb") → pandas/numpy stats (counts, label balance, length stats
 - Download is network-dependent (~80 MB): use the HF cache and set `HF_ENDPOINT` if blocked (roadmap risk R2).
 - EDA feeds model selection (T8) and preprocessing decisions (T5–T6).
 
+## Results & evidence
+
+- IMDB: 25,000 train / 25,000 test reviews, balanced 50/50 by construction
+  (verified); cleaning (§4–§5) and class-imbalance (§8) treatment confirmed N/A.
+- Artifacts:
+  [imdb_dataset_eda.json](../../experiments/results/imdb_dataset_eda.json),
+  [label distribution](../../experiments/plots/imdb_label_distribution.png),
+  [review-length distribution](../../experiments/plots/imdb_review_length_distribution.png).
+
 ## Links
 
 - Roadmap: [PROJECT_ROADMAP.md](../PROJECT_ROADMAP.md) (§4 Phase 2, §5 T3–T4)

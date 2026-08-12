@@ -8,12 +8,13 @@
 - **Date created:** 2026-08-11
 - **Last updated:** 2026-08-11
 - **Description:** Tracks environment provisioning and problem framing for Practice 3.
-- **Status:** In Progress
+- **Status:** Done
 - **Phase doc:** [../phases/SETUP.md](../phases/SETUP.md)
 
 ## Log
 
 - 2026-08-11: status doc created; environment provisioning started (codebase audit P0.1 — HF stack + pytest into `.venv`)
+- 2026-08-12: `.venv` provisioned and verified — torch 2.13.0+cu130 (`cuda: True`), transformers 5.15.0, datasets 5.0.1, evaluate 0.4.6, pytest 9.1.1; problem framing locked ([PURPOSE.md §3](../PURPOSE.md#3-locked-objective))
 
 ## Blockers (if any)
 
@@ -25,7 +26,7 @@
 
 ## Next step
 
-- Complete T1: verify HF imports + GPU/VRAM check in `.venv`; then T2 framing review.
+- Proceed to Phase 3 (FEATURE_SPLIT): tokenization + train/val/test split (T5–T6).
 
 ## Links
 

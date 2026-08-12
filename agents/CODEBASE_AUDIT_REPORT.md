@@ -432,6 +432,10 @@ Done (PR #13 + post-PR fixes):
 | 5W1H reporting | Pass | `metadata_5w1h` in `experiments/results/baseline_imdb_sentiment.json` |
 | Dependencies | Pass | pins restored (`torch==2.13.0+cu130` …); `requirements.lock` consistent; CI installs via the cu130 index |
 | Constraint consistency | Pass | ≤3.5 GB target propagated to PURPOSE, OVERVIEW, roadmap, phase docs, config |
+| CI (GitHub Actions) | Pass | `test` workflow on merged head `dbd0b6b`: conclusion `success` (ruff + pytest, 2026-08-12) |
 | Accepted deviations | Note | `scratch/build_notebook.py` (documented in [FOLDER_STRUCTURE.md](rules/FOLDER_STRUCTURE.md)); TensorBoard under `experiments/runs/baseline_zero_shot/` (experiment, not a training run); notebook may regenerate EDA artifacts when missing |
 
 **Verdict: Phase 2 (DATA_PREP) and Phase 4 (BASELINE) pass the completion audit.**
+
+**Merge status:** PR #13 merged into `LAB3_HuggingFace` as `3f982ee`
+(2026-08-12); Phases 1, 2, and 4 accepted as done (roadmap statuses updated).
