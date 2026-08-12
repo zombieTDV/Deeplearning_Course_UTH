@@ -35,10 +35,11 @@ from transformers import AutoModelForSequenceClassification
 
 from src.data.prepare_imdb import prepare_imdb
 from src.utils.checkpoint_utils import latest_run_dir, safe_load_checkpoint
-from src.utils.resource_monitor import ResourceMonitor
+from src.utils.resource_monitor import ResourceMonitor, cleanup_vram
 
 
 def _resolve_checkpoint(checkpoint: str | None, run_root: str) -> Path:
+
     if checkpoint:
         path = Path(checkpoint)
         if not path.exists():
@@ -84,8 +85,10 @@ def evaluate(
     batch_size: int = 32,
     max_samples: int | None = None,
 ) -> dict[str, Any]:
+    cleanup_vram()
     print(f"Loading checkpoint: {checkpoint_path}")
     ckpt = safe_load_checkpoint(checkpoint_path, device="cpu")
+
     run_cfg = ckpt.get("config", {})
     model_name = (run_cfg.get("model") or cfg.get("model"))["name"]
     max_length = (run_cfg.get("data") or cfg.get("dataset"))["max_length"]

@@ -31,14 +31,26 @@ def save_checkpoint(path: str | Path, state: dict[str, Any]) -> None:
 
 
 def latest_run_dir(run_root: str | Path, run_name: str) -> Path | None:
-    """Find the newest `experiments/runs/<ts>_<run_name>/` for a run name."""
+    """Find the registered or newest `experiments/runs/<ts>_<run_name>/` for a run name."""
     run_root = Path(run_root)
     if not run_root.is_dir():
         return None
+    registry_path = run_root / "registry.json"
+    if registry_path.exists():
+        try:
+            with open(registry_path, encoding="utf-8") as f:
+                registry = json.load(f)
+            if run_name in registry:
+                reg_path = Path(registry[run_name])
+                if reg_path.is_dir():
+                    return reg_path
+        except (json.JSONDecodeError, OSError):
+            pass
     matches = [p for p in run_root.glob(f"*_{run_name}") if p.is_dir()]
     if not matches:
         return None
     return sorted(matches, key=lambda p: p.name, reverse=True)[0]
+
 
 
 def next_run_dir(run_root: str | Path, run_name: str) -> Path:

@@ -42,7 +42,7 @@ from src.utils.checkpoint_utils import (
     save_checkpoint,
     update_registry,
 )
-from src.utils.resource_monitor import ResourceMonitor
+from src.utils.resource_monitor import ResourceMonitor, cleanup_vram
 from src.utils.run_logger import RunLogger
 
 
@@ -173,6 +173,9 @@ class FullStateCallback(TrainerCallback):
         save_checkpoint(last_path, _full_state(self.trainer, self.config, self.history, None))
         if self.best is not None:
             save_checkpoint(best_path, _full_state(self.trainer, self.config, self.history, self.best))
+        if self.trainer and self.trainer.model:
+            self.trainer.model.zero_grad(set_to_none=True)
+        cleanup_vram()
 
 
 def _train(
@@ -181,6 +184,7 @@ def _train(
     resume_from: str | None,
     force_resume: bool,
 ) -> dict[str, Any]:
+    cleanup_vram()
     t = config["training"]
     run_name = t["run_name"]
     run_dir = Path(resume_from) if resume_from else next_run_dir(t["run_root"], run_name)
@@ -192,14 +196,36 @@ def _train(
 
     set_seed(t["seed"])
     logger.info(f"starting training: {json.dumps(t, default=str)}")
-    ds, tokenizer = _prepare_datasets(config, smoke=args.smoke)
 
+    ds, tokenizer = _prepare_datasets(config, smoke=args.smoke)
     model = AutoModelForSequenceClassification.from_pretrained(
+
         config["model"]["name"],
         num_labels=config["model"]["num_labels"],
         id2label={int(k): v for k, v in config["model"]["id2label"].items()},
         label2id={k: int(v) for k, v in config["model"]["label2id"].items()},
     )
+
+    # Configure classifier dropout (CLI override or config default)
+    clf_dropout = args.classifier_dropout if args.classifier_dropout is not None else t.get("classifier_dropout", 0.30)
+    if clf_dropout is not None:
+        model.config.seq_classif_dropout = clf_dropout
+        model.config.dropout = clf_dropout
+        logger.info(f"Set classifier dropout: {clf_dropout}")
+
+    # Freeze bottom transformer layers if specified
+    if args.freeze_layers > 0:
+        for param in model.distilbert.embeddings.parameters():
+            param.requires_grad = False
+        for i in range(min(args.freeze_layers, len(model.distilbert.transformer.layer))):
+            for param in model.distilbert.transformer.layer[i].parameters():
+                param.requires_grad = False
+        trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
+        total = sum(p.numel() for p in model.parameters())
+        logger.info(f"Froze bottom {args.freeze_layers} layers: {trainable:,} / {total:,} trainable params")
+
+    scheduler_type = args.lr_scheduler_type if args.lr_scheduler_type != "linear" else t.get("lr_scheduler_type", "cosine")
+    label_smoothing = args.label_smoothing_factor if args.label_smoothing_factor is not None else t.get("label_smoothing_factor", 0.0)
 
     train_args = TrainingArguments(
         output_dir=str(run_dir),
@@ -211,10 +237,15 @@ def _train(
         learning_rate=t["lr"],
         weight_decay=t["weight_decay"],
         warmup_steps=_warmup_steps(config, ds),
+        lr_scheduler_type=scheduler_type,
+        label_smoothing_factor=label_smoothing,
+        max_grad_norm=args.max_grad_norm,
         fp16=t["fp16"],
         eval_strategy=t["eval_strategy"],
         eval_steps=t.get("eval_steps", 300),
         logging_steps=t["logging_steps"],
+        metric_for_best_model="loss",
+        greater_is_better=False,
         save_strategy="no",
         dataloader_num_workers=0,
         seed=t["seed"],
@@ -222,6 +253,15 @@ def _train(
     )
 
     callback = FullStateCallback(run_dir, run_name, config, logger)
+    callbacks: list[Any] = [callback]
+    patience = args.early_stopping_patience if args.early_stopping_patience > 0 else t.get("early_stopping_patience", 3)
+    if patience > 0:
+        from transformers import EarlyStoppingCallback
+
+        callbacks.append(EarlyStoppingCallback(early_stopping_patience=patience))
+        logger.info(f"Enabled EarlyStoppingCallback(patience={patience})")
+
+
     trainer = Trainer(
         model=model,
         args=train_args,
@@ -229,8 +269,10 @@ def _train(
         eval_dataset=ds["val"],
         processing_class=tokenizer,
         compute_metrics=_compute_metrics,
-        callbacks=[callback],
+        callbacks=callbacks,
     )
+
+
     callback.attach(trainer)
 
     remaining_epochs = t["epochs"]
@@ -286,6 +328,14 @@ def main() -> None:
     parser.add_argument("--config", default="configs/config_imdb_sentiment.yaml")
     parser.add_argument("--epochs", type=int, default=None, help="override config epochs")
     parser.add_argument("--seed", type=int, default=None, help="override config seed")
+    parser.add_argument("--run-name", default=None, help="override run_name in config")
+    parser.add_argument("--early-stopping-patience", type=int, default=0, help="patience for EarlyStoppingCallback")
+    parser.add_argument("--lr-scheduler-type", default="linear", help="learning rate scheduler type (linear, cosine, etc.)")
+    parser.add_argument("--weight-decay", type=float, default=None, help="override weight decay")
+    parser.add_argument("--classifier-dropout", type=float, default=None, help="override classifier dropout")
+    parser.add_argument("--label-smoothing-factor", type=float, default=None, help="label smoothing factor (e.g. 0.10)")
+    parser.add_argument("--max-grad-norm", type=float, default=1.0, help="maximum gradient norm for clipping")
+    parser.add_argument("--freeze-layers", type=int, default=0, help="number of bottom transformer layers to freeze")
     parser.add_argument("--resume", action="store_true", help="resume from the latest run's _last.pt")
     parser.add_argument("--force-resume", action="store_true", help="rewind from _best.pt")
     parser.add_argument("--tb", action="store_true", help="enable TensorBoard logging")
@@ -302,10 +352,15 @@ def main() -> None:
         "training": raw["training"],
     }
     t = config["training"]
+    if args.run_name is not None:
+        t["run_name"] = args.run_name
     if args.epochs is not None:
         t["epochs"] = args.epochs
     if args.seed is not None:
         t["seed"] = args.seed
+    if args.weight_decay is not None:
+        t["weight_decay"] = args.weight_decay
+
 
     resume_from = None
     force = False

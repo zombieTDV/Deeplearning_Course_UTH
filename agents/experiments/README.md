@@ -30,4 +30,10 @@ Add one row per experiment document, created from
 | ID | Title & Summary | Status | Link |
 |:--:|:---|:---:|:---|
 | `EXP-EX1-BASELINE` | Exercise 1 zero-shot sentiment pipeline & IMDB baseline floor | Done | [EX1_SENTIMENT_BASELINE.md](EX1_SENTIMENT_BASELINE.md) |
-| `EXP-EX2-FINETUNE` | Exercise 2 — HF `Trainer` finetune of `distilbert-base-uncased` on IMDB | To Do | [EX2_IMDB_FINETUNE.md](EX2_IMDB_FINETUNE.md) |
+| `EXP-EX2-FINETUNE` | Exercise 2 — HF `Trainer` finetune of `distilbert-base-uncased` on IMDB | Done | [EX2_IMDB_FINETUNE.md](EX2_IMDB_FINETUNE.md) |
+| `EXP-EX2-HYPERPARAMETER-SEARCH` | Systematic hyperparameter search & advanced anti-overfitting protocol | Done | [EX3_HYPERPARAMETER_SEARCH_ANTI_OVERFITTING.md](EX3_HYPERPARAMETER_SEARCH_ANTI_OVERFITTING.md) |
+| `EXP-EX2-ANTI-OVERFITTING-REPORT` | 5W1H Benchmark Report for EXP-01 through EXP-05 hyperparameter trials | Done | [EX3_ANTI_OVERFITTING_REPORT.md](EX3_ANTI_OVERFITTING_REPORT.md) |
+| `EXP-EX2-ADVANCED-SPEC` | Specification for 4 advanced anti-overfitting techniques (Label Smoothing, LLRD, SWA) | Planned | [EX4_ADVANCED_ANTI_OVERFITTING_PLAN.md](EX4_ADVANCED_ANTI_OVERFITTING_PLAN.md) |
+
+
+
