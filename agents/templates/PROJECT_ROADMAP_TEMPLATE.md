@@ -7,15 +7,17 @@
   section plus brief instructions on how to populate each one effectively.
 - **Overview Pipeline**: Copy the file → fill the Overview → keep the milestones, phases,
   tasks, dependencies, resources, and timeline updated as the project progresses.
-- **Detailed Plan**: (1) how to use; (2) project overview; (3) key milestones; (4) major
-  phases; (5) task breakdown; (6) task dependencies; (7) resource allocation;
-  (8) estimated timeline; (9) risks & mitigations; (10) maintenance.
+- **Detailed Plan**: (0) at-a-glance summary; (1) how to use; (2) project overview;
+  (3) key milestones; (4) major phases; (5) task breakdown; (6) task dependencies;
+  (7) resource allocation; (8) estimated timeline; (9) risks & mitigations;
+  (10) maintenance.
 - **References**: Markdown (GitHub-flavoured tables/checklists).
 
 ---
 
 ## Table of Contents
 
+- [At a Glance](#at-a-glance)
 1. [How to Use This Template](#1-how-to-use-this-template)
 2. [Project Overview](#2-project-overview)
 3. [Key Milestones](#3-key-milestones)
@@ -26,6 +28,33 @@
 8. [Estimated Timeline](#8-estimated-timeline)
 9. [Risks & Mitigations](#9-risks--mitigations)
 10. [Maintenance & Status](#10-maintenance--status)
+
+---
+
+## At a Glance
+
+> **How to populate:** the "elevator view" — a reader should grasp the whole
+> project flow in under 30 seconds without reading the detailed sections. Keep
+> one line per phase, reuse the phase names and order from
+> [§4 Major Phases](#4-major-phases), and mark each with the
+> [§1](#1-how-to-use-this-template) status legend. Update the progress bar and
+> count whenever you tick a phase in §4.
+
+**Progress: `<N> / <M>` phases complete** — `<one-line summary of what is delivered so far>`.
+
+```
+██████░░░░░░░░░░   <N/M> (<pct>%)     █ = done, ░ = remaining
+```
+
+1. **`<Phase 1 name>`** — `<short description>` — `[X]` — [<PHASE>.md](#)
+2. **`<Phase 2 name>`** — `<short description>` — `[ ]` — [<PHASE>.md](#)
+3. **`<Phase 3 name>`** — `<short description>` — `[ ]` — [<PHASE>.md](#)
+...
+
+> Status legend: `[X]` done · `[ ]` not started · `[~]` in progress · `[!]` blocked
+> (see [§1 How to Use This Template](#1-how-to-use-this-template)).
+
+**Next:** `<the next unstarted phase or task>`.
 
 ---
 
