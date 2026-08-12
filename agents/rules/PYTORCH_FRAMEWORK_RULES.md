@@ -43,7 +43,12 @@
      checkpoint = torch.load(ckpt_path, map_location=device, weights_only=True)
      ```
 
-5. **Hugging Face & PyTorch Integration**:
+5. **Training Monitoring & TensorBoard**:
+   - All training loops and finetuning scripts MUST integrate PyTorch TensorBoard (`torch.utils.tensorboard.SummaryWriter` or `--tb` flag in HF `TrainingArguments`).
+   - TensorBoard logs must be stored in `experiments/runs/<ts>_<run_name>/tensorboard/`.
+   - Log key metrics per step/epoch: training loss, validation loss, accuracy, learning rate, and VRAM allocation.
+
+6. **Hugging Face & PyTorch Integration**:
    - For Hugging Face models (`AutoModelForSequenceClassification`), output tensors/logits must be handled via standard PyTorch loss functions or the HF `Trainer`.
    - When converting HF `Dataset` objects for PyTorch:
      ```python
@@ -58,4 +63,5 @@
 - [ ] Seeds initialized using `set_seed()`.
 - [ ] PyTorch tensors formatted correctly before passing into model `forward()`.
 - [ ] `weights_only=True` enforced on all `torch.load` calls.
+- [ ] TensorBoard summary writer integrated and outputs directed to `experiments/runs/<ts>_<run>/tensorboard/`.
 - [ ] Gradient computation explicitly disabled (`with torch.no_grad():` or `@torch.no_grad()`) during evaluation and inference.

@@ -29,5 +29,4 @@ Add one row per experiment document, created from
 
 | ID | Title & Summary | Status | Link |
 |:--:|:---|:---:|:---|
-| `EXP-01` | <One-sentence summary> | Done | [EXP_01_<name>.md](EXP_01_<name>.md) |
-| `EXP-02` | <One-sentence summary> | In Progress | [EXP_02_<name>.md](EXP_02_<name>.md) |
+| `EXP-EX1-BASELINE` | Exercise 1 zero-shot sentiment pipeline & IMDB baseline floor | In Progress | [EX1_SENTIMENT_BASELINE.md](EX1_SENTIMENT_BASELINE.md) |

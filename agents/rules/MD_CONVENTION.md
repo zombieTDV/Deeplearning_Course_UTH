@@ -38,6 +38,7 @@ MD_creation_guide.md — see that file for full rationale and examples.
 - Rules and phase/progress docs must additionally cross-link the rule they
   enforce (e.g. any logging-related doc links
   [LOGGING_CHECKPOINT_RULES.md](LOGGING_CHECKPOINT_RULES.md)).
+- **External Hugging Face Links:** Every reference to a Hugging Face model ID (e.g., [`distilbert-base-uncased-finetuned-sst-2-english`](https://huggingface.co/distilbert-base-uncased-finetuned-sst-2-english)) or dataset ID (e.g., [`stanfordnlp/imdb`](https://huggingface.co/datasets/stanfordnlp/imdb)) MUST be written as a direct, clickable markdown link to the Hugging Face Hub.
 - Notebook headers must include a `## References` block linking the rules,
   scripts, and artifact locations they consume — see
   [NOTEBOOK_HEADER_CONVENTION.md](NOTEBOOK_HEADER_CONVENTION.md).
@@ -60,6 +61,7 @@ MD_creation_guide.md — see that file for full rationale and examples.
 | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Single-variable principle | One changed factor per experiment; state what's held constant                                                                                                                                       |
 | Cross-reference links     | **Mandatory** — any file/notebook/path mention must be a working relative link (see [Mandatory cross-reference links](#mandatory-cross-reference-links))                                            |
+| External HF Resources    | **Mandatory** — any Hugging Face model ID (e.g. `distilbert-base-uncased`) or dataset ID mentioned MUST include a direct clickable markdown link (e.g. `[distilbert-base-uncased](https://huggingface.co/distilbert-base-uncased)`) |
 | File paths                | Relative link (`agents/OVERVIEW.md`: internal), Cross-file anchor link (`agents/OVERVIEW.md#installation`: jump to a heading), Absolute URL (external) — never bare text                             |
 | Notebook refs             | `notebooks/<category>/<experiment>/<filename>.ipynb`; link the notebook AND its consuming scripts/artifacts                                                                                         |
 | Output dirs               | `experiments/runs/<ts>_<run>/` (run state), `experiments/results/<experiment>/` (consolidated outputs) — see [LOGGING_CHECKPOINT_RULES.md](LOGGING_CHECKPOINT_RULES.md)                              |

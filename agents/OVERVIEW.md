@@ -58,8 +58,7 @@ execution plan lives in [PROJECT_ROADMAP.md](PROJECT_ROADMAP.md).
 
 ## Known constraints
 
-- GPU with 8 GB VRAM — target ≤6 GB usage (ceiling 8 GB); limits batch size
-  and `max_length`.
+- Multi-GPU team hardware (1 machine with 8GB VRAM, 1 machine with 4GB VRAM) — target ≤3.5GB VRAM usage (strict ceiling 4GB for compatibility across all team machines). Limits batch size, requires gradient accumulation & mixed precision (fp16).
 - English-only sample sentences.
 - HF dependencies (`transformers`, `datasets`, `evaluate`) must be added to
   `requirements.txt` and pinned.

@@ -36,7 +36,7 @@ Exactly these 4 columns, one row per notebook step:
 - **Step**: sequential number
 - **Description**: short action phrase
 - **What it does**: 5–15 words
-- **Import path**: `src/...` module or `—` if none
+- **Import path**: **MUST be a clickable markdown link** to the target file/script (e.g. [`src/experiments/baseline_imdb_sentiment.py`](../src/experiments/baseline_imdb_sentiment.py)), or `—` if an external library/none
 - Table must end with `---` immediately after
 
 ## 4. References (mandatory)

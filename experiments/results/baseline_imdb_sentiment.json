@@ -1,0 +1,51 @@
+{
+  "metadata_5w1h": {
+    "who": "Learner & AI Coding Agent",
+    "what": "Exercise 1 Zero-Shot Sentiment Analysis Baseline",
+    "when": "2026-08-12T08:11:36.163852",
+    "where": "Repo branch feature/ex1-sentiment-baseline (GPU)",
+    "why": "Establish baseline accuracy floor on IMDB for Practice 3 Exercise 1 & 2 comparison",
+    "how": "Hugging Face pipeline with pretrained model 'distilbert-base-uncased-finetuned-sst-2-english'"
+  },
+  "environment": {
+    "model_name": "distilbert-base-uncased-finetuned-sst-2-english",
+    "device": "cuda",
+    "cuda_available": true,
+    "vram_allocated_mb": 8.12
+  },
+  "demo_sample": {
+    "sample_text": "The movie was thrilling and visually stunning!",
+    "tokens": [
+      "the",
+      "movie",
+      "was",
+      "thrilling",
+      "and",
+      "visually",
+      "stunning",
+      "!"
+    ],
+    "token_ids": [
+      1996,
+      3185,
+      2001,
+      26162,
+      1998,
+      17453,
+      14726,
+      999
+    ],
+    "predicted_label": "POSITIVE",
+    "confidence_score": 0.9998807907104492,
+    "latency_ms": 380.4922103881836
+  },
+  "evaluation": {
+    "num_test_samples": 25000,
+    "majority_class_accuracy": 0.5,
+    "zero_shot_accuracy": 0.89072,
+    "zero_shot_roc_auc": 0.9587059968,
+    "eval_time_seconds": 274.76603603363037,
+    "roc_curve_plot": "experiments/plots/baseline_zero_shot_roc_curve.png",
+    "tensorboard_log_dir": "experiments/runs/baseline_zero_shot/tensorboard"
+  }
+}

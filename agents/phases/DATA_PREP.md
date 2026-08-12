@@ -7,9 +7,9 @@
 - **Title:** Data Survey & Cleaning
 - **Execution order:** 2 of 8
 - **Date created:** 2026-08-11
-- **Last updated:** 2026-08-11
-- **Description:** Run EDA on IMDB (label balance, review lengths, sample inspection) and document why the cleaning and class-imbalance pipeline stages are N/A for this dataset.
-- **Status:** To Do
+- **Last updated:** 2026-08-12
+- **Description:** Run EDA on [`stanfordnlp/imdb`](https://huggingface.co/datasets/stanfordnlp/imdb) (label balance 50/50, review lengths, plot visualizations) and document why cleaning/imbalance stages are N/A.
+- **Status:** Done
 
 ## Background
 
