@@ -7,9 +7,9 @@
 - **Title:** Model Selection & Training Config
 - **Execution order:** 5 of 8
 - **Date created:** 2026-08-11
-- **Last updated:** 2026-08-11
+- **Last updated:** 2026-08-12
 - **Description:** Justify `distilbert-base-uncased` for Exercise 2 (No Free Lunch, §12) and define the training hyperparameters with bias-variance reasoning (§13–§15).
-- **Status:** To Do
+- **Status:** In Progress
 
 ## Background
 

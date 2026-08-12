@@ -48,28 +48,27 @@
 
 ## At a Glance
 
-**Progress: 3 / 8 phases complete** — Exercise 1 (Phases 1, 2, 4) is done;
-the rest remain ahead.
+**Progress: 8 / 8 phases complete** — Exercise 1 (Phases 1, 2, 4) and Exercise 2 (Phases 3, 5, 6, 7, 8) 100% complete!
 
 ```
-██████░░░░░░░░░░   3/8 (38%)     █ = done, ░ = remaining
+████████████████   8/8 (100%)    █ = done, ░ = remaining
 ```
 
 1. **Setup & Problem Framing** — environment, HF stack, framing — `[X]` — [SETUP.md](phases/SETUP.md)
 2. **Data Survey & Cleaning** — IMDB EDA, cleaning/imbalance N/A — `[X]` — [DATA_PREP.md](phases/DATA_PREP.md)
-3. **Feature Engineering & Split** — tokenization, splits, leakage rules — `[ ]` (next) — [FEATURE_SPLIT.md](phases/FEATURE_SPLIT.md)
+3. **Feature Engineering & Split** — tokenization, splits, leakage rules — `[X]` — [FEATURE_SPLIT.md](phases/FEATURE_SPLIT.md)
 4. **Baseline Model (Ex 1)** — zero-shot floor — `[X]` — [BASELINE.md](phases/BASELINE.md)
-5. **Model Selection & Config** — `distilbert-base-uncased` + training args — `[ ]` — [MODEL.md](phases/MODEL.md)
-6. **Finetuning (Ex 2)** — HF `Trainer`, checkpoints, resume — `[ ]` — [TRAINING_INFO.md](phases/TRAINING_INFO.md)
-7. **Evaluation & Validation** — test metrics with 5W1H — `[ ]` — [EVAL.md](phases/EVAL.md)
-8. **Error Analysis & Reporting** — notebook, final report — `[ ]` — [REPORT.md](phases/REPORT.md)
+5. **Model Selection & Config** — `distilbert-base-uncased` + training args — `[X]` — [MODEL.md](phases/MODEL.md)
+6. **Finetuning (Ex 2)** — HF `Trainer`, checkpoints, resume — `[X]` — [TRAINING_INFO.md](phases/TRAINING_INFO.md)
+7. **Evaluation & Validation** — test metrics with 5W1H — `[X]` — [EVAL.md](phases/EVAL.md)
+8. **Error Analysis & Reporting** — notebook, final report — `[X]` — [REPORT.md](phases/REPORT.md)
 
 > Status legend: `[X]` done · `[ ]` not started · `[~]` in progress (see
 > [§1 How to Use This Roadmap](#1-how-to-use-this-roadmap)). Detailed
 > deliverables, dates, and milestones live in [§3 Key Milestones](#3-key-milestones)
 > and [§4 Major Phases](#4-major-phases).
 
-**Next:** Phase 3 — Feature Engineering & Split (tasks T5–T6).
+**Next:** Submission-ready! Create PR to merge `feature/ex2-imdb-finetune` into main branch.
 
 ---
 

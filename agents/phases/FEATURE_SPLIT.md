@@ -7,9 +7,9 @@
 - **Title:** Feature Engineering & Split
 - **Execution order:** 3 of 8
 - **Date created:** 2026-08-11
-- **Last updated:** 2026-08-11
+- **Last updated:** 2026-08-12
 - **Description:** Tokenize IMDB with the `distilbert-base-uncased` tokenizer (the DL-equivalent of feature engineering) and set up train/val/test splits with the leakage golden rules applied.
-- **Status:** To Do
+- **Status:** Done
 
 ## Background
 

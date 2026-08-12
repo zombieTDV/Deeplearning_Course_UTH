@@ -6,14 +6,15 @@
 
 - **Title:** Model Selection & Training Config
 - **Date created:** 2026-08-11
-- **Last updated:** 2026-08-11
+- **Last updated:** 2026-08-12
 - **Description:** Tracks `distilbert-base-uncased` justification and the training config.
-- **Status:** To Do
+- **Status:** Done
 - **Phase doc:** [../phases/MODEL.md](../phases/MODEL.md)
 
 ## Log
 
 - 2026-08-11: status doc created — phase not started.
+- 2026-08-12: `MODEL.md` rationale documented; `configs/config_imdb_sentiment.yaml` created with hyperparameter rationale.
 
 ## Blockers (if any)
 
@@ -21,11 +22,11 @@
 
 ## Decisions
 
-- (none yet)
+- `distilbert-base-uncased` chosen for fit in ≤3.5 GB VRAM budget while preserving ~97% of BERT-base accuracy.
 
 ## Next step
 
-- Start T8: write the model-selection rationale in `../phases/MODEL.md`.
+- Proceed to Phase 6 training.
 
 ## Links
 

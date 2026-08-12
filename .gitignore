@@ -59,4 +59,7 @@ logs/
 # Environment
 .env
 .env.*
+
+# Scratch folder
+scratch/
 *.tar.gz

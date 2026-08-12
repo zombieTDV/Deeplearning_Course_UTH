@@ -1,0 +1,36 @@
+# Exercise 2 — Finetune `distilbert-base-uncased` on IMDB (binary sentiment).
+# Specialized per agents/plans/PLAN_EX2_OVERFITTING_FIX.md to fix overfitting.
+
+dataset:
+  name: "stanfordnlp/imdb"
+  max_length: 256          # 256 tokens covers the vast majority of IMDB reviews
+  seed: 42
+  val_size: 0.1            # carve validation out of the IMDB train split (25k)
+  processed_dir: "data/processed/imdb_tokenized"
+
+model:
+  name: "distilbert-base-uncased"   # ≈66M params
+  num_labels: 2
+  id2label:
+    "0": "neg"
+    "1": "pos"
+  label2id:
+    "neg": 0
+    "pos": 1
+
+training:
+  seed: 42
+  run_name: "distilbert-finetune"
+  run_root: "experiments/runs"
+  epochs: 4                # 4 epochs with step-wise evaluation
+  batch_size: 8            # small batch + gradient accumulation
+  gradient_accumulation_steps: 2
+  lr: 1.5e-5               # Reduced learning rate to stabilize loss and prevent overfitting
+  weight_decay: 0.05       # 5x stronger weight decay regularization
+  warmup_ratio: 0.1
+  fp16: true               # mixed precision keeps VRAM ≤3.5 GB
+  eval_strategy: "steps"   # Frequent step-wise validation
+  eval_steps: 300          # Evaluate every 300 steps (~4 evaluations per epoch)
+  logging_steps: 50
+  save_total_limit: 2
+  vram_budget_gb: 3.5      # strict ceiling 4 GB across team machines
