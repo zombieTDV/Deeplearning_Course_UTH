@@ -13,7 +13,7 @@
 
 ## Background
 
-Pipeline stages §12–§15 of [ML_PIPELINE_REFERENCE_v3.md](../ML_PIPELINE_REFERENCE_v3.md): model selection must match the inductive bias to the data structure and constraints (VRAM ≤6 GB, coursework compute), and every hyperparameter must be justified and logged. The brief in [PURPOSE.md](../PURPOSE.md) locked `distilbert-base-uncased`; this phase documents why and pins the config. This phase covers roadmap tasks T8–T9.
+Pipeline stages §12–§15 of [ML_PIPELINE_REFERENCE_v3.md](../ML_PIPELINE_REFERENCE_v3.md): model selection must match the inductive bias to the data structure and constraints (VRAM ≤3.5 GB on 4 GB team machines, coursework compute), and every hyperparameter must be justified and logged. The brief in [PURPOSE.md](../PURPOSE.md) locked `distilbert-base-uncased`; this phase documents why and pins the config. This phase covers roadmap tasks T8–T9.
 
 ## Goals / Purpose
 
@@ -32,7 +32,7 @@ Pipeline stages §12–§15 of [ML_PIPELINE_REFERENCE_v3.md](../ML_PIPELINE_REFE
 ## How to do it (general plan)
 
 1. Compare candidate families (e.g. `bert-base-uncased`, `distilbert-base-uncased`, `roberta-base`) on VRAM footprint, throughput, and expected accuracy (§12).
-2. Document the choice: DistilBERT ≈ 66M params, ~40% smaller than BERT-base with near-parity accuracy — fits the ≤6 GB VRAM target.
+2. Document the choice: DistilBERT ≈ 66M params, ~40% smaller than BERT-base with near-parity accuracy — fits the ≤3.5 GB VRAM target.
 3. Define hyperparameters (§13–§15): lr ≈ 2e-5, epochs 2–3, batch size tuned to VRAM (e.g. 16 with gradient accumulation), weight decay (AdamW default 0.01), `max_length` from Phase 3.
 4. Write `configs/config_imdb_sentiment.yaml`; every value will be logged with each run (single-variable principle, §18).
 5. Document bias-variance reasoning: more epochs ↔ overfitting risk; weight decay ↔ regularization.
@@ -47,7 +47,7 @@ EDA + split design → MODEL.md rationale → configs/config_imdb_sentiment.yaml
 ## Detailed plan / gotchas
 
 - Change exactly ONE hyperparameter between experiment runs (roadmap task T14; [§18.3](../ML_PIPELINE_REFERENCE_v3.md#183-the-single-variable-principle)).
-- Keep batch size + gradient accumulation so peak VRAM stays ≤6 GB (roadmap risk R1).
+- Keep batch size + gradient accumulation so peak VRAM stays ≤3.5 GB (roadmap risk R1).
 - Log every config value with every run — required by §18.3 and [LOGGING_CHECKPOINT_RULES.md](../rules/LOGGING_CHECKPOINT_RULES.md).
 
 ## Links

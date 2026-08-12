@@ -12,15 +12,16 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.12"
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          # CUDA wheels (+cu130) are not hosted on PyPI — install via the PyTorch index
+          pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu130
           pip install ruff
       - name: Lint (ruff)
         run: ruff check src tests
       - name: Run tests
         run: pytest
-        # Data-dependent tests are skipped when data/raw is absent (see tests/conftest.py),
-        # so CI runs the synthetic unit suite without the dataset.
+        # The smoke suite verifies package imports and directory layout only;
+        # no data or GPU is required on CI.

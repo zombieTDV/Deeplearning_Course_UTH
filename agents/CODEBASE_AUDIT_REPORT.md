@@ -41,6 +41,7 @@ session (`agents/OVERVIEW.md`, `agents/phases/PHASE_TEMPLATE.md` modified;
 - [11. Overall Project Health](#11-overall-project-health)
 - [12. Prioritized Action Plan](#12-prioritized-action-plan)
 - [Appendix — Resolution Log](#appendix--resolution-log)
+- [Appendix — Phase 2 & 4 Completion Audit (2026-08-12)](#appendix--phase-2--4-completion-audit-2026-08-12)
 
 ---
 
@@ -412,3 +413,25 @@ on branch `LAB3_HuggingFace`):
 | P2.1 — remove unused `needs_data` marker from [conftest.py](../tests/conftest.py) | [AQ-2](#2-findings-summary) | Resolved |
 | P2.2 — delete `templates/PHASE_DOC_TEMPLATE.md` | [ARC-3](#2-findings-summary) | Resolved |
 | P2.3 — fill root [README.md](../README.md) placeholders | [AQ-4](#2-findings-summary) | Resolved |
+
+---
+
+## Appendix — Phase 2 & 4 Completion Audit (2026-08-12)
+
+Step-10 gate before accepting DATA_PREP (Phase 2) and BASELINE (Phase 4) as
+Done (PR #13 + post-PR fixes):
+
+| Check | Result | Evidence |
+|---|---|---|
+| Smoke suite | Pass | `pytest` → 3 passed (`.venv`, torch 2.13.0+cu130) |
+| Script execution | Pass | `src/data/eda_imdb.py` regenerates plots + JSON; `baseline_imdb_sentiment.py --eval-imdb --max-samples 50` runs end-to-end |
+| Lint (ruff, CI rule) | Pass | `ruff check src tests` (BUG_02 fixes verified) |
+| Naming convention | Pass | `eda_imdb.py`, `baseline_imdb_sentiment.py` (snake_case); `01_ex1_sentiment_baseline.ipynb` (`NN_short_purpose`) |
+| Notebook policy | Pass | 1 header cell per [NOTEBOOK_HEADER_CONVENTION.md](rules/NOTEBOOK_HEADER_CONVENTION.md); 5 code cells; no training loop |
+| Results indexing | Pass | both result JSONs registered in [experiments/results/README.md](../experiments/results/README.md) with 5W1H |
+| 5W1H reporting | Pass | `metadata_5w1h` in `experiments/results/baseline_imdb_sentiment.json` |
+| Dependencies | Pass | pins restored (`torch==2.13.0+cu130` …); `requirements.lock` consistent; CI installs via the cu130 index |
+| Constraint consistency | Pass | ≤3.5 GB target propagated to PURPOSE, OVERVIEW, roadmap, phase docs, config |
+| Accepted deviations | Note | `scratch/build_notebook.py` (documented in [FOLDER_STRUCTURE.md](rules/FOLDER_STRUCTURE.md)); TensorBoard under `experiments/runs/baseline_zero_shot/` (experiment, not a training run); notebook may regenerate EDA artifacts when missing |
+
+**Verdict: Phase 2 (DATA_PREP) and Phase 4 (BASELINE) pass the completion audit.**

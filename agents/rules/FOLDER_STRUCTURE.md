@@ -51,6 +51,7 @@ project_root/
 │   ├── experiments/       # python experiment execution scripts
 │   └── utils/
 ├── notebooks/             # exploratory & deliverable notebooks (no training)
+├── scratch/               # generated-notebook build scripts (e.g. build_notebook.py)
 ├── configs/
 ├── experiments/           # run outputs, checkpoints, plots, results
 └── tests/                 # smoke tests + unit tests

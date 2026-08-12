@@ -37,23 +37,35 @@ on test ci/cd
 
 ## 3. Solution & Remediation
 
-Updated [`requirements.txt`](../../requirements.txt) to unpin hardcoded `+cu130` local CUDA wheel suffixes and specify clean framework dependencies:
-- Changed `torch==2.13.0+cu130` $\rightarrow$ `torch`
-- Changed `torchvision==0.28.0+cu130` $\rightarrow$ `torchvision`
-- Unpinned `transformers`, `datasets`, `evaluate` to allow version resolution across both local GPU and CI CPU environments.
+Kept the CUDA pins in [`requirements.txt`](../../requirements.txt) and fixed the **installation path** instead:
 
-Local CUDA GPU machines can continue to use CUDA-enabled PyTorch wheels in `.venv`, while CI/CD runners automatically pull compatible CPU PyTorch wheels from PyPI.
+- `torch==2.13.0+cu130` / `torchvision==0.28.0+cu130` and the HF pins
+  (`transformers==5.15.0`, `datasets==5.0.1`, `evaluate==0.4.6`) remain pinned
+  for reproducibility.
+- CI now installs via the PyTorch CUDA index:
+  ```bash
+  pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu130
+  ```
+  (`--extra-index-url` keeps everything else on PyPI; the `+cu130` local
+  version only resolves from the PyTorch index.)
+- Bumped the CI runner to Python 3.12 to match the local `.venv` environment.
+- `requirements.lock` remains the exact-reproducibility source of truth.
+
+> **Why not unpin?** Removing the pins makes `pip install torch` resolve to
+> the **CPU wheel** from PyPI on GPU machines — a silent, hard-to-detect loss
+> of CUDA. The pin failure was an install-path problem, not a version problem.
 
 ---
 
 ## 4. Verification Evidence
 
-- Modified [`requirements.txt`](../../requirements.txt).
-- Verified local test suite execution:
-  ```bash
-  python -m pytest tests/ -v
-  ```
-  Result: **3/3 smoke tests passed cleanly**.
+- [`requirements.txt`](../../requirements.txt) still pins
+  `torch==2.13.0+cu130`; [`requirements.lock`](../../requirements.lock) is
+  consistent with it.
+- Local `.venv` verified: `torch 2.13.0+cu130`, `cuda: True`,
+  `cuda_version: 13.0`.
+- Test suite: `python -m pytest` → **3 passed**.
+- CI workflow updated: [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml#L18).
 
 ---
 

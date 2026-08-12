@@ -8,7 +8,7 @@ dataset:
   num_classes: [n]
 
 dataloader:
-  batch_size: 64
+  batch_size: 16          # ≤3.5 GB VRAM target (4 GB ceiling) — small batch + gradient accumulation, see agents/rules/PYTORCH_FRAMEWORK_RULES.md
   shuffle_train: true
   shuffle_eval: false
   # 0 = main-process loading: safe on Python 3.14 (see agents/bugs for the

@@ -15,6 +15,7 @@
 
 - 2026-08-11: status doc created — phase not started.
 - 2026-08-12: implemented `src/data/eda_imdb.py` to analyze [`stanfordnlp/imdb`](https://huggingface.co/datasets/stanfordnlp/imdb). Generated class balance plot (`experiments/plots/imdb_label_distribution.png`), length distribution plot (`experiments/plots/imdb_review_length_distribution.png`), and persisted statistics JSON (`experiments/results/imdb_dataset_eda.json`).
+- 2026-08-12: post-PR review fixes (results indexed, constraint propagated); Phase 2 completion audit passed — see [CODEBASE_AUDIT_REPORT.md](../CODEBASE_AUDIT_REPORT.md) appendix.
 
 ## Blockers (if any)
 

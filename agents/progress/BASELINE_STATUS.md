@@ -16,6 +16,7 @@
 - 2026-08-11: status doc created — phase not started.
 - 2026-08-12: created branch plan `agents/experiments/EX1_SENTIMENT_BASELINE.md` for `feature/ex1-sentiment-baseline`.
 - 2026-08-12: implemented `src/experiments/baseline_imdb_sentiment.py` using [`distilbert-base-uncased-finetuned-sst-2-english`](https://huggingface.co/distilbert-base-uncased-finetuned-sst-2-english) on [`stanfordnlp/imdb`](https://huggingface.co/datasets/stanfordnlp/imdb). Achieved 89.07% accuracy vs 50.00% majority baseline floor.
+- 2026-08-12: post-PR review fixes (requirements pins restored, results indexed, constraint propagated); Phase 4 completion audit passed — see [CODEBASE_AUDIT_REPORT.md](../CODEBASE_AUDIT_REPORT.md) appendix.
 
 ## Blockers (if any)
 
