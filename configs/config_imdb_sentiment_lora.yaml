@@ -20,7 +20,7 @@ lora:
   r: 32
   lora_alpha: 64
   target_modules: ["q_lin", "k_lin", "v_lin", "out_lin"]
-  lora_dropout: 0.10
+  lora_dropout: 0.15
   bias: "none"
   task_type: "SEQ_CLS"
 
@@ -30,13 +30,14 @@ training:
   run_root: "experiments/runs"
   batch_size: 16
   gradient_accumulation_steps: 1
-  epochs: 4
+  epochs: 3
   lr: 2.5e-4
-  weight_decay: 0.03
-  classifier_dropout: 0.20
+  weight_decay: 0.05
+  classifier_dropout: 0.25
+  label_smoothing_factor: 0.05
   lr_scheduler_type: "cosine"
   warmup_ratio: 0.08
-  early_stopping_patience: 4
+  early_stopping_patience: 3
   fp16: true
   eval_strategy: "steps"
   eval_steps: 300
