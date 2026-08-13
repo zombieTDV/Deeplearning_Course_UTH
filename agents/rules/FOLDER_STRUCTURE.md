@@ -1,8 +1,6 @@
 # FOLDER_STRUCTURE.md
 
-Source of truth for where things live. The agent should check this
-before creating any new file, and update it (with human approval)
-if the structure changes.
+Source of truth for where things live. The agent should check this before creating any new file, and update it (with human approval) if the structure changes.
 
 ```
 project_root/
@@ -10,59 +8,56 @@ project_root/
 │   ├── README.md          # Index & guide for Agent AI
 │   ├── OVERVIEW.md        # Core project overview & roadmap
 │   ├── PURPOSE.md         # Original brief & requirements
-│   ├── PROJECT_ROADMAP.md  # Execution plan: milestones, phases, tasks, timeline
-│   ├── HOW_TO_SETUP_AI_AGENT.md  # Agent workflow setup guide
+│   ├── PROJECT_ROADMAP.md # Execution plan: milestones, phases, tasks, timeline
+│   ├── HOW_TO_SETUP_AI_AGENT.md # Agent workflow setup guide
 │   ├── rules/             # Guidelines & standards for Agent AI
 │   │   ├── AGENT_AI.md    # Agent AI philosophy & behavior rules
 │   │   ├── CODEBASE_AUDIT.md # Codebase audit procedure
 │   │   ├── FOLDER_STRUCTURE.md
 │   │   ├── MD_CONVENTION.md
-│   │   ├── NAMING_CONVENTION.md
-│   │   ├── NOTEBOOK_HEADER_CONVENTION.md
-│   │   └── PYTORCH_FRAMEWORK_RULES.md
-│   ├── phases/            # Phase & pipeline documentation
-│   │   ├── PHASE_TEMPLATE.md
-│   │   └── <PHASE>.md     # SETUP, DATA_PREP, FEATURE_SPLIT, BASELINE, MODEL, TRAINING_INFO, EVAL, REPORT
-│   ├── templates/         # Document & checklist templates
-│   │   ├── PROJECT_ROADMAP_TEMPLATE.md
-│   │   ├── PROGRESS_STATUS_TEMPLATE.md
-│   │   ├── CODEBASE_AUDIT_TEMPLATE.md
-│   │   └── SMOKE_TEST_CHECKLIST.md
-│   ├── references/        # External guides & reference docs
-│   │   ├── REFERENCE_TEMPLATE.md
-│   │   └── <GUIDE>.md     # e.g. OPTUNA_DB_GUIDE.md, GIT_AND_RELEASE_BEST_PRACTICES.md
-│   ├── experiments/       # Experiment reports, plans & technical comparisons
-│   │   ├── README.md
-│   │   └── <EXP>.md       # from EXPERIMENT_TEMPLATE.md
-│   ├── progress/          # One status file per task/phase
-│   │   └── <PHASE>_STATUS.md  # from PROGRESS_TEMPLATE.md
-│   └── bugs/              # Documented bug reports
-│       ├── README.md
-│       └── BUG_<NN>_<SHORT>.md  # from BUG_TEMPLATE.md
+   │   ├── NAMING_CONVENTION.md
+   │   ├── NOTEBOOK_HEADER_CONVENTION.md
+   │   └── PYTORCH_FRAMEWORK_RULES.md
+   ├── phases/            # Phase & pipeline documentation
+   │   ├── PHASE_TEMPLATE.md
+   │   └── <PHASE>.md     # SETUP, DATA_PREP, FEATURE_SPLIT, BASELINE, MODEL, TRAINING_INFO, EVAL, REPORT
+   ├── templates/         # Document & checklist templates
+   │   ├── PROJECT_ROADMAP_TEMPLATE.md
+   │   ├── PROGRESS_STATUS_TEMPLATE.md
+   │   ├── CODEBASE_AUDIT_TEMPLATE.md
+   │   └── SMOKE_TEST_CHECKLIST.md
+   ├── references/        # External guides & reference docs
+   │   ├── REFERENCE_TEMPLATE.md
+   │   └── <GUIDE>.md     # e.g. OPTUNA_DB_GUIDE.md, GIT_AND_RELEASE_BEST_PRACTICES.md
+   ├── experiments/       # Experiment reports, plans & technical comparisons
+   │   ├── README.md
+   │   └── <EXP>.md       # e.g. EX6_512_TOKENS_BREAKTHROUGH_REPORT.md
+   ├── progress/          # One status file per task/phase
+   │   └── <PHASE>_STATUS.md  # from PROGRESS_TEMPLATE.md
+   └── bugs/              # Documented bug reports
+       ├── README.md
+       └── BUG_<NN>_<SHORT>.md
 ├── data/
-│   ├── raw/               # never edited by the agent
-│   ├── processed/
+│   ├── raw/               # Never edited by the agent
+│   ├── processed/         # Cached tokenized IMDB datasets (256 and 512 tokens)
 │   └── external/
-├── src/
-│   ├── data/              # loading, cleaning, transforms, dataloaders
-│   ├── models/            # model definitions
-│   ├── training/          # training loops (script entry points)
-│   ├── eval/              # metrics, evaluation scripts
-│   ├── experiments/       # python experiment execution scripts
-│   └── utils/
-├── notebooks/             # exploratory & deliverable notebooks (no training)
-├── scratch/               # generated-notebook build scripts (e.g. build_notebook.py)
-├── configs/
-├── experiments/           # run outputs, checkpoints, plots, results
-└── tests/                 # smoke tests + unit tests
+├── src/                   # Core modular package (top-level exports in src/__init__.py)
+│   ├── data/              # prepare_imdb, IMDBDatasetEDA
+│   ├── models/            # build_model, LLRD optimizer parameters, SentimentPredictor
+│   ├── training/          # imdb_sentiment_train, IMDBTrainer
+│   ├── eval/              # evaluate_model, IMDBEvaluator, IMDBPlotter, ErrorAuditor
+│   └── utils/             # safe_load_checkpoint, average_checkpoints, ResourceMonitor
+├── notebooks/             # Deliverable interactive notebooks
+│   ├── 01_ex1_sentiment_baseline.ipynb  # Zero-Shot Baseline Exercise 1 (89.07% Acc)
+│   └── 02_ex2_finetune.ipynb            # Fine-Tuning Exercise 2 & Presets EXP-00 to EXP-07 (93.23% Acc)
+├── scratch/               # Generated utility & audit scripts
+├── configs/               # YAML experiment configuration files
+├── experiments/           # Run outputs, checkpoints, plots, evaluation results
+└── tests/                 # Unit tests & smoke test suite
 ```
 
 ## Rules
 
-- Agent must not create top-level folders without flagging it first
-- Anything in `data/raw/` is read-only — never written to by any script
-- Exploratory/throwaway code stays in `notebooks/`, not `src/`
-- If actual folder structure diverges from this file, that's a
-  CODEBASE_AUDIT.md finding, not something to silently "fix"
-- Before working on a phase, read the matching `agents/phases/<phase>.md` and
-  `agents/progress/<phase>_STATUS.md` yourself before asking the human for context.
+- No random files in project_root (keep root lean: README, configs, tests, source dirs).
+- Never write code directly in `data/raw/` or edit raw datasets.
+- Always use `src/` modules for logic and call high-level class abstractions in Jupyter notebooks.

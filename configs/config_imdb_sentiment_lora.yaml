@@ -1,0 +1,47 @@
+# Exercise 2 — LoRA (Low-Rank Adaptation) Fine-Tuning Preset (EXP-LORA)
+model:
+  name: "distilbert-base-uncased"
+  num_labels: 2
+  id2label:
+    "0": "neg"
+    "1": "pos"
+  label2id:
+    "neg": 0
+    "pos": 1
+
+data:
+  name: "stanfordnlp/imdb"
+  max_length: 512
+  seed: 42
+  val_size: 0.1
+  processed_dir: "data/processed/imdb_tokenized_512"
+
+lora:
+  r: 32
+  lora_alpha: 64
+  target_modules: ["q_lin", "k_lin", "v_lin", "out_lin"]
+  lora_dropout: 0.10
+  bias: "none"
+  task_type: "SEQ_CLS"
+
+training:
+  seed: 42
+  run_name: "distilbert-finetune-lora"
+  run_root: "experiments/runs"
+  batch_size: 16
+  gradient_accumulation_steps: 1
+  epochs: 4
+  lr: 2.5e-4
+  weight_decay: 0.03
+  classifier_dropout: 0.20
+  lr_scheduler_type: "cosine"
+  warmup_ratio: 0.08
+  early_stopping_patience: 4
+  fp16: true
+  eval_strategy: "steps"
+  eval_steps: 300
+  logging_steps: 50
+  save_strategy: "steps"
+  save_steps: 300
+  metric_for_best_model: "accuracy"
+  greater_is_better: true

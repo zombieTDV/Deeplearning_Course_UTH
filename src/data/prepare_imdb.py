@@ -48,7 +48,11 @@ def prepare_imdb(
     """Load IMDB, tokenize, split, cache to arrow files, and return (datasets, tokenizer, meta)."""
     import json
 
-    processed = Path(processed_dir)
+    root = Path(".").resolve()
+    if root.name == "notebooks":
+        root = root.parent
+    processed = root / processed_dir if not Path(processed_dir).is_absolute() else Path(processed_dir)
+
     flat_ready = all((processed / s).is_dir() for s in ("train", "val", "test"))
 
     ds_cache_ready = (processed / "dataset").is_dir()

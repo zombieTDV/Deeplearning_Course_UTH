@@ -12,16 +12,17 @@
 ### 1. WHO
 - **Operator / Team:** bush-le (Student) & Antigravity AI Pair Programmer
 - **Execution Machine:** Linux x86_64, Single CUDA GPU (Target VRAM budget $\le 3.5\text{ GB}$, ceiling $4.0\text{ GB}$)
-- **Frameworks:** PyTorch 2.6.0+cu124, Hugging Face `transformers` 4.56.0, `accelerate` 1.14.0
+- **Pinned Stack (Canonical):** PyTorch 2.13.0+cu130, Hugging Face `transformers` 5.15.0, `accelerate` 1.14.0 (as defined in `requirements.txt` / `requirements.lock`)
+- **Exploratory Grid Environment:** PyTorch 2.6.0+cu124, `transformers` 4.56.0 (used during initial hyperparameter sweep)
 
 ### 2. WHAT
 - **Task & Model:** Binary Sentiment Analysis on IMDB dataset using `distilbert-base-uncased` (66.9M parameters).
 - **Core Problem Addressed:** Divergence between Training Loss (which continues dropping to $\sim 0.05$) and Validation Loss (which rebounds from $0.2671$ up to $0.4819$ after Epoch 1), signaling classic over-parameterized overfitting.
-- **Techniques Evaluated:**
-  1. `EarlyStoppingCallback(patience=3)` based on `eval_loss`.
+- **Techniques Evaluated & Bug Remediation:**
+  1. `EarlyStoppingCallback(patience=3)` based on `eval_loss` — now fully persisted with `early_stop_triggered` in `_best.pt` and `_last.pt` to ensure `--resume` halts when early stopping has triggered, and `--force-resume` rewinds to best epoch with reset budget.
   2. Cosine Annealing Learning Rate Scheduler vs Linear Decay.
   3. Increased $L_2$ Weight Decay Regularization ($0.05 \rightarrow 0.10$).
-  4. Sequence Classifier Head Dropout Regularization ($0.20 \rightarrow 0.30$).
+  4. Sequence Classifier Head Dropout Regularization ($0.20 \rightarrow 0.30$) — fixed constructor kwarg bug (`seq_classif_dropout` kwarg to `from_pretrained`) to eliminate silent no-op mutation.
   5. Bottom 2-Layer Transformer Freezing (66.9M $\rightarrow$ 28.9M trainable parameters).
 
 ### 3. WHEN
@@ -31,6 +32,8 @@
 ### 4. WHERE
 - **Code Base:**
   - Training Entrypoint: [`src/training/imdb_sentiment_train.py`](../../src/training/imdb_sentiment_train.py)
+  - Canonical Baseline Config: [`configs/config_imdb_sentiment.yaml`](../../configs/config_imdb_sentiment.yaml) (91.19% winning model)
+  - Tuned Variant Config: [`configs/config_imdb_sentiment_tuned.yaml`](../../configs/config_imdb_sentiment_tuned.yaml) (EXP-04 recipe)
   - Experiment Grid Runner: [`scratch/run_experiment_grid.py`](../../scratch/run_experiment_grid.py)
   - Evaluation CLI: [`src/eval/evaluate_model.py`](../../src/eval/evaluate_model.py)
 - **Persisted Artifacts:**
@@ -73,10 +76,12 @@
 
 ## 🎯 Final Recommendation for Exercise 2 Submission
 
-**Optimal Production Configuration (`EXP-04` + `EXP-01` Hybrid):**
+**Canonical Production Configuration (`configs/config_imdb_sentiment.yaml`):**
 - **Architecture:** `distilbert-base-uncased`
-- **Learning Rate:** $1.5 \times 10^{-5}$ with Cosine Scheduler
-- **Weight Decay:** $0.10$ ($L_2$ Regularization)
-- **Classifier Dropout:** $0.30$
+- **Learning Rate:** $2.0 \times 10^{-5}$ with Linear Scheduler
+- **Weight Decay:** $0.01$
+- **Classifier Dropout:** $0.20$
 - **Early Stopping:** `patience=3` on `eval_loss`
-- **Expected Test Performance:** Accuracy **$91.48\%$**, Macro F1 **$0.9147$**, ROC-AUC **$0.9710$**, Peak VRAM $\le 1.1\text{ GB}$.
+- **Canonical Test Performance:** Accuracy **$91.19\%$**, Macro F1 **$0.9118\%$**, ROC-AUC **$0.9699\%$**, Peak VRAM $\le 1.1\text{ GB}$.
+
+*(Note: The EXP-04 tuned configuration is available as `configs/config_imdb_sentiment_tuned.yaml` for optional training).*
