@@ -117,5 +117,22 @@
       97.6,
       96.0
     ]
+  },
+  "Soft-Voting Ensemble + TTA": {
+    "mode": "Ensemble + TTA",
+    "test_loss": 0.2084,
+    "test_acc": 96.96,
+    "per_class_acc": [
+      98.3,
+      98.7,
+      96.5,
+      93.5,
+      97.3,
+      94.0,
+      99.3,
+      98.1,
+      97.7,
+      96.2
+    ]
   }
 }
