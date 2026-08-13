@@ -75,12 +75,25 @@ def demonstrate_tokenization_and_pipeline(
     }
 
 
+def evaluate_zero_shot_imdb(
+    model_name: str = "distilbert-base-uncased-finetuned-sst-2-english",
+    data_dir: Path | None = None,
+    device_id: int = 0,
+    output_json: Path | None = None,
+    batch_size: int = 32,
+    max_samples: int | None = None,
+) -> dict[str, Any]:
+    """Alias function for evaluate_imdb_baseline for framework compatibility."""
+    return evaluate_imdb_baseline(model_name=model_name, batch_size=batch_size, max_samples=max_samples, device_id=device_id)
+
+
 def evaluate_imdb_baseline(
     model_name: str,
     batch_size: int = 32,
-    max_samples: int = None,
+    max_samples: int | None = None,
     device_id: int = 0,
 ) -> dict[str, Any]:
+
     """Evaluate zero-shot pipeline on IMDB test split alongside majority-class baseline floor."""
     print("Loading IMDB test dataset via Hugging Face `datasets`...")
     dataset = load_dataset("stanfordnlp/imdb", split="test")
@@ -108,7 +121,21 @@ def evaluate_imdb_baseline(
         top_k=None,
     )
 
+    # Print Formatted Model Parameter Architecture Summary for Ex 1
+    if hasattr(clf, "model"):
+        all_params = sum(p.numel() for p in clf.model.parameters())
+        print("\n" + "=" * 65)
+        print(" MODEL PARAMETER ARCHITECTURE SUMMARY (EXERCISE 1 BASELINE)")
+        print("=" * 65)
+        print(f" Pretrained Pipeline Model: {model_name}")
+        print(f" Evaluation Mode:           Zero-Shot Pretrained Baseline (No Training)")
+        print(f" Total Parameters:          {all_params:,}")
+        print(f" Trainable Parameters:      0 (0.00% - Fully Frozen Pretrained)")
+        print(f" Pretrained Weights:        {all_params:,} (100.00%)")
+        print("=" * 65 + "\n")
+
     print(f"Evaluating zero-shot model '{model_name}' on IMDB test set...")
+
     texts = dataset["text"]
     correct = 0
     y_true = []

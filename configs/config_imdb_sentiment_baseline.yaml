@@ -1,0 +1,25 @@
+# Exercise 1 Zero-Shot Baseline Config
+model:
+  name: "distilbert-base-uncased-finetuned-sst-2-english"
+  num_labels: 2
+  id2label:
+    "0": "neg"
+    "1": "pos"
+  label2id:
+    "neg": 0
+    "pos": 1
+
+data:
+  name: "stanfordnlp/imdb"
+  max_length: 256
+  seed: 42
+  val_size: 0.1
+  processed_dir: "data/processed/imdb_tokenized"
+
+training:
+  seed: 42
+  run_name: "baseline_zero_shot"
+  run_root: "experiments/runs"
+  epochs: 0
+  batch_size: 16
+  lr: 0.0
