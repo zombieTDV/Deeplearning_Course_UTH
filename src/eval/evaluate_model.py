@@ -26,7 +26,6 @@ os.environ["CUDA_MODULE_LOADING"] = "LAZY"
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
-
 from datasets import Dataset
 from sklearn.metrics import (
     accuracy_score,
@@ -39,7 +38,7 @@ from sklearn.metrics import (
 from transformers import AutoModelForSequenceClassification
 
 from src.data.prepare_imdb import prepare_imdb
-from src.utils.checkpoint_utils import latest_run_dir, safe_load_checkpoint
+from src.utils.checkpoint_utils import safe_load_checkpoint
 from src.utils.resource_monitor import ResourceMonitor, cleanup_vram
 
 

@@ -1,13 +1,14 @@
 """High-level Training Runner and Metric Curves Plotter."""
 
-import os
-import sys
 import json
+import os
 import subprocess
+import sys
 from pathlib import Path
-from typing import Any
+
 import matplotlib.pyplot as plt
-from src.utils.checkpoint_utils import latest_run_dir, resolve_run_files
+
+from src.utils.checkpoint_utils import resolve_run_files
 
 
 class IMDBTrainer:
