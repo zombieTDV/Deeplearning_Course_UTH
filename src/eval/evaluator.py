@@ -1,14 +1,14 @@
 """High-level IMDB Model Evaluator and Baseline Comparison Table."""
 
-import os
-import sys
 import json
+import os
 import subprocess
+import sys
 from pathlib import Path
 from typing import Any
-import numpy as np
+
 import matplotlib.pyplot as plt
-from IPython.display import display, Image, HTML
+from IPython.display import HTML, Image, display
 
 
 class IMDBEvaluator:
@@ -101,6 +101,18 @@ class IMDBEvaluator:
             return payload
         return {}
 
+    def _load_finetuned_accuracy(self) -> float | None:
+        """Finetuned test accuracy (%) from the committed eval artifact, if present."""
+        eval_path = self.project_root / "experiments" / "results" / "imdb_sentiment_eval.json"
+        if not eval_path.exists():
+            return None
+        try:
+            with open(eval_path, encoding="utf-8") as f:
+                acc = json.load(f)["result"]["accuracy"]
+            return float(acc) * 100
+        except (json.JSONDecodeError, KeyError, OSError, TypeError, ValueError):
+            return None
+
     def plot_baseline_benchmark_charts(self) -> None:
         """Plot Exercise 1 Baseline Accuracy, F1, and ROC-AUC benchmark charts."""
         baseline_path = self.project_root / "experiments" / "results" / "baseline_imdb_sentiment.json"
@@ -118,9 +130,15 @@ class IMDBEvaluator:
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 4.5))
 
         # Panel 1: Accuracy Floor vs Zero-Shot Baseline
-        categories = ["Random / Majority Floor", "Zero-Shot Baseline (Ex 1)", "Finetuned Target (Ex 2)"]
-        accuracies = [maj_acc, zs_acc, 93.23]
-        colors = ["#95a5a6", "#3498db", "#2ecc71"]
+        finetuned_acc = self._load_finetuned_accuracy()
+        if finetuned_acc is not None:
+            categories = ["Random / Majority Floor", "Zero-Shot Baseline (Ex 1)", "Finetuned Target (Ex 2)"]
+            accuracies = [maj_acc, zs_acc, finetuned_acc]
+            colors = ["#95a5a6", "#3498db", "#2ecc71"]
+        else:
+            categories = ["Random / Majority Floor", "Zero-Shot Baseline (Ex 1)"]
+            accuracies = [maj_acc, zs_acc]
+            colors = ["#95a5a6", "#3498db"]
 
         bars = ax1.bar(categories, accuracies, color=colors, edgecolor="black", width=0.55)
         ax1.set_ylabel("Test Accuracy (%)", fontsize=11, fontweight="bold")

@@ -23,7 +23,7 @@ See [PURPOSE.md](PURPOSE.md) for the original brief and locked objective. The ex
 - **Dataset:** IMDB (Hugging Face `datasets`), binary sentiment (positive/negative), 25k train + 25k test reviews, balanced 50/50.
 - **Models:**
   - **Ex 1 Zero-Shot Baseline:** Pretrained HF sentiment pipeline (`distilbert-base-uncased-finetuned-sst-2-english`), achieving **89.07% Test Accuracy** and **0.9587 ROC-AUC**.
-  - **Ex 2 Finetuned Model:** `distilbert-base-uncased` finetuned with HF `Trainer` + LLRD + SWA + 512 tokens sequence length expansion (`EXP-06`), achieving **93.23% Test Accuracy**, **0.9323 Macro F1**, and **0.9742 ROC-AUC**.
+  - **Ex 2 Finetuned Model:** `distilbert-base-uncased` finetuned with HF `Trainer` + LLRD + SWA + 512 tokens sequence length expansion (`EXP-06`/`EXP-07`), achieving **93.23% Test Accuracy**, **0.9323 Macro F1**, and **0.9790 ROC-AUC** (committed in [`experiments/results/imdb_sentiment_eval.json`](../experiments/results/imdb_sentiment_eval.json)).
 - **Approach:** Baseline-first ([§11 of ML_PIPELINE_REFERENCE_v3.md](ML_PIPELINE_REFERENCE_v3.md#11-baseline-thinking)) → tokenize/split with leakage rules → finetune → single held-out evaluation with per-class metrics → error analysis → 5W1H report.
 - **Modular Code Base:** Fully modularized `src/` package (`src/models`, `src/data`, `src/eval`, `src/training`, `src/utils`).
 - **Interactive Notebook Suite:**

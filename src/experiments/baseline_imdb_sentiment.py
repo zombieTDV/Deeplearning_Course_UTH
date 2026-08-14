@@ -128,9 +128,9 @@ def evaluate_imdb_baseline(
         print(" MODEL PARAMETER ARCHITECTURE SUMMARY (EXERCISE 1 BASELINE)")
         print("=" * 65)
         print(f" Pretrained Pipeline Model: {model_name}")
-        print(f" Evaluation Mode:           Zero-Shot Pretrained Baseline (No Training)")
+        print(" Evaluation Mode:           Zero-Shot Pretrained Baseline (No Training)")
         print(f" Total Parameters:          {all_params:,}")
-        print(f" Trainable Parameters:      0 (0.00% - Fully Frozen Pretrained)")
+        print(" Trainable Parameters:      0 (0.00% - Fully Frozen Pretrained)")
         print(f" Pretrained Weights:        {all_params:,} (100.00%)")
         print("=" * 65 + "\n")
 

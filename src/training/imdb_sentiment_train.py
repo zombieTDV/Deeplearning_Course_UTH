@@ -27,7 +27,6 @@ import torch
 from datasets import DatasetDict
 from sklearn.metrics import accuracy_score, f1_score
 from transformers import (
-    AutoModelForSequenceClassification,
     AutoTokenizer,
     Trainer,
     TrainerCallback,
@@ -35,10 +34,17 @@ from transformers import (
 )
 
 from src.data.prepare_imdb import prepare_imdb
+from src.models import (
+    build_model,
+)
+from src.models import (
+    get_llrd_optimizer_grouped_parameters as _get_llrd_optimizer_grouped_parameters,
+)
 from src.utils.checkpoint_utils import (
     checkpoint_paths,
     latest_run_dir,
     next_run_dir,
+    safe_load_checkpoint,
     save_checkpoint,
     update_registry,
 )
@@ -170,8 +176,6 @@ class FullStateCallback(TrainerCallback):
             self.latest_train_loss = float(logs["loss"])
 
     def on_evaluate(self, args, state, control, metrics=None, **kwargs) -> None:
-        if control.should_training_stop:
-            self.early_stop_triggered = True
         if not metrics:
             return
         row = {
@@ -224,11 +228,12 @@ class FullStateCallback(TrainerCallback):
         cleanup_vram()
 
     def on_train_end(self, args, state, control, **kwargs) -> None:
+        # Single reliable capture point for the early-stop flag: the callback
+        # ordering guarantees on_evaluate runs before EarlyStoppingCallback
+        # flips control.should_training_stop, so we record the terminal state
+        # here (the post-train checkpoint save below picks it up).
         if control.should_training_stop:
             self.early_stop_triggered = True
-
-from src.models import build_model, get_llrd_optimizer_grouped_parameters as _get_llrd_optimizer_grouped_parameters
-
 
 
 def _train(
@@ -319,15 +324,12 @@ def _train(
         eval_strategy=t.get("eval_strategy", "steps"),
         eval_steps=t.get("eval_steps", 300),
         logging_steps=t.get("logging_steps", 50),
-        metric_for_best_model=eval_metric_name,
-        greater_is_better=greater_is_better,
         disable_tqdm=not getattr(args, "show_tqdm", False),
         save_strategy="no",
         dataloader_num_workers=0,
         seed=t.get("seed", 42),
         report_to=["tensorboard"] if args.tb else ["none"],
     )
-
 
     callback = FullStateCallback(
         run_dir,
@@ -452,7 +454,8 @@ def main() -> None:
     parser.add_argument("--run-name", default=None, help="override run_name in config")
     parser.add_argument("--early-stopping-patience", type=int, default=0, help="patience for EarlyStoppingCallback")
     parser.add_argument("--metric-for-best-model", default=None, help="metric for best model (e.g. accuracy, f1, loss)")
-    parser.add_argument("--greater-is-better", action="store_true", default=None, help="whether higher metric value is better")
+    parser.add_argument("--greater-is-better", action=argparse.BooleanOptionalAction, default=None,
+                        help="whether a higher metric value is better (default: auto — False for loss, True otherwise)")
     parser.add_argument("--lr-scheduler-type", default=None, help="learning rate scheduler type (linear, cosine, etc.)")
     parser.add_argument("--weight-decay", type=float, default=None, help="override weight decay")
     parser.add_argument("--classifier-dropout", type=float, default=None, help="override classifier dropout")
@@ -518,7 +521,6 @@ def main() -> None:
     print(f"\nRun complete: {result['run_dir']}")
     print(f"Best: {result['best']}")
     print(result["vram"])
-
 
 
 if __name__ == "__main__":

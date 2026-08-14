@@ -1,11 +1,11 @@
 """IMDB Dataset Visual EDA Utilities."""
 
-import re
-from collections import Counter
 from typing import Any
-import numpy as np
+
 import matplotlib.pyplot as plt
+import numpy as np
 from datasets import load_dataset
+
 from src.data.prepare_imdb import prepare_imdb
 
 

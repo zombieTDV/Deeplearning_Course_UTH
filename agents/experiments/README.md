@@ -33,7 +33,9 @@ Add one row per experiment document, created from
 | `EXP-EX2-FINETUNE` | Exercise 2 — HF `Trainer` finetune of `distilbert-base-uncased` on IMDB | Done | [EX2_IMDB_FINETUNE.md](EX2_IMDB_FINETUNE.md) |
 | `EXP-EX2-HYPERPARAMETER-SEARCH` | Systematic hyperparameter search & advanced anti-overfitting protocol | Done | [EX3_HYPERPARAMETER_SEARCH_ANTI_OVERFITTING.md](EX3_HYPERPARAMETER_SEARCH_ANTI_OVERFITTING.md) |
 | `EXP-EX2-ANTI-OVERFITTING-REPORT` | 5W1H Benchmark Report for EXP-01 through EXP-05 hyperparameter trials | Done | [EX3_ANTI_OVERFITTING_REPORT.md](EX3_ANTI_OVERFITTING_REPORT.md) |
-| `EXP-EX2-ADVANCED-SPEC` | Specification for 4 advanced anti-overfitting techniques (Label Smoothing, LLRD, SWA) | Planned | [EX4_ADVANCED_ANTI_OVERFITTING_PLAN.md](EX4_ADVANCED_ANTI_OVERFITTING_PLAN.md) |
+| `EXP-EX2-ADVANCED-SPEC` | Specification for 4 advanced anti-overfitting techniques (Label Smoothing, LLRD, SWA) | Done | [EX4_ADVANCED_ANTI_OVERFITTING_PLAN.md](EX4_ADVANCED_ANTI_OVERFITTING_PLAN.md) |
+| `EXP-EX2-ADVANCED-RESULTS` | Results & diagnostics report for the advanced anti-overfitting techniques (EXP-01…EXP-05) | Done | [EX4_RESULTS_AND_DIAGNOSTICS_REPORT.md](EX4_RESULTS_AND_DIAGNOSTICS_REPORT.md) |
+| `EXP-EX2-512-BREAKTHROUGH` | **93.23% test accuracy** — EXP-06/EXP-07 512-token sequence-length expansion breakthrough | Done | [EX6_512_TOKENS_BREAKTHROUGH_REPORT.md](EX6_512_TOKENS_BREAKTHROUGH_REPORT.md) |
 
 
 
