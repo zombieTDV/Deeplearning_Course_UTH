@@ -460,3 +460,32 @@ Step-10 audit gate executed for Phase 3 (FEATURE_SPLIT), Phase 5 (MODEL), Phase 
 
 **Verdict: Phases 3, 5, 6, 7, and 8 pass the Step-10 completion audit.**
 
+---
+
+## Appendix — PR #15 Review & Remediation Audit (2026-08-14)
+
+Audit gate over the changes introduced since `9d4627ce` (Exercise 2 IMDB feature,
+PR #13/#14/#15, and the local fix commit `8f536b0`). Scope: `9d4627ce..HEAD`
+(68 files, +5078/−862).
+
+| Check | Result | Evidence |
+|---|---|---|
+| B1 — package importable | **Fixed** | `src/__init__.py` now uses lazy PEP 562 exports; `error_auditor.py` lazy-imports `scratch.analyze_misclassifications` (optional helper). `import src` succeeds without the helper; regression tests added. |
+| B2 — resume helper | **Fixed** | `safe_load_checkpoint` imported in `imdb_sentiment_train.py` (was missing → NameError on `--resume`). |
+| Lint (ruff, CI rule) | **Pass** | `ruff check src tests` clean (import sort, unused imports, f-strings fixed). |
+| Tests | **Pass** | `pytest` → 12 passed (package-import regressions + training/checkpoint unit tests). |
+| Early-stop flag | **Fixed** | `early_stop_triggered` captured reliably in `FullStateCallback.on_train_end`; `--resume` halts / `--force-resume` rewinds per [LOGGING_CHECKPOINT_RULES.md](rules/LOGGING_CHECKPOINT_RULES.md) §5. |
+| Classifier dropout | **Fixed** | `seq_classif_dropout` passed as a constructor kwarg to `from_pretrained` (was a silent post-hoc config mutation no-op). |
+| Results consistency | **Fixed** | [`experiments/results/README.md`](../experiments/results/README.md) reconciled to the committed eval JSON (**93.23%** / 0.9790 / 0.9323, `distilbert-finetune-512-hyper_best.pt`); default-config comment corrected. |
+| Reproducibility | **Annotated** | Env divergence (grid ran on torch 2.6.0+cu124 / transformers 4.56.0 vs pinned torch 2.13.0+cu130 / transformers 5.15.0) flagged in results README + EX3 report. |
+| Doc–code drift | **Fixed** | `experiments/README.md` indexes EX4-results + EX6; `FOLDER_STRUCTURE.md` + `agents/README.md` list `agents/plans/`; OVERVIEW ROC-AUC corrected to 0.9790. |
+| Data leakage guard | **Pass** | `prepare_imdb._validate_no_test_leakage` asserts 25k/22.5k/2.5k split geometry. |
+| Notebook policy | **Pass** | Notebooks invoke training via documented subprocess CLI; no inline training loop. |
+| Known residual | Note | `ErrorAuditor.audit_top_misclassifications` requires the optional `scratch.analyze_misclassifications` module (absent in-tree) — raises a clear error; add the helper if the notebook cell is to run. |
+
+**Verdict:** the Exercise 2 feature and its review remediation are code- and
+doc-clean, lint-green, and test-green. The two PR-#15 merge blockers (B1/B2)
+are resolved in local commit `8f536b0`. Any remaining action is the optional
+`scratch` error-audit helper and re-verifying committed eval numbers on the
+pinned stack.
+
