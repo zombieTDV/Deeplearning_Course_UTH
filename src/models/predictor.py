@@ -20,12 +20,17 @@ class SentimentPredictor:
         self.model_name = model_cfg.get("name", "distilbert-base-uncased")
         self.max_length = data_cfg.get("max_length", 512)
         clf_dropout = (run_cfg.get("training") or {}).get("classifier_dropout", 0.15)
+        lora_cfg = run_cfg.get("lora")
 
         self.tokenizer = AutoTokenizer.from_pretrained(self.model_name)
-        self.model = AutoModelForSequenceClassification.from_pretrained(
-            self.model_name,
-            num_labels=2,
-            seq_classif_dropout=clf_dropout,
+        from src.models.model_builder import build_model
+        self.model = build_model(
+            model_name=self.model_name,
+            num_labels=model_cfg.get("num_labels", 2),
+            classifier_dropout=clf_dropout,
+            id2label={int(k): v for k, v in model_cfg.get("id2label", {"0": "neg", "1": "pos"}).items()} if model_cfg.get("id2label") else None,
+            label2id={k: int(v) for k, v in model_cfg.get("label2id", {"neg": 0, "pos": 1}).items()} if model_cfg.get("label2id") else None,
+            lora_config_dict=lora_cfg,
         )
         self.model.load_state_dict(ckpt["model_state_dict"])
         self.model.to(self.device).eval()

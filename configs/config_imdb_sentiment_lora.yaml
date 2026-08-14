@@ -17,10 +17,10 @@ data:
   processed_dir: "data/processed/imdb_tokenized_512"
 
 lora:
-  r: 64
-  lora_alpha: 128
-  target_modules: ["q_lin", "k_lin", "v_lin", "out_lin", "lin1", "lin2"]
-  lora_dropout: 0.05
+  r: 16
+  lora_alpha: 32
+  target_modules: ["q_lin", "k_lin", "v_lin", "out_lin"]
+  lora_dropout: 0.10
   bias: "none"
   task_type: "SEQ_CLS"
 
@@ -29,20 +29,22 @@ training:
   run_name: "distilbert-finetune-lora"
   run_root: "experiments/runs"
   batch_size: 16
-  gradient_accumulation_steps: 1
+  gradient_accumulation_steps: 2
   epochs: 4
-  lr: 2.8e-4
-  weight_decay: 0.02
-  classifier_dropout: 0.10
-  label_smoothing_factor: 0.0
+  lr: 4.0e-4
+  weight_decay: 0.06
+  classifier_dropout: 0.25
+  label_smoothing_factor: 0.08
   lr_scheduler_type: "cosine"
   warmup_ratio: 0.10
   early_stopping_patience: 4
   fp16: true
   eval_strategy: "steps"
-  eval_steps: 250
+  eval_steps: 200
   logging_steps: 50
   save_strategy: "steps"
-  save_steps: 250
+  save_steps: 200
   metric_for_best_model: "accuracy"
   greater_is_better: true
+
+
