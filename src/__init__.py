@@ -1,38 +1,43 @@
-"""Core package for the deep-learning pipeline."""
+"""Core package for the deep-learning pipeline.
 
-from src.data.eda_imdb import IMDBDatasetEDA
-from src.data.prepare_imdb import prepare_imdb
-from src.eval.error_auditor import ErrorAuditor
-from src.eval.evaluate_model import evaluate
-from src.eval.evaluator import IMDBEvaluator
-from src.eval.plotter import IMDBPlotter
-from src.models.model_builder import (
-    build_model,
-    get_llrd_optimizer_grouped_parameters,
-)
-from src.models.predictor import SentimentPredictor
-from src.training.trainer import IMDBTrainer
-from src.utils.checkpoint_utils import (
-    average_checkpoints,
-    latest_run_dir,
-    safe_load_checkpoint,
-)
-from src.utils.resource_monitor import ResourceMonitor, cleanup_vram
+Public names are exposed **lazily** (PEP 562 ``__getattr__``) so that
+``import src`` — or importing any ``src.*`` submodule — never eagerly pulls in
+the heavy/optional dependencies (``transformers``, ``datasets``, ``IPython``)
+and never fails when an optional helper (e.g. the ``scratch`` error-audit
+module) is absent from the checkout.
+"""
 
-__all__ = [
-    "IMDBPlotter",
-    "IMDBDatasetEDA",
-    "IMDBTrainer",
-    "IMDBEvaluator",
-    "SentimentPredictor",
-    "ErrorAuditor",
-    "prepare_imdb",
-    "evaluate",
-    "build_model",
-    "get_llrd_optimizer_grouped_parameters",
-    "safe_load_checkpoint",
-    "latest_run_dir",
-    "average_checkpoints",
-    "ResourceMonitor",
-    "cleanup_vram",
-]
+from __future__ import annotations
+
+import importlib as _importlib
+
+_LAZY_EXPORTS: dict[str, str] = {
+    "IMDBDatasetEDA": "src.data.eda_imdb",
+    "prepare_imdb": "src.data.prepare_imdb",
+    "ErrorAuditor": "src.eval.error_auditor",
+    "evaluate": "src.eval.evaluate_model",
+    "IMDBEvaluator": "src.eval.evaluator",
+    "IMDBPlotter": "src.eval.plotter",
+    "build_model": "src.models.model_builder",
+    "get_llrd_optimizer_grouped_parameters": "src.models.model_builder",
+    "SentimentPredictor": "src.models.predictor",
+    "IMDBTrainer": "src.training.trainer",
+    "average_checkpoints": "src.utils.checkpoint_utils",
+    "latest_run_dir": "src.utils.checkpoint_utils",
+    "safe_load_checkpoint": "src.utils.checkpoint_utils",
+    "ResourceMonitor": "src.utils.resource_monitor",
+    "cleanup_vram": "src.utils.resource_monitor",
+}
+
+__all__ = sorted(_LAZY_EXPORTS)
+
+
+def __getattr__(name: str):
+    module_name = _LAZY_EXPORTS.get(name)
+    if module_name is None:
+        raise AttributeError(f"module 'src' has no attribute {name!r}")
+    return getattr(_importlib.import_module(module_name), name)
+
+
+def __dir__() -> list[str]:
+    return sorted(set(globals()) | set(__all__))

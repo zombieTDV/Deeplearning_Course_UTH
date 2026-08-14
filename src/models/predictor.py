@@ -1,10 +1,17 @@
 """Interactive Sentiment Predictor and Inference Engine."""
 
-from typing import Any
-import torch
 from pathlib import Path
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
-from src.utils.checkpoint_utils import safe_load_checkpoint, latest_run_dir, average_checkpoints, resolve_run_files
+from typing import Any
+
+import torch
+from transformers import AutoTokenizer
+
+from src.models.model_builder import build_model
+from src.utils.checkpoint_utils import (
+    average_checkpoints,
+    resolve_run_files,
+    safe_load_checkpoint,
+)
 
 
 class SentimentPredictor:
@@ -21,13 +28,31 @@ class SentimentPredictor:
         self.max_length = data_cfg.get("max_length", 512)
         clf_dropout = (run_cfg.get("training") or {}).get("classifier_dropout", 0.15)
 
-        self.tokenizer = AutoTokenizer.from_pretrained(self.model_name)
-        self.model = AutoModelForSequenceClassification.from_pretrained(
-            self.model_name,
-            num_labels=2,
-            seq_classif_dropout=clf_dropout,
+        # Rebuild the exact training-time architecture. The checkpoint state dict
+        # tells us whether the model was trained with LoRA (PEFT prefixed keys or
+        # a stored lora config) — loading a plain model then would mismatch keys.
+        state = ckpt["model_state_dict"]
+        is_lora = bool(run_cfg.get("lora")) or any(
+            k.startswith("base_model.model.") or k.startswith("lora_") for k in state
         )
-        self.model.load_state_dict(ckpt["model_state_dict"])
+        id2label = model_cfg.get("id2label")
+        label2id = model_cfg.get("label2id")
+        if id2label is not None:
+            id2label = {int(k): v for k, v in id2label.items()}
+        if label2id is not None:
+            label2id = {k: int(v) for k, v in label2id.items()}
+
+        self.tokenizer = AutoTokenizer.from_pretrained(self.model_name)
+        self.model = build_model(
+            model_name=self.model_name,
+            num_labels=2,
+            classifier_dropout=clf_dropout,
+            id2label=id2label,
+            label2id=label2id,
+            use_lora=is_lora,
+            lora_config_dict=run_cfg.get("lora"),
+        )
+        self.model.load_state_dict(state)
         self.model.to(self.device).eval()
 
     @classmethod

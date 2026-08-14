@@ -1,5 +1,8 @@
 # Exercise 2 — Finetune `distilbert-base-uncased` on IMDB (binary sentiment).
-# Primary baseline config yielding optimal generalization (91.19% test accuracy).
+# Default (base) config for `python -m src.training.imdb_sentiment_train`.
+# Note: this config is NOT the top-scoring one — the best committed result
+# (93.23% test acc, see experiments/results/imdb_sentiment_eval.json) comes from
+# the 512-token tuned config: configs/config_imdb_sentiment_512_hyper.yaml.
 
 dataset:
   name: "stanfordnlp/imdb"

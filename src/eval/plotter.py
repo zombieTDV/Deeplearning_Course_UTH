@@ -1,10 +1,11 @@
 """Unified Visualization & Plotter Module for IMDB Pipeline Artifacts."""
 
-from pathlib import Path
 import json
-import numpy as np
+from pathlib import Path
+
 import matplotlib.pyplot as plt
-from IPython.display import display, Image
+from IPython.display import Image, display
+
 from src.utils.checkpoint_utils import resolve_run_files
 
 
@@ -15,6 +16,18 @@ class IMDBPlotter:
         self.project_root = Path(project_root).resolve() if project_root else Path(".").resolve()
         if self.project_root.name == "notebooks":
             self.project_root = self.project_root.parent
+
+    def _load_finetuned_accuracy(self) -> float | None:
+        """Finetuned test accuracy (%) from the committed eval artifact, if present."""
+        eval_path = self.project_root / "experiments" / "results" / "imdb_sentiment_eval.json"
+        if not eval_path.exists():
+            return None
+        try:
+            with open(eval_path, encoding="utf-8") as f:
+                acc = json.load(f)["result"]["accuracy"]
+            return float(acc) * 100
+        except (json.JSONDecodeError, KeyError, OSError, TypeError, ValueError):
+            return None
 
     def plot_baseline_benchmark(self, include_ex2: bool = False) -> None:
         """Plot Exercise 1 Baseline Accuracy, F1, and ROC-AUC benchmark charts."""
@@ -34,9 +47,16 @@ class IMDBPlotter:
 
         # Panel 1: Pure Zero-Shot Baseline Performance vs Majority Floor
         if include_ex2:
-            categories = ["Random / Majority Floor", "Zero-Shot Baseline (Ex 1)", "Finetuned Target (Ex 2)"]
-            accuracies = [maj_acc, zs_acc, 93.23]
-            colors = ["#95a5a6", "#3498db", "#2ecc71"]
+            finetuned_acc = self._load_finetuned_accuracy()
+            if finetuned_acc is not None:
+                categories = ["Random / Majority Floor", "Zero-Shot Baseline (Ex 1)", "Finetuned Target (Ex 2)"]
+                accuracies = [maj_acc, zs_acc, finetuned_acc]
+                colors = ["#95a5a6", "#3498db", "#2ecc71"]
+            else:
+                # No finetuned eval artifact yet — show only the baseline bars.
+                categories = ["Random / Majority Floor", "Zero-Shot Baseline (Ex 1)"]
+                accuracies = [maj_acc, zs_acc]
+                colors = ["#95a5a6", "#3498db"]
         else:
             categories = ["Random / Majority Floor", "Zero-Shot Baseline (Ex 1)"]
             accuracies = [maj_acc, zs_acc]
