@@ -16,6 +16,7 @@ Usage:
     python -m src.training.train_lab2_models                          # all 6 variants, 20 epochs
     python -m src.training.train_lab2_models --modes frozen finetune  # subset
     python -m src.training.train_lab2_models --epochs 20 --seed 42    # explicit config
+    python -m src.training.train_lab2_models --dropout 0.2            # head dropout during training
     python -m src.training.train_lab2_models --tb                     # + TensorBoard monitoring
     python -m src.training.train_lab2_models --resume                 # continue interrupted runs
     python -m src.training.train_lab2_models --smoke                  # 1 epoch, 2 batches (CI sanity)
@@ -45,6 +46,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+from src.data.config import load_config
 from src.data.dataloader import get_cifar10_loaders
 from src.data.transforms import get_advanced_train_transform, get_eval_transform
 from src.models.build_model import (
@@ -83,6 +85,10 @@ def parse_args() -> argparse.Namespace:
                    help="Which modes to train (default: all three).")
     p.add_argument("--epochs", type=int, default=DEFAULT_EPOCHS)
     p.add_argument("--seed", type=int, default=DEFAULT_SEED)
+    p.add_argument("--dropout", type=float, default=None,
+                   help="Dropout rate for the classification head during training. "
+                        "Overrides configs/data.yaml [training.dropout]. "
+                        "0.0 = no dropout (default; keeps existing checkpoints loadable).")
     p.add_argument("--resume", action="store_true",
                    help="Continue every selected variant from its latest *_last.pt checkpoint. "
                         "If a run already early-stopped, resume halts (the run is complete).")
@@ -107,6 +113,18 @@ def _set_seed(seed: int) -> None:
         torch.cuda.manual_seed_all(seed)
 
 
+def _is_head_param(name: str) -> bool:
+    """Whether a parameter name belongs to the classification head.
+
+    Covers both the plain head (``fc.weight`` / ``classifier.weight``) and a
+    head wrapped as ``Sequential(Dropout, Linear)`` (``fc.1.weight`` /
+    ``classifier.1.weight``) so the optional dropout rate does not break the
+    finetune head/backbone optimizer split.
+    """
+    return (name == "fc" or name.startswith("fc.")
+            or name == "classifier" or name.startswith("classifier."))
+
+
 def _build_optimizer(model: nn.Module, mode: str, lr: float, weight_decay: float):
     """Replicates the notebook's optimizer construction (frozen/finetune/sota)."""
     if mode == "sota":
@@ -119,7 +137,7 @@ def _build_optimizer(model: nn.Module, mode: str, lr: float, weight_decay: float
         backbone, head = [], []
         for n, param in model.named_parameters():
             if param.requires_grad:
-                if "classifier" in n or n in ("fc.weight", "fc.bias"):
+                if _is_head_param(n):
                     head.append(param)
                 else:
                     backbone.append(param)
@@ -184,6 +202,18 @@ def main() -> None:
                            else ("mps" if torch.backends.mps.is_available() else "cpu")))
     print(f"Device: {device} | seed: {args.seed} | epochs: {args.epochs} | modes: {args.modes}")
 
+    # ---- Configurable dropout rate: CLI overrides config file, config overrides 0.0 ----
+    config_dropout = 0.0
+    try:
+        _cfg = load_config(PROJECT_ROOT / "configs" / "data.yaml")
+        config_dropout = float(_cfg.get("training", {}).get("dropout", 0.0) or 0.0)
+    except (OSError, ValueError):
+        _cfg, config_dropout = {}, 0.0
+    dropout_rate = args.dropout if args.dropout is not None else config_dropout
+    dropout_rate = max(0.0, min(float(dropout_rate), 1.0))
+    print(f"Dropout rate (head, training): {dropout_rate:.3f} "
+          f"(source: {'--dropout CLI' if args.dropout is not None else 'configs/data.yaml'})")
+
     # ---- Data loaders (shared across variants of the same transform family) ----
     train_loader, val_loader, _ = get_cifar10_loaders(batch_size=64, num_workers=0)
     sota_train_loader, _, _ = get_cifar10_loaders(
@@ -212,6 +242,7 @@ def main() -> None:
             "lr": lr,
             "weight_decay": 1e-4,
             "label_smoothing": smoothing,
+            "dropout_rate": dropout_rate,   # classification-head dropout during training
             "advanced_augmentation": use_adv,   # RandAugment + RandomErasing
             "scheduler": "CosineAnnealingLR" if use_cosine else None,
             "early_stopping": {"patience": 5, "min_delta": 1e-3},
@@ -227,7 +258,7 @@ def main() -> None:
                 f"Who: LAB2 team. When: reproducibility run — full state logged."),
         }
 
-        model = builder(num_classes=10, mode=mode, device=device)
+        model = builder(num_classes=10, mode=mode, device=device, dropout_rate=dropout_rate)
         criterion = nn.CrossEntropyLoss(label_smoothing=smoothing)
         optimizer = _build_optimizer(model, mode, lr, weight_decay=1e-4)
         scheduler = (torch.optim.lr_scheduler.CosineAnnealingLR(

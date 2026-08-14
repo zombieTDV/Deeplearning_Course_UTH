@@ -44,6 +44,26 @@ _ARCH_IN_FEATURES = {
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+def _make_classifier_head(
+    in_features: int,
+    num_classes: int,
+    dropout_rate: float = 0.0,
+) -> nn.Module:
+    """Build the classification head, optionally preceded by dropout.
+
+    With ``dropout_rate == 0.0`` (default) a plain ``nn.Linear`` is returned so
+    the architecture (and thus the ``state_dict`` keys) is identical to the
+    pre-dropout models — existing checkpoints remain loadable. When
+    ``dropout_rate > 0`` the head becomes ``nn.Sequential(Dropout, Linear)``.
+    """
+    if dropout_rate and dropout_rate > 0:
+        return nn.Sequential(
+            nn.Dropout(p=float(dropout_rate)),
+            nn.Linear(in_features, num_classes),
+        )
+    return nn.Linear(in_features, num_classes)
+
+
 def set_parameter_requires_grad(model: nn.Module, requires_grad: bool) -> None:
     """Freeze (requires_grad=False) or thaw all parameters in *model*."""
     for param in model.parameters():
@@ -67,6 +87,7 @@ def build_resnet18(
     num_classes: int = 10,
     mode: str = "frozen",
     device: torch.device | None = None,
+    dropout_rate: float = 0.0,
 ) -> nn.Module:
     """Load ImageNet-pretrained ResNet18 and adapt for *num_classes*.
 
@@ -76,6 +97,10 @@ def build_resnet18(
               (last residual block + FC trainable).
         device: Target device (e.g. ``torch.device("cuda")``).  If ``None``
                 (default), the model stays on CPU.
+        dropout_rate: Dropout probability applied before the classification
+                      head during training. ``0.0`` (default) keeps a plain
+                      ``nn.Linear`` head so existing checkpoints load unchanged;
+                      ``> 0`` wraps the head as ``Sequential(Dropout, Linear)``.
 
     Returns:
         Model in ``eval()`` mode on the requested device with the freeze
@@ -83,7 +108,7 @@ def build_resnet18(
     """
     model = resnet18(weights=ResNet18_Weights.DEFAULT)
     in_features = model.fc.in_features  # 512
-    model.fc = nn.Linear(in_features, num_classes)
+    model.fc = _make_classifier_head(in_features, num_classes, dropout_rate)
 
     if mode == "frozen":
         # Freeze everything except the new FC layer
@@ -109,6 +134,7 @@ def build_densenet121(
     num_classes: int = 10,
     mode: str = "frozen",
     device: torch.device | None = None,
+    dropout_rate: float = 0.0,
 ) -> nn.Module:
     """Load ImageNet-pretrained DenseNet121 and adapt for *num_classes*.
 
@@ -118,6 +144,10 @@ def build_densenet121(
               (last dense block + classifier trainable).
         device: Target device (e.g. ``torch.device("cuda")``).  If ``None``
                 (default), the model stays on CPU.
+        dropout_rate: Dropout probability applied before the classification
+                      head during training. ``0.0`` (default) keeps a plain
+                      ``nn.Linear`` head so existing checkpoints load unchanged;
+                      ``> 0`` wraps the head as ``Sequential(Dropout, Linear)``.
 
     Returns:
         Model in ``eval()`` mode on the requested device with the freeze
@@ -125,7 +155,7 @@ def build_densenet121(
     """
     model = densenet121(weights=DenseNet121_Weights.DEFAULT)
     in_features = model.classifier.in_features  # 1024
-    model.classifier = nn.Linear(in_features, num_classes)
+    model.classifier = _make_classifier_head(in_features, num_classes, dropout_rate)
 
     if mode == "frozen":
         # Freeze everything except the new classifier
@@ -159,14 +189,19 @@ def build_resnet18_full_sota(
     num_classes: int = 10,
     mode: str = "sota",
     device: torch.device | None = None,
+    dropout_rate: float = 0.0,
 ) -> nn.Module:
     """Build ResNet18 with deep feature unfreezing (layer3 + layer4 + fc).
 
     ``mode`` is accepted for signature compatibility with ``build_resnet18``
     (train_lab2_models passes the variant mode); it is ignored — this builder
     always produces the full-SOTA unfreeze layout.
+
+    ``dropout_rate`` is forwarded to :func:`build_resnet18` so the optional
+    classification-head dropout is applied consistently across variants.
     """
-    model = build_resnet18(num_classes=num_classes, mode="frozen", device=device)
+    model = build_resnet18(num_classes=num_classes, mode="frozen", device=device,
+                           dropout_rate=dropout_rate)
     set_parameter_requires_grad(model.layer3, True)
     set_parameter_requires_grad(model.layer4, True)
     set_parameter_requires_grad(model.fc, True)
@@ -177,6 +212,7 @@ def build_densenet121_full_sota(
     num_classes: int = 10,
     mode: str = "sota",
     device: torch.device | None = None,
+    dropout_rate: float = 0.0,
 ) -> nn.Module:
     """Build DenseNet121 with deep feature unfreezing
     (denseblock3 + denseblock4 + norm5 + classifier).
@@ -184,8 +220,12 @@ def build_densenet121_full_sota(
     ``mode`` is accepted for signature compatibility with ``build_densenet121``
     (train_lab2_models passes the variant mode); it is ignored — this builder
     always produces the full-SOTA unfreeze layout.
+
+    ``dropout_rate`` is forwarded to :func:`build_densenet121` so the optional
+    classification-head dropout is applied consistently across variants.
     """
-    model = build_densenet121(num_classes=num_classes, mode="frozen", device=device)
+    model = build_densenet121(num_classes=num_classes, mode="frozen", device=device,
+                              dropout_rate=dropout_rate)
     set_parameter_requires_grad(model.features.denseblock3, True)
     set_parameter_requires_grad(model.features.denseblock4, True)
     set_parameter_requires_grad(model.features.norm5, True)
