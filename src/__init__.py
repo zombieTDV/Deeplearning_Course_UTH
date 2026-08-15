@@ -12,7 +12,9 @@ from __future__ import annotations
 import importlib as _importlib
 
 _LAZY_EXPORTS: dict[str, str] = {
+    "IMDBCleanlabAuditor": "src.data.cleanlab_denoiser",
     "IMDBDatasetEDA": "src.data.eda_imdb",
+    "clean_text": "src.data.prepare_imdb",
     "prepare_imdb": "src.data.prepare_imdb",
     "ErrorAuditor": "src.eval.error_auditor",
     "evaluate": "src.eval.evaluate_model",

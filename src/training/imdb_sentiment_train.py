@@ -326,6 +326,8 @@ def _train(
         logging_steps=t.get("logging_steps", 50),
         disable_tqdm=not getattr(args, "show_tqdm", False),
         save_strategy="no",
+        metric_for_best_model=eval_metric_name,
+        greater_is_better=greater_is_better,
         dataloader_num_workers=0,
         seed=t.get("seed", 42),
         report_to=["tensorboard"] if args.tb else ["none"],

@@ -25,6 +25,8 @@ class IMDBTrainer:
         "EXP-06": {"config": "configs/config_imdb_sentiment_512.yaml", "run_name": "distilbert-finetune-512"},
         "EXP-07": {"config": "configs/config_imdb_sentiment_512_hyper.yaml", "run_name": "distilbert-finetune-512-hyper"},
         "EXP-LORA": {"config": "configs/config_imdb_sentiment_lora.yaml", "run_name": "distilbert-finetune-lora"},
+        "EXP-LORA-DENOISED": {"config": "configs/config_imdb_sentiment_denoised.yaml", "run_name": "distilbert-finetune-lora-denoised"},
+        "EXP-FULLFT-DENOISED": {"config": "configs/config_imdb_sentiment_denoised_fullft.yaml", "run_name": "distilbert-finetune-512-denoised-fullft"},
     }
 
 
@@ -58,6 +60,8 @@ class IMDBTrainer:
 
         env = os.environ.copy()
         env["PYTHONPATH"] = str(self.project_root)
+        env["OMP_NUM_THREADS"] = "1"
+        env["PYTHONUNBUFFERED"] = "1"
         process = subprocess.Popen(cmd, cwd=str(self.project_root), env=env)
         process.communicate()
 

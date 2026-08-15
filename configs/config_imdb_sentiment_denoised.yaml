@@ -1,4 +1,4 @@
-# Exercise 2 — LoRA (Low-Rank Adaptation) Fine-Tuning Preset (EXP-LORA)
+# Exercise 2 — Denoised Dataset + LoRA Adaptation Preset (EXP-LORA-DENOISED)
 model:
   name: "distilbert-base-uncased"
   num_labels: 2
@@ -12,13 +12,13 @@ model:
 data:
   name: "stanfordnlp/imdb"
   max_length: 512
-  seed: 42
   val_size: 0.1
-  processed_dir: "data/processed/imdb_tokenized_512"
+  seed: 42
+  processed_dir: "data/processed/imdb_denoised_512"
 
 lora:
-  r: 16
-  lora_alpha: 32
+  r: 32
+  lora_alpha: 64
   target_modules: ["q_lin", "k_lin", "v_lin", "out_lin"]
   lora_dropout: 0.10
   bias: "none"
@@ -26,25 +26,23 @@ lora:
 
 training:
   seed: 42
-  run_name: "distilbert-finetune-lora"
+  run_name: "distilbert-finetune-lora-denoised-peak"
   run_root: "experiments/runs"
   batch_size: 16
   gradient_accumulation_steps: 2
   epochs: 4
-  lr: 4.0e-4
-  weight_decay: 0.06
-  classifier_dropout: 0.25
-  label_smoothing_factor: 0.08
+  lr: 3.0e-4
+  weight_decay: 0.01
+  classifier_dropout: 0.20
+  label_smoothing_factor: 0.05
   lr_scheduler_type: "cosine"
   warmup_ratio: 0.10
-  early_stopping_patience: 4
+  save_total_limit: 3
+  early_stopping_patience: 5
   fp16: true
-  eval_strategy: "steps"
-  eval_steps: 200
   logging_steps: 50
+  eval_steps: 100
+  eval_strategy: "steps"
   save_strategy: "steps"
-  save_steps: 200
-  metric_for_best_model: "accuracy"
+  metric_for_best_model: "eval_accuracy"
   greater_is_better: true
-
-

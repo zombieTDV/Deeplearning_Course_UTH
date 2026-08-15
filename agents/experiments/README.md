@@ -36,6 +36,11 @@ Add one row per experiment document, created from
 | `EXP-EX2-ADVANCED-SPEC` | Specification for 4 advanced anti-overfitting techniques (Label Smoothing, LLRD, SWA) | Done | [EX4_ADVANCED_ANTI_OVERFITTING_PLAN.md](EX4_ADVANCED_ANTI_OVERFITTING_PLAN.md) |
 | `EXP-EX2-ADVANCED-RESULTS` | Results & diagnostics report for the advanced anti-overfitting techniques (EXP-01…EXP-05) | Done | [EX4_RESULTS_AND_DIAGNOSTICS_REPORT.md](EX4_RESULTS_AND_DIAGNOSTICS_REPORT.md) |
 | `EXP-EX2-512-BREAKTHROUGH` | **93.23% test accuracy** — EXP-06/EXP-07 512-token sequence-length expansion breakthrough | Done | [EX6_512_TOKENS_BREAKTHROUGH_REPORT.md](EX6_512_TOKENS_BREAKTHROUGH_REPORT.md) |
-
-
-
+| `EXP-EX2-HTML-CLEANING` | **Token Economy & Context Reclaim** — EX-07 HTML `<br />` Artifact Stripping Report | Done | [EX7_HTML_DATA_CLEANING_REPORT.md](EX7_HTML_DATA_CLEANING_REPORT.md) |
+| `EXP-EX2-CLEANLAB-DENOISING` | **Data-Centric AI** — EX-08 Confident Learning & Label Error Audit (Cleanlab) Report | Done | [EX8_CLEANLAB_DATA_CENTRIC_DENOISING_REPORT.md](EX8_CLEANLAB_DATA_CENTRIC_DENOISING_REPORT.md) |
+| `EXP-EX2-LORA-RANK32-OPTIMAL` | **Anti-Overfitting Triad** — EX-09 LoRA Rank 32 + Multi-Tier Regularization Report | Done | [EX9_LORA_RANK32_OPTIMAL_REGULARIZATION_REPORT.md](EX9_LORA_RANK32_OPTIMAL_REGULARIZATION_REPORT.md) |
+| `EXP-EX2-LORA-LOW-LR-AUDIT` | **Underfitting Diagnostics** — EX-10 LoRA Micro-LR (5e-5) Audit Report | Done | [EX10_LORA_LOW_LR_UNDERFITTING_REPORT.md](EX10_LORA_LOW_LR_UNDERFITTING_REPORT.md) |
+| `EXP-EX2-LORA-5E5-STOPPING` | **Early Stopping Telemetry** — EX-11 LoRA 5e-5 Replication & Underfit Confirmation | Done | [EX11_LORA_5E5_EARLY_STOPPING_REPORT.md](EX11_LORA_5E5_EARLY_STOPPING_REPORT.md) |
+| `EXP-EX2-LORA-POSTMORTEM` | **Root-Cause Analysis** — EX-12 LoRA Micro-LR (5e-5) Post-Mortem & Sweet-Spot Guide | Done | [EX12_LORA_5E5_DENOISED_EVAL_REPORT.md](EX12_LORA_5E5_DENOISED_EVAL_REPORT.md) |
+| `EXP-EX2-HEAD-TAIL-UPGRADE` | **Context & Verdict Retention** — EX-13 Head+Tail Truncation & Peak Checkpoint Resolution | Done | [EX13_HEAD_TAIL_TRUNCATION_REPORT.md](EX13_HEAD_TAIL_TRUNCATION_REPORT.md) |
+| `EXP-EX2-LORA-DENOISED-PEAK` | **93.14% Test Accuracy** — EX-14 LoRA on Cleanlab Denoised IMDB with Head-Tail Truncation | Done | [EX14_LORA_DENOISED_HEAD_TAIL_BREAKTHROUGH_REPORT.md](EX14_LORA_DENOISED_HEAD_TAIL_BREAKTHROUGH_REPORT.md) |

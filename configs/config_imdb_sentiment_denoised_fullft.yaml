@@ -1,0 +1,40 @@
+# Exercise 2 — Full Fine-Tuning on Cleanlab Denoised Dataset (EXP-FULLFT-DENOISED)
+model:
+  name: "distilbert-base-uncased"
+  num_labels: 2
+  id2label:
+    "0": "neg"
+    "1": "pos"
+  label2id:
+    "neg": 0
+    "pos": 1
+
+data:
+  name: "stanfordnlp/imdb"
+  max_length: 512
+  val_size: 0.1
+  seed: 42
+  processed_dir: "data/processed/imdb_denoised_512"
+
+training:
+  seed: 42
+  run_name: "distilbert-finetune-512-denoised-fullft"
+  run_root: "experiments/runs"
+  batch_size: 8
+  gradient_accumulation_steps: 4
+  epochs: 4
+  lr: 2.0e-5
+  weight_decay: 0.01
+  classifier_dropout: 0.20
+  label_smoothing_factor: 0.05
+  lr_scheduler_type: "cosine"
+  warmup_ratio: 0.10
+  save_total_limit: 3
+  early_stopping_patience: 3
+  fp16: true
+  logging_steps: 50
+  eval_steps: 100
+  eval_strategy: "steps"
+  save_strategy: "steps"
+  metric_for_best_model: "eval_loss"
+  greater_is_better: false

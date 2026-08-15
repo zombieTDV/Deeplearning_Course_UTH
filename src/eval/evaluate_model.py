@@ -35,7 +35,6 @@ from sklearn.metrics import (
     roc_auc_score,
     roc_curve,
 )
-from transformers import AutoModelForSequenceClassification
 
 from src.data.prepare_imdb import prepare_imdb
 from src.utils.checkpoint_utils import safe_load_checkpoint
@@ -113,10 +112,21 @@ def evaluate(
     ckpt = safe_load_checkpoint(checkpoint_path, device="cpu")
 
     run_cfg = ckpt.get("config", {})
-    model_name = (run_cfg.get("model") or cfg.get("model"))["name"]
-    max_length = (run_cfg.get("data") or cfg.get("dataset"))["max_length"]
+    model_cfg = run_cfg.get("model") or cfg.get("model") or {}
+    model_name = model_cfg.get("name", "distilbert-base-uncased")
+    data_cfg = run_cfg.get("data") or run_cfg.get("dataset") or cfg.get("data") or cfg.get("dataset") or {}
+    max_length = data_cfg.get("max_length", 256)
+    processed_dir = data_cfg.get("processed_dir", "data/processed/imdb_tokenized")
+    lora_cfg = run_cfg.get("lora")
 
-    model = AutoModelForSequenceClassification.from_pretrained(model_name, num_labels=2)
+    from src.models.model_builder import build_model
+    model = build_model(
+        model_name=model_name,
+        num_labels=model_cfg.get("num_labels", 2),
+        id2label={int(k): v for k, v in model_cfg.get("id2label", {"0": "neg", "1": "pos"}).items()} if model_cfg.get("id2label") else None,
+        label2id={k: int(v) for k, v in model_cfg.get("label2id", {"neg": 0, "pos": 1}).items()} if model_cfg.get("label2id") else None,
+        lora_config_dict=lora_cfg,
+    )
     model.load_state_dict(ckpt["model_state_dict"])
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -128,7 +138,7 @@ def evaluate(
         dataset_id="stanfordnlp/imdb",
         model_name=model_name,
         max_length=max_length,
-        processed_dir="data/processed/imdb_tokenized",
+        processed_dir=processed_dir,
     )
     test: Dataset = ds["test"]
     if max_samples and max_samples < len(test):

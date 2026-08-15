@@ -8,7 +8,6 @@ from pathlib import Path
 from typing import Any
 
 import matplotlib.pyplot as plt
-from IPython.display import HTML, Image, display
 
 
 class IMDBEvaluator:
@@ -96,7 +95,12 @@ class IMDBEvaluator:
             cm_plot = self.project_root / "experiments" / "plots" / "imdb_finetuned_confusion_matrix.png"
             if cm_plot.exists():
                 print("\n--- Confusion Matrix Plot ---")
-                display(Image(filename=str(cm_plot)))
+                try:
+                    from IPython.display import Image, display
+
+                    display(Image(filename=str(cm_plot)))
+                except ImportError:
+                    pass
 
             return payload
         return {}
@@ -196,4 +200,9 @@ class IMDBEvaluator:
             for name, acc, f1, auc, notes in rows:
                 table_html += f"<tr><td style='padding:6px;'>{name}</td><td style='padding:6px;'>{acc}</td><td style='padding:6px;'>{f1}</td><td style='padding:6px;'>{auc}</td><td style='padding:6px;'>{notes}</td></tr>"
             table_html += "</table>"
-            display(HTML(table_html))
+            try:
+                from IPython.display import HTML, display
+
+                display(HTML(table_html))
+            except ImportError:
+                pass
