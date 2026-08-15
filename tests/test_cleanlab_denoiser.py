@@ -1,11 +1,13 @@
 """Unit tests for IMDBCleanlabAuditor."""
 
 import numpy as np
+import pytest
 
 from src.data.cleanlab_denoiser import IMDBCleanlabAuditor
 
 
 def test_cleanlab_audit_mock():
+    pytest.importorskip("cleanlab")
     auditor = IMDBCleanlabAuditor()
     # Mock probabilities: sample 0 is confident pos (0.95), sample 1 is confident neg (0.05)
     # Ground truth: sample 0 is labeled 0 (noisy!), sample 1 is labeled 0 (correct)
