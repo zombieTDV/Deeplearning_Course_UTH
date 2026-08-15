@@ -34,7 +34,7 @@ training:
   fp16: true
   logging_steps: 50
   eval_steps: 100
-  evaluation_strategy: "steps"
+  eval_strategy: "steps"
   save_strategy: "steps"
   metric_for_best_model: "eval_loss"
   greater_is_better: false

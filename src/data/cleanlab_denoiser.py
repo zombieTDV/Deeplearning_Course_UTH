@@ -108,6 +108,15 @@ class IMDBCleanlabAuditor:
         run_cfg = ckpt.get("config", {})
         model_cfg = run_cfg.get("model", {})
 
+        run_data_cfg = run_cfg.get("data") or {}
+        run_max_length = int(run_data_cfg.get("max_length") or 512)
+        if run_max_length < 512:
+            print(
+                f"[WARN] Checkpoint from {run_name} was trained with max_length={run_max_length} "
+                f"(not 512) — audit tokenization will match this model but may diverge from the "
+                f"head-tail 512 convention used for the denoised export."
+            )
+
         model_name = model_cfg.get("name", "distilbert-base-uncased")
         state = ckpt["model_state_dict"]
         is_lora = bool(run_cfg.get("lora")) or any(
@@ -163,6 +172,7 @@ class IMDBCleanlabAuditor:
                     meta.get("checkpoint_path") == current_ckpt_str
                     and meta.get("checkpoint_mtime") == current_ckpt_mtime
                     and meta.get("total_samples") == len(labels)
+                    and meta.get("truncation") == "head_tail"
                 ):
                     print(f"[CACHE] Loading precomputed probabilities from {cache_file}")
                     print(f"[CACHE] Synced with model: {Path(current_ckpt_str).name} ({Path(current_ckpt_str).parent.parent.name})")
@@ -174,22 +184,31 @@ class IMDBCleanlabAuditor:
             except Exception:
                 pass
 
+        from src.data.prepare_imdb import head_tail_tokenize
+
         cleanup_vram()
-        model, tokenizer, _ = self._load_latest_model()
+        model, tokenizer, run_cfg = self._load_latest_model()
+
+        # Tokenize with the exact head-tail scheme the model was trained on,
+        # using the checkpoint's own max_length (512 for the denoised preset).
+        max_length = int((run_cfg.get("data") or {}).get("max_length") or 512)
+        if max_length < 256:
+            max_length = 512  # head-tail truncation only applies at >= 256 tokens
 
         all_probs: list[np.ndarray] = []
         n = len(texts)
-        print(f"[CLEANLAB] Computing predicted probabilities across {n:,} samples on {self.device}...")
+        print(
+            f"[CLEANLAB] Computing predicted probabilities across {n:,} samples on "
+            f"{self.device} (max_length={max_length}, head-tail truncation)..."
+        )
 
         for i in range(0, n, batch_size):
             batch_texts = [clean_text(t) for t in texts[i : min(i + batch_size, n)]]
-            enc = tokenizer(
-                batch_texts,
-                truncation=True,
-                padding="max_length",
-                max_length=512,
-                return_tensors="pt",
-            ).to(self.device)
+            enc_dict = head_tail_tokenize(batch_texts, tokenizer, max_length=max_length, head_ratio=0.25)
+            enc = {
+                "input_ids": torch.tensor(enc_dict["input_ids"], dtype=torch.long).to(self.device),
+                "attention_mask": torch.tensor(enc_dict["attention_mask"], dtype=torch.long).to(self.device),
+            }
 
             logits = model(**enc).logits
             probs = torch.softmax(logits, dim=-1).detach().cpu().numpy()
@@ -207,6 +226,7 @@ class IMDBCleanlabAuditor:
                         "device": str(self.device),
                         "checkpoint_path": current_ckpt_str,
                         "checkpoint_mtime": current_ckpt_mtime,
+                        "truncation": "head_tail",
                     },
                     f,
                     indent=2,
@@ -297,8 +317,9 @@ class IMDBCleanlabAuditor:
                 lora_config_dict={"r": 32, "lora_alpha": 64, "target_modules": ["q_lin", "k_lin", "v_lin", "out_lin"], "lora_dropout": 0.10},
             ).to(self.device)
 
+            use_amp = self.device.type == "cuda"
             optimizer = torch.optim.AdamW(fold_model.parameters(), lr=lr, weight_decay=0.01)
-            scaler = torch.amp.GradScaler("cuda" if self.device.type == "cuda" else "cpu")
+            scaler = torch.amp.GradScaler("cuda") if use_amp else None
 
             fold_model.train()
             for epoch in range(epochs):
@@ -309,7 +330,7 @@ class IMDBCleanlabAuditor:
                     attention_mask = batch["attention_mask"].clone().detach().to(self.device) if isinstance(batch["attention_mask"], torch.Tensor) else torch.tensor(batch["attention_mask"]).to(self.device)
                     batch_labels = batch["label"].clone().detach().to(self.device) if isinstance(batch["label"], torch.Tensor) else torch.tensor(batch["label"]).to(self.device)
 
-                    if self.device.type == "cuda":
+                    if use_amp:
                         with torch.amp.autocast("cuda"):
                             outputs = fold_model(input_ids=input_ids, attention_mask=attention_mask, labels=batch_labels)
                             loss = outputs.loss
@@ -317,9 +338,13 @@ class IMDBCleanlabAuditor:
                         outputs = fold_model(input_ids=input_ids, attention_mask=attention_mask, labels=batch_labels)
                         loss = outputs.loss
 
-                    scaler.scale(loss).backward()
-                    scaler.step(optimizer)
-                    scaler.update()
+                    if scaler is not None:
+                        scaler.scale(loss).backward()
+                        scaler.step(optimizer)
+                        scaler.update()
+                    else:
+                        loss.backward()
+                        optimizer.step()
                     optimizer.zero_grad()
 
                     running_loss += loss.item()
@@ -591,6 +616,7 @@ class IMDBCleanlabAuditor:
         )
 
         train_len = len(base_ds["train"])
+        removed_count = len(idx_set)
         clean_indices = [i for i in range(train_len) if i not in idx_set]
 
         clean_train = base_ds["train"].select(clean_indices)
@@ -613,7 +639,7 @@ class IMDBCleanlabAuditor:
                 "test": len(clean_test),
             },
             "denoised": True,
-            "removed_noise_samples": len(issue_indices),
+            "removed_noise_samples": removed_count,
         }
         with open(out_path / "meta.json", "w", encoding="utf-8") as f:
             json.dump(meta_info, f, indent=2)
@@ -622,7 +648,7 @@ class IMDBCleanlabAuditor:
         print(" 🧹 CLEANLAB DENOISED DATASET EXPORTED SUCCESSFULLY")
         print("=" * 65)
         print(f"Original Train Samples: {train_len:,}")
-        print(f"Removed Noisy Labels:   {len(issue_indices):,} ({len(issue_indices)/train_len*100:.2f}%)")
+        print(f"Removed Noisy Labels:   {removed_count:,} ({removed_count/train_len*100:.2f}%)")
         print(f"Clean Train Samples:    {len(clean_train):,} ({len(clean_train)/train_len*100:.2f}%)")
         print(f"Val & Test Splits:      100% Preserved ({len(clean_val):,} val / {len(clean_test):,} test)")
         print(f"Saved To Directory:     {out_path}")

@@ -29,6 +29,12 @@ def visualize_head_tail_truncation(
         if len(long_samples) >= 10:
             break
 
+    if not long_samples:
+        raise RuntimeError(
+            "No long review (>= 700 tokens) found in the first 1000 training samples; "
+            "cannot visualize head-tail truncation."
+        )
+
     chosen_idx, chosen_text, total_tokens = long_samples[sample_index % len(long_samples)]
     cleaned = clean_text(chosen_text)
     full_tokens = tokenizer.encode(cleaned, add_special_tokens=True, truncation=False)

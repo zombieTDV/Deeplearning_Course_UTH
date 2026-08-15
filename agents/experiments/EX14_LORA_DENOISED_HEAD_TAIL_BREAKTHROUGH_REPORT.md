@@ -33,7 +33,7 @@ The table below contrasts EX-14 against all preceding milestones across the proj
 | **EX-01 (Floor)** | Zero-Shot DistilBERT | $0$ (Pretrained) | Standard $128$ | $89.07\%$ | $0.8906$ | $0.9412$ | $\sim 0.6\text{ GB}$ |
 | **EX-02 (Base FT)** | Full Fine-Tuning | $22,500$ (Raw) | Standard $128$ | $91.40\%$ | $0.9139$ | $0.9610$ | $\sim 1.8\text{ GB}$ |
 | **EX-06 (Expansion)**| Full Fine-Tuning | $22,500$ (Raw) | Standard $512$ | $93.23\%$ | $0.9323$ | $0.9742$ | $2.31\text{ GB}$ |
-| **EX-09 (LoRA Base)** | LoRA Rank 32 | $22,500$ (Raw) | Standard $512$ | $92.67\%$ | $0.9266$ | $0.9697$ | $1.85\text{ GB}$ |
+| **EX-09 (LoRA Optimal)** | LoRA Rank 32 | $22,164$ (Clean) | Standard $512$ | $92.35\%$ | $0.9235$ | $0.9753$ | $\sim 1.85\text{ GB}$ |
 | **EX-10..12 (Underfit)**| LoRA Micro-LR ($5\text{e}-5$)| $22,500$ (Raw) | Standard $512$ | $90.62\%$ | $0.9061$ | $0.9580$ | $1.85\text{ GB}$ |
 | **EX-14 (THIS RUN)** | **LoRA + Cleanlab + Head-Tail** | **$22,388$ (Clean)** | **Head-Tail $512$** | **$93.14\%$** | **$0.9314$** | **$0.9662$** | **$1.11\text{ GB}$** |
 

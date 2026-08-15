@@ -10,7 +10,7 @@ import torch
 from datasets import load_dataset
 from transformers import AutoTokenizer
 
-from src.data.prepare_imdb import clean_text
+from src.data.prepare_imdb import clean_text, head_tail_tokenize
 from src.models.model_builder import build_model
 from src.utils.checkpoint_utils import resolve_run_files, safe_load_checkpoint
 from src.utils.resource_monitor import cleanup_vram
@@ -91,8 +91,14 @@ class ErrorAuditor:
         device = "cuda" if torch.cuda.is_available() else "cpu"
         cleanup_vram()
 
-        model, tokenizer, _, ckpt_path = cls._load_latest_model(run_root=run_root, device=device)
+        model, tokenizer, run_cfg, ckpt_path = cls._load_latest_model(run_root=run_root, device=device)
         print(f"[AUDIT] Loaded model checkpoint: {ckpt_path.name} ({ckpt_path.parent.parent.name})")
+
+        # Match the model's training-time tokenization (head-tail at its own
+        # max_length) so the audit input distribution equals the training one.
+        max_length = int((run_cfg.get("data") or {}).get("max_length") or 512)
+        if max_length < 256:
+            max_length = 512  # head-tail truncation only applies at >= 256 tokens
 
         raw_test = load_dataset("stanfordnlp/imdb", split="test")
         if max_samples and max_samples < len(raw_test):
@@ -103,19 +109,17 @@ class ErrorAuditor:
         texts = list(raw_test["text"])
         n = len(texts)
 
-        print(f"[AUDIT] Running inference across {n:,} test samples on {device}...")
+        print(f"[AUDIT] Running inference across {n:,} test samples on {device} (max_length={max_length})...")
         all_probs: list[np.ndarray] = []
 
         with torch.no_grad():
             for i in range(0, n, batch_size):
                 batch_texts = [clean_text(t) for t in texts[i : min(i + batch_size, n)]]
-                enc = tokenizer(
-                    batch_texts,
-                    truncation=True,
-                    padding="max_length",
-                    max_length=512,
-                    return_tensors="pt",
-                ).to(device)
+                enc_dict = head_tail_tokenize(batch_texts, tokenizer, max_length=max_length, head_ratio=0.25)
+                enc = {
+                    "input_ids": torch.tensor(enc_dict["input_ids"], dtype=torch.long).to(device),
+                    "attention_mask": torch.tensor(enc_dict["attention_mask"], dtype=torch.long).to(device),
+                }
 
                 logits = model(**enc).logits
                 probs = torch.softmax(logits, dim=-1).detach().cpu().numpy()
