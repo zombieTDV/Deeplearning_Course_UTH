@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 from pathlib import Path
 from typing import Any
 
@@ -151,10 +150,10 @@ class ErrorAuditor:
             p_neg = pred_probs[idx, 0]
             text_snippet = texts[idx][:250].replace("\n", " ") + "..."
             print(f"\n[FP #{rank}] Test Sample Index: #{idx}")
-            print(f"    • Ground Truth:     Negative (0)")
+            print("    • Ground Truth:     Negative (0)")
             print(f"    • Model Predicted:  Positive (1) — Confidence: {p_pos*100:.2f}% (P_pos={p_pos:.4f}, P_neg={p_neg:.4f})")
             print(f"    • Review Text:      \"{text_snippet}\"")
-            print(f"    • Primary Root Cause: Sarcasm / Praise for individual actor in a terrible movie.")
+            print("    • Primary Root Cause: Sarcasm / Praise for individual actor in a terrible movie.")
 
         print("\n" + "=" * 75)
         print(f" 🚨 TOP {top_k} FALSE NEGATIVES (Given Positive, Predicted Negative with High Confidence)")
@@ -164,10 +163,10 @@ class ErrorAuditor:
             p_pos = pred_probs[idx, 1]
             text_snippet = texts[idx][:250].replace("\n", " ") + "..."
             print(f"\n[FN #{rank}] Test Sample Index: #{idx}")
-            print(f"    • Ground Truth:     Positive (1)")
+            print("    • Ground Truth:     Positive (1)")
             print(f"    • Model Predicted:  Negative (0) — Confidence: {p_neg*100:.2f}% (P_neg={p_neg:.4f}, P_pos={p_pos:.4f})")
             print(f"    • Review Text:      \"{text_snippet}\"")
-            print(f"    • Primary Root Cause: Mixed critique / Harsh descriptive words describing movie themes.")
+            print("    • Primary Root Cause: Mixed critique / Harsh descriptive words describing movie themes.")
 
         print("\n" + "=" * 75)
         print(f" Total Evaluated: {n:,} | False Positives: {len(fp_indices):,} | False Negatives: {len(fn_indices):,}")

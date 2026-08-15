@@ -9,6 +9,7 @@ Caches the tokenized datasets to `data/processed/imdb_tokenized/` as arrow files
 from __future__ import annotations
 
 import argparse
+import re
 from pathlib import Path
 from typing import Any
 
@@ -25,9 +26,6 @@ def _validate_no_test_leakage(train: Dataset, val: Dataset, test: Dataset) -> No
     assert len(train) + len(val) == expected_train, (
         f"train({len(train)}) + val({len(val)}) must equal {expected_train}"
     )
-
-
-import re
 
 
 def clean_text(text: str) -> str:
@@ -48,7 +46,7 @@ def head_tail_tokenize(
     head_ratio: float = 0.25,
 ) -> dict[str, Any]:
     """Tokenize texts with Head + Tail Truncation for sequences longer than max_length.
-    
+
     Preserves both the introduction (Head: 128 tokens) and verdict/conclusion (Tail: 384 tokens)
     of long reviews, fitting perfectly within the 512-token context window without out-of-index errors.
     """

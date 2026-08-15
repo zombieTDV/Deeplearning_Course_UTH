@@ -9,7 +9,7 @@ from typing import Any
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
-from datasets import Dataset, load_dataset
+from datasets import load_dataset
 from transformers import AutoTokenizer
 
 from src.data.prepare_imdb import clean_text
@@ -69,7 +69,7 @@ class IMDBCleanlabAuditor:
             history_files = list(run_dir.glob("metrics/*_history.jsonl"))
             if history_files:
                 try:
-                    with open(history_files[0], "r", encoding="utf-8") as f:
+                    with open(history_files[0], encoding="utf-8") as f:
                         for line in f:
                             if not line.strip():
                                 continue
@@ -107,7 +107,6 @@ class IMDBCleanlabAuditor:
         ckpt = safe_load_checkpoint(ckpt_path, device="cpu")
         run_cfg = ckpt.get("config", {})
         model_cfg = run_cfg.get("model", {})
-        data_cfg = run_cfg.get("data", {})
 
         model_name = model_cfg.get("name", "distilbert-base-uncased")
         state = ckpt["model_state_dict"]
@@ -136,7 +135,7 @@ class IMDBCleanlabAuditor:
         use_cache: bool = True,
     ) -> tuple[np.ndarray, np.ndarray, list[str]]:
         """Run batch inference on train split to compute predicted probabilities.
-        
+
         Features smart cache synchronization: automatically validates cache against the highest-accuracy checkpoint.
         """
         cache_file = self.project_root / "experiments" / "results" / "imdb_train_pred_probs.npy"
@@ -158,7 +157,7 @@ class IMDBCleanlabAuditor:
         # Smart Cache check: Validate cache against highest-accuracy model checkpoint
         if use_cache and cache_file.exists() and cache_meta.exists() and max_samples is None:
             try:
-                with open(cache_meta, "r", encoding="utf-8") as f:
+                with open(cache_meta, encoding="utf-8") as f:
                     meta = json.load(f)
                 if (
                     meta.get("checkpoint_path") == current_ckpt_str
@@ -224,15 +223,17 @@ class IMDBCleanlabAuditor:
         use_cache: bool = True,
     ) -> tuple[np.ndarray, np.ndarray, list[str]]:
         """Compute True 5-Fold Cross-Validation Out-Of-Fold (OOF) predicted probabilities.
-        
+
         Zero-Memorization Guarantee:
         Splits the 22,500 train reviews into K stratified folds. For each fold, a fresh
         LoRA adapter is trained on (K-1)/K of the data and predicts softmax probabilities on
         the held-out 1/K validation fold. Samples are NEVER evaluated by a model that saw them during training.
         """
         from datetime import datetime
+
         from sklearn.model_selection import StratifiedKFold
         from torch.utils.data import DataLoader
+
         from src.data.prepare_imdb import prepare_imdb
 
         cache_file = self.project_root / "experiments" / "results" / "imdb_oof_train_pred_probs.npy"
@@ -247,7 +248,7 @@ class IMDBCleanlabAuditor:
 
         train_ds = base_ds["train"]
         labels = np.array(train_ds["label"])
-        
+
         # Load raw texts if available
         raw_full = load_dataset("stanfordnlp/imdb", split="train")
         raw_train = raw_full.train_test_split(test_size=0.1, seed=42)["train"]
@@ -256,7 +257,7 @@ class IMDBCleanlabAuditor:
 
         if use_cache and cache_file.exists() and cache_meta.exists():
             try:
-                with open(cache_meta, "r", encoding="utf-8") as f:
+                with open(cache_meta, encoding="utf-8") as f:
                     meta = json.load(f)
                 if meta.get("n_splits") == n_splits and meta.get("total_samples") == n_samples:
                     print(f"[OOF-CACHE] Loading precomputed 5-Fold Out-Of-Fold probabilities from {cache_file}")
@@ -540,7 +541,7 @@ class IMDBCleanlabAuditor:
         epochs: int = 2,
     ) -> dict[str, Any]:
         """Convenient one-line API for Jupyter Notebooks.
-        
+
         Args:
             top_k (int): Number of top confident label errors to display.
             max_samples (int | None): Number of samples to scan. None = Full 22,500 train dataset.
@@ -570,6 +571,7 @@ class IMDBCleanlabAuditor:
     ) -> Path:
         """Filter out identified label issues from train set and save tokenized clean splits to disk."""
         import json
+
         from src.data.prepare_imdb import prepare_imdb
 
         out_path = self.project_root / output_dir

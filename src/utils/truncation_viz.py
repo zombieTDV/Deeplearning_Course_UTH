@@ -2,13 +2,12 @@
 
 from pathlib import Path
 from typing import Any
+
 import matplotlib.pyplot as plt
-import numpy as np
-import torch
 from datasets import load_dataset
 from transformers import AutoTokenizer
 
-from src.data.prepare_imdb import clean_text, head_tail_tokenize
+from src.data.prepare_imdb import clean_text
 
 
 def visualize_head_tail_truncation(
@@ -38,14 +37,12 @@ def visualize_head_tail_truncation(
     tail_len = max_length - head_len         # 384
 
     # 1. Standard Truncation
-    std_tokens = full_tokens[:max_length]
     std_lost_tokens = full_tokens[max_length:]
 
     # 2. Head + Tail Truncation
     ht_head_tokens = full_tokens[:head_len]
     ht_discarded_middle = full_tokens[head_len:-tail_len]
     ht_tail_tokens = full_tokens[-tail_len:]
-    ht_result_tokens = ht_head_tokens + ht_tail_tokens
 
     # Decode segments for preview
     intro_preview = tokenizer.decode(ht_head_tokens[:30]) + "..."

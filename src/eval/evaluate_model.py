@@ -35,7 +35,6 @@ from sklearn.metrics import (
     roc_auc_score,
     roc_curve,
 )
-from transformers import AutoModelForSequenceClassification
 
 from src.data.prepare_imdb import prepare_imdb
 from src.utils.checkpoint_utils import safe_load_checkpoint
