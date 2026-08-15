@@ -22,7 +22,7 @@
   `templates/PROJECT_ROADMAP_TEMPLATE.md`, `rules/LOGGING_CHECKPOINT_RULES.md`,
   `rules/RESULTS_REPORTING.md`.
 
-**Last updated:** 2026-08-13 (Milestone Achieved: **93.23% Test Accuracy** via EXP-06 512 Tokens Sequence Expansion)
+**Last updated:** 2026-08-15 (Milestone Achieved: **93.14% Test Accuracy** — EX-14 LoRA PEFT on Cleanlab-denoised IMDB with Head+Tail Truncation; builds on the EXP-06 512-token expansion milestone of **93.23%**)
 
 ---
 
@@ -184,7 +184,7 @@ marked **N/A** with a documented rationale instead of being silently skipped.
 | `T11` | Phase 6 | Smoke test finetuning on a tiny subset per [SMOKE_TEST_CHECKLIST.md](templates/SMOKE_TEST_CHECKLIST.md); verify VRAM ≤3.5 GB. **Accept:** smoke passes, VRAM reported | AI agent | `0.5d` | `T10` | `P0` | `[X]` |
 | `T12` | Phase 6 | Full finetune run on GPU; artifacts (checkpoints, logs, config, history JSONL) auto-persisted to `experiments/runs/<ts>_<run>/`. **Accept:** complete run dir per logging rules | Learner (launch) + AI agent (monitor) | `1d` | `T11` | `P0` | `[X]` |
 | `T13` | Phase 7 | Evaluation script [evaluate_model.py](../src/eval/evaluate_model.py): accuracy (primary), confusion matrix, per-class precision/recall/F1 on the held-out test set, evaluated once (§16; balanced classes → ROC-AUC optional). **Accept:** metrics reported with 5W1H per [RESULTS_REPORTING.md](rules/RESULTS_REPORTING.md) | AI agent | `1d` | `T12` | `P0` | `[X]` |
-| `T14` | Phase 7 | Single-variable experiments (e.g. one lr or epoch delta) with optional μ±σ across 2–3 seeds; K-Fold CV explicitly **N/A** and documented (§17–§18). **Accept:** one variable changed per run; deltas vs baseline — *evidence: [PLAN_EX2_OVERFITTING_FIX.md](plans/PLAN_EX2_OVERFITTING_FIX.md) remediation (multi-variable, accepted as P2/optional)* | Learner | `1d` | `T13` | `P2` | `[X]` |
+| `T14` | Phase 7 | Single-variable experiments (e.g. one lr or epoch delta) with optional μ±σ across 2–3 seeds; K-Fold CV explicitly **N/A** and documented (§17–§18). **Accept:** one variable changed per run; deltas vs baseline — *evidence: [PLAN_EX2_OVERFITTING_FIX.md](plans/completed/PLAN_EX2_OVERFITTING_FIX.md) remediation (multi-variable, accepted as P2/optional)* | Learner | `1d` | `T13` | `P2` | `[X]` |
 | `T15` | Phase 8 | Error analysis: extract misclassified reviews, group by root cause (label noise, rare patterns, etc.) per §19.1; record in [EVAL.md](phases/EVAL.md). **Accept:** root-cause groups documented | AI agent + Learner | `0.5d` | `T13` | `P1` | `[X]` |
 | `T16` | Phase 8 | Local interpretability: sample predictions + confidence review in notebook (§20). **Accept:** example predictions shown | AI agent | `0.5d` | `T13` | `P3` | `[X]` |
 | `T17` | Phase 8 | Demo/analysis notebook `notebooks/02_ex2_finetune.ipynb` with header per [NOTEBOOK_HEADER_CONVENTION.md](rules/NOTEBOOK_HEADER_CONVENTION.md); loads artifacts only, no training loop. **Accept:** runs standalone | AI agent | `1d` | `T15`, `T16` | `P1` | `[X]` |

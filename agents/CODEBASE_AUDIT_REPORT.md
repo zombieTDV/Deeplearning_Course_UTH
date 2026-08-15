@@ -237,11 +237,11 @@ Severity totals: **High × 3, Medium × 4, Low × 3, Info × 4.** Cross-referenc
 
 ### `ARC-3`: Two phase-doc templates coexist
 - **Severity:** Low
-- **Description:** [templates/PHASE_DOC_TEMPLATE.md](templates/PHASE_DOC_TEMPLATE.md)
+- **Description:** `templates/PHASE_DOC_TEMPLATE.md`
   and [phases/PHASE_TEMPLATE.md](phases/PHASE_TEMPLATE.md) both claim to be the
   phase-doc template; the 8 phase docs were created from the latter. Two
   templates will drift.
-- **Affected:** [templates/PHASE_DOC_TEMPLATE.md](templates/PHASE_DOC_TEMPLATE.md),
+- **Affected:** `templates/PHASE_DOC_TEMPLATE.md`,
   [phases/PHASE_TEMPLATE.md](phases/PHASE_TEMPLATE.md).
 - **Remediation:** designate one canonical template and remove or alias the
   other. — tracked in [Action P2.2](#12-prioritized-action-plan)
@@ -488,4 +488,45 @@ doc-clean, lint-green, and test-green. The two PR-#15 merge blockers (B1/B2)
 are resolved in local commit `8f536b0`. Any remaining action is the optional
 `scratch` error-audit helper and re-verifying committed eval numbers on the
 pinned stack.
+
+---
+
+## Appendix — PR #16 Review & Remediation Audit (2026-08-15)
+
+Audit gate over all changes introduced since `c708cb0` (the `LAB3_HuggingFace`
+base): PR #16 `feature/ex2-finetune` (Head-Tail Truncation, 5-Fold OOF
+Cleanlab auditing, LoRA PEFT breakthrough) plus the review-fix commit
+`ae178d5`. Scope: `c708cb0..b9c4b1e` (merged 2026-08-15, 49 files,
++10,655/−545).
+
+| Check | Result | Evidence |
+|---|---|---|
+| Head-tail truncation consistency | **Fixed** | `IMDBCleanlabAuditor.compute_train_probabilities` and `ErrorAuditor.audit_top_misclassifications` now tokenize with `head_tail_tokenize()` at the checkpoint's own `max_length` — matching the training distribution instead of prefix truncation. Cache meta records `truncation: head_tail` so the stale committed prefix-truncated `imdb_train_pred_probs.npy` is invalidated. |
+| `export_denoised_dataset` metadata | **Fixed** | Counts `len(idx_set)` (number of pruned samples) instead of `len(issue_indices)` (dict key count ≈ 6) in `meta.json` and the console report. |
+| CUDA/CPU AMP | **Fixed** | `GradScaler` created only on CUDA (`use_amp`); plain `backward()/step()` on CPU in `compute_oof_probabilities`. |
+| Config key drift | **Fixed** | `config_imdb_sentiment_denoised_fullft.yaml` `evaluation_strategy` → `eval_strategy` (the trainer reads `eval_strategy`; the old key was silently ignored). |
+| Audit checkpoint selection | **Hardened** | `_load_latest_model` warns when the resolved highest-accuracy checkpoint was trained at `max_length < 512`, flagging divergence from the head-tail 512 convention. |
+| `truncation_viz` crash guard | **Fixed** | Raises a clear `RuntimeError` instead of a zero-division `IndexError` when no ≥700-token review is found. |
+| CI imports (IPython) | **Fixed** | `IPython.display` lazy-imported inside methods in `evaluator.py`/`plotter.py` (commits `858a8e7`, `648996d`); `tests/test_cleanlab_denoiser.py` uses `pytest.importorskip("cleanlab")`. |
+| Lint (ruff, CI rule) | **Pass** | `ruff check src tests` clean (verified locally with ruff 0.16.2). |
+| Tests | **Pass** | `pytest` → 15 passed / 1 skipped (cleanlab absent locally; skips via `importorskip`). |
+| Notebook header policy | **Fixed** | `notebooks/02_ex2_finetune.ipynb` roadmap column renamed to `Import path` and the mandatory `## References` block added per [NOTEBOOK_HEADER_CONVENTION.md](rules/NOTEBOOK_HEADER_CONVENTION.md). |
+| Report metric consistency | **Fixed** | `EX14` comparison table row for EX-09 reconciled to EX-09's own report (22,164 Clean / 92.35% / F1 0.9235 / AUC 0.9753) — it previously conflated EX-08's numbers. |
+| Results & overview docs | **Fixed** | [`experiments/results/README.md`](../experiments/results/README.md) re-indexed to the EX-14 eval JSON and the new Cleanlab/truncation artifacts; [`OVERVIEW.md`](OVERVIEW.md) updated to the 93.14% EX-14 milestone; `FOLDER_STRUCTURE.md` lists the new modules. |
+| Data leakage guard | **Pass** | 5-Fold OOF auditing guarantees each train sample is scored by a model that never saw it; val/test splits sealed. |
+| Data-centric integrity | **Annotated** | Cleanlab `find_label_issues` returns probabilities whose tokenization now matches training (see first row). |
+
+**Residual risks (non-blocking, tracked):**
+
+- **R1 — audit count mismatch:** the committed [`cleanlab_label_issues.json`](../experiments/results/cleanlab_label_issues.json) lists **707** candidate issues (3.14%), while the EX-13/EX-14 reports and the exported `imdb_denoised_512` (22,388 clean = 112 pruned) reference a higher-confidence subset. The exact pruned index list is not yet reproducible from the artifact alone; recommend recording the pruned indices (or a confidence threshold in `audit_label_errors`/`export_denoised_dataset`) so the 112 can be traced.
+- **R2 — stray artifact:** a duplicate `notebooks/experiments/results/head_tail_truncation_viz.png` was committed (generated with CWD=notebooks). Plots belong under `experiments/plots|results`; remove the stray copy.
+- **R3 — committed binary caches:** `imdb_train_pred_probs.npy` / `imdb_oof_train_pred_probs.npy` (~180 KB each) are regenerable script outputs; committing them is consistent with the repo's results-committing practice but inflates git — consider `.gitignore`-ing the `.npy` caches going forward.
+- **R4 — report format debt:** EX-07…EX-14 reports carry 5W1H but do not fully follow [MD_CONVENTION.md](rules/MD_CONVENTION.md) (5-field header + TOC); paths/HF IDs are occasionally bare text.
+- **R5 — hardcoded viz constants:** `truncation_viz.py` coverage/waste figures (e.g. `[9.48, 55.66, 86.24, 100.0]`, `18.4` tokens) are presentation constants, not derived from data.
+
+**Verdict:** the merged PR #16 content is code-clean, lint-green, test-green,
+and consistent with the logging/checkpoint, 5W1H, and notebook-header rules.
+All review findings raised on the PR were remediated in `ae178d5` (now merged
+via `b9c4b1e`); the residual items above are documentation/artifact-practice
+follow-ups, none blocking the submission.
 

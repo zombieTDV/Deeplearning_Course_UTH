@@ -35,7 +35,7 @@ project_root/
 │   │   └── <GUIDE>.md     # e.g. OPTUNA_DB_GUIDE.md, GIT_AND_RELEASE_BEST_PRACTICES.md
 │   ├── experiments/       # Experiment reports, plans & technical comparisons
 │   │   ├── README.md
-│   │   └── <EXP>.md       # EX1…EX6 reports (indexed in README.md)
+│   │   └── <EXP>.md       # EX1…EX14 reports (indexed in README.md)
 │   ├── progress/          # One status file per task/phase
 │   │   └── <PHASE>_STATUS.md  # from PROGRESS_TEMPLATE.md
 │   └── bugs/              # Documented bug reports
@@ -43,19 +43,19 @@ project_root/
 │       └── BUG_<NN>_<SHORT>.md
 ├── data/
 │   ├── raw/               # Never edited by the agent
-│   ├── processed/         # Cached tokenized IMDB datasets (256 and 512 tokens)
+│   ├── processed/         # Cached tokenized IMDB datasets (imdb_tokenized_512, imdb_denoised_512)
 │   └── external/
 ├── src/                   # Core modular package (top-level exports in src/__init__.py)
-│   ├── data/              # prepare_imdb.py, eda_imdb.py (IMDBDatasetEDA)
+│   ├── data/              # prepare_imdb.py (clean_text, head_tail_tokenize), eda_imdb.py (IMDBDatasetEDA), cleanlab_denoiser.py (IMDBCleanlabAuditor)
 │   ├── models/            # model_builder.py (build_model, LLRD), predictor.py (SentimentPredictor)
 │   ├── training/          # imdb_sentiment_train.py (CLI), trainer.py (IMDBTrainer)
 │   ├── eval/              # evaluate_model.py, evaluator.py (IMDBEvaluator), plotter.py (IMDBPlotter), error_auditor.py (ErrorAuditor)
-│   └── utils/             # run_logger.py, checkpoint_utils.py, resource_monitor.py
-├── notebooks/             # Deliverable interactive notebooks
+│   └── utils/             # run_logger.py, checkpoint_utils.py, resource_monitor.py, truncation_viz.py (visualize_head_tail_truncation)
+├── notebooks/             # Deliverable interactive notebooks (analysis only — no training loops)
 │   ├── 01_ex1_sentiment_baseline.ipynb  # Zero-Shot Baseline Exercise 1 (89.07% Acc)
-│   └── 02_ex2_finetune.ipynb            # Fine-Tuning Exercise 2 & Presets EXP-00 to EXP-07 (93.23% Acc)
+│   └── 02_ex2_finetune.ipynb            # Exercise 2 end-to-end: EDA, HTML cleaning, Head+Tail truncation, 5-Fold OOF Cleanlab audit, LoRA training & eval (peak 93.14% Acc)
 ├── scratch/               # Generated utility & audit scripts (build_notebook.py)
-├── configs/               # YAML experiment configuration files (config_imdb_sentiment_*.yaml)
+├── configs/               # YAML experiment configuration files (config_imdb_sentiment_*.yaml incl. denoised + fullft presets)
 ├── experiments/           # Run outputs, checkpoints, plots, evaluation results
 └── tests/                 # Unit tests & smoke test suite
 ```

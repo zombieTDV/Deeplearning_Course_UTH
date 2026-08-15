@@ -8,6 +8,7 @@ Covers B1 (the ``src`` package must import cleanly even when the optional
 import importlib
 
 _LAZY_NAMES = [
+    "IMDBCleanlabAuditor",
     "IMDBDatasetEDA",
     "IMDBEvaluator",
     "IMDBPlotter",
@@ -16,6 +17,7 @@ _LAZY_NAMES = [
     "SentimentPredictor",
     "build_model",
     "prepare_imdb",
+    "clean_text",
     "evaluate",
     "safe_load_checkpoint",
     "cleanup_vram",
