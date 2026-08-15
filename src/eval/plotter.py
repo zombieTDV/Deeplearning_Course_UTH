@@ -4,7 +4,6 @@ import json
 from pathlib import Path
 
 import matplotlib.pyplot as plt
-from IPython.display import Image, display
 
 from src.utils.checkpoint_utils import resolve_run_files
 
@@ -62,25 +61,26 @@ class IMDBPlotter:
             accuracies = [maj_acc, zs_acc]
             colors = ["#95a5a6", "#3498db"]
 
-        bars = ax1.bar(categories, accuracies, color=colors, edgecolor="black", width=0.45)
-        ax1.set_ylabel("Test Accuracy (%)", fontsize=11, fontweight="bold")
-        ax1.set_title("Ex 1 Zero-Shot Accuracy vs Random Baseline Floor", fontsize=12, fontweight="bold")
-        ax1.set_ylim(40, 100)
-        ax1.grid(axis="y", linestyle="--", alpha=0.6)
+        bars = ax1.bar(categories, accuracies, color=colors, width=0.55, edgecolor="black", linewidth=1)
+        ax1.set_ylim(0, 105)
+        ax1.set_ylabel("Accuracy (%)", fontweight="bold", fontsize=11)
+        ax1.set_title("Zero-Shot Baseline vs Majority Floor Accuracy", fontweight="bold", fontsize=12)
+        ax1.grid(axis="y", linestyle="--", alpha=0.5)
 
-        for bar, acc in zip(bars, accuracies, strict=False):
+        for bar in bars:
             yval = bar.get_height()
-            ax1.text(bar.get_x() + bar.get_width()/2.0, yval + 1.2, f"{acc:.2f}%", ha="center", va="bottom", fontweight="bold", fontsize=10)
+            ax1.text(bar.get_x() + bar.get_width()/2.0, yval + 1.5, f"{yval:.2f}%", ha="center", va="bottom", fontweight="bold", fontsize=10)
 
-        # Panel 2: Metric Breakdown (Accuracy, F1, ROC-AUC)
-        metrics = ["Zero-Shot Accuracy", "Zero-Shot F1 (macro)", "Zero-Shot ROC-AUC"]
-        scores = [zs_acc / 100.0, zs_acc / 100.0, roc_auc]
+        # Panel 2: Evaluation Metrics
+        metrics = ["Zero-Shot Accuracy", "Zero-Shot ROC-AUC"]
+        scores = [zs_acc / 100.0, roc_auc]
+        colors2 = ["#3498db", "#9b59b6"]
 
-        bars2 = ax2.barh(metrics[::-1], scores[::-1], color=["#e67e22", "#9b59b6", "#3498db"], edgecolor="black", height=0.5)
-        ax2.set_xlim(0.80, 1.00)
-        ax2.set_xlabel("Score Ratio (0.0 to 1.0)", fontsize=11, fontweight="bold")
-        ax2.set_title("Ex 1 Zero-Shot Baseline Performance Breakdown", fontsize=12, fontweight="bold")
-        ax2.grid(axis="x", linestyle="--", alpha=0.6)
+        bars2 = ax2.barh(metrics[::-1], scores[::-1], color=colors2[::-1], height=0.45, edgecolor="black", linewidth=1)
+        ax2.set_xlim(0, 1.1)
+        ax2.set_xlabel("Score (0.0 to 1.0)", fontweight="bold", fontsize=11)
+        ax2.set_title("Zero-Shot Model Performance Metrics", fontweight="bold", fontsize=12)
+        ax2.grid(axis="x", linestyle="--", alpha=0.5)
 
         for bar, score in zip(bars2, scores[::-1], strict=False):
             xval = bar.get_width()
@@ -94,7 +94,12 @@ class IMDBPlotter:
         plot_name = "imdb_finetuned_roc_curve.png" if finetuned else "baseline_zero_shot_roc_curve.png"
         roc_plot_path = self.project_root / "experiments" / "plots" / plot_name
         if roc_plot_path.exists():
-            display(Image(filename=str(roc_plot_path)))
+            try:
+                from IPython.display import Image, display
+
+                display(Image(filename=str(roc_plot_path)))
+            except ImportError:
+                pass
         else:
             print("ROC Curve plot artifact not found at", roc_plot_path)
 
@@ -103,7 +108,12 @@ class IMDBPlotter:
         plot_name = "imdb_finetuned_confusion_matrix.png" if finetuned else "baseline_zero_shot_confusion_matrix.png"
         cm_plot_path = self.project_root / "experiments" / "plots" / plot_name
         if cm_plot_path.exists():
-            display(Image(filename=str(cm_plot_path)))
+            try:
+                from IPython.display import Image, display
+
+                display(Image(filename=str(cm_plot_path)))
+            except ImportError:
+                pass
         else:
             print("Confusion Matrix plot artifact not found at", cm_plot_path)
 
