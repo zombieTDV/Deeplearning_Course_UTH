@@ -2,41 +2,41 @@
   "metadata_5w1h": {
     "what": "Finetuned DistilBERT test-set evaluation (accuracy, ROC-AUC, confusion matrix, per-class P/R/F1)",
     "why": "Generalization benchmark on sealed IMDB test split vs Exercise 1 zero-shot floor",
-    "when": "2026-08-14T18:05:16.415500",
+    "when": "2026-08-15T18:16:39.520529",
     "where": "experiments/results/imdb_sentiment_eval.json | executed on cuda",
     "who": "bush-le + AI agent \u2014 coursework submission",
     "how": "single held-out evaluation pass, softmax probability output, no TTA"
   },
   "result": {
-    "checkpoint": "experiments/runs/20260814_171836_distilbert-finetune-lora/checkpoints/distilbert-finetune-lora_best.pt",
+    "checkpoint": "experiments/runs/20260815_173320_distilbert-finetune-lora-denoised/checkpoints/distilbert-finetune-lora-denoised_best.pt",
     "model": "distilbert-base-uncased",
     "num_test_samples": 25000,
-    "accuracy": 0.9286,
-    "roc_auc": 0.9770630848000001,
+    "accuracy": 0.93144,
+    "roc_auc": 0.9661535327999998,
     "confusion_matrix": {
-      "neg_neg": 11465,
-      "neg_pos": 1035,
-      "pos_neg": 750,
-      "pos_pos": 11750
+      "neg_neg": 11605,
+      "neg_pos": 895,
+      "pos_neg": 819,
+      "pos_pos": 11681
     },
     "per_class": {
       "neg": {
-        "precision": 0.9386000818665575,
-        "recall": 0.9172,
-        "f1": 0.9277766538539348,
+        "precision": 0.934079201545396,
+        "recall": 0.9284,
+        "f1": 0.9312309420638741,
         "support": 12500
       },
       "pos": {
-        "precision": 0.9190457567461869,
-        "recall": 0.94,
-        "f1": 0.9294047854459165,
+        "precision": 0.9288326972010178,
+        "recall": 0.93448,
+        "f1": 0.9316477907162227,
         "support": 12500
       }
     },
-    "f1_macro": 0.9285907196499257,
+    "f1_macro": 0.9314393663900484,
     "vram": {
-      "peak_allocated_mb": 269.13,
-      "peak_reserved_mb": 1110.0,
+      "peak_allocated_mb": 271.38,
+      "peak_reserved_mb": 1112.0,
       "vram_target_gb": 3.5,
       "vram_ceiling_gb": 4.0,
       "vram_within_target": true

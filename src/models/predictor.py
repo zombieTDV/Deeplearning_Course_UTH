@@ -80,7 +80,14 @@ class SentimentPredictor:
 
     def predict(self, review_text: str) -> dict[str, Any]:
         """Predict sentiment label, confidence %, and probabilities for input review text."""
-        enc = self.tokenizer(review_text, truncation=True, padding=True, max_length=self.max_length, return_tensors="pt").to(self.device)
+        from src.data.prepare_imdb import clean_text, head_tail_tokenize
+
+        cleaned = clean_text(review_text)
+        enc_dict = head_tail_tokenize([cleaned], self.tokenizer, max_length=self.max_length, head_ratio=0.25)
+        enc = {
+            "input_ids": torch.tensor(enc_dict["input_ids"], dtype=torch.long).to(self.device),
+            "attention_mask": torch.tensor(enc_dict["attention_mask"], dtype=torch.long).to(self.device),
+        }
         with torch.no_grad():
             logits = self.model(**enc).logits
             probs = torch.softmax(logits, dim=-1)[0]

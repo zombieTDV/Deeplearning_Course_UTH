@@ -27,13 +27,73 @@ def _validate_no_test_leakage(train: Dataset, val: Dataset, test: Dataset) -> No
     )
 
 
-def tokenize_split(examples: dict[str, list], tokenizer: AutoTokenizer, max_length: int) -> dict[str, Any]:
+import re
+
+
+def clean_text(text: str) -> str:
+    """Strip HTML line breaks (<br />, <br>) and collapse redundant whitespace."""
+    if not isinstance(text, str):
+        return text
+    # Replace HTML line breaks with a space
+    cleaned = re.sub(r"<br\s*/?>", " ", text, flags=re.IGNORECASE)
+    # Collapse multiple whitespace characters into single space
+    cleaned = re.sub(r"\s+", " ", cleaned).strip()
+    return cleaned
+
+
+def head_tail_tokenize(
+    texts: list[str],
+    tokenizer: AutoTokenizer,
+    max_length: int = 512,
+    head_ratio: float = 0.25,
+) -> dict[str, Any]:
+    """Tokenize texts with Head + Tail Truncation for sequences longer than max_length.
+    
+    Preserves both the introduction (Head: 128 tokens) and verdict/conclusion (Tail: 384 tokens)
+    of long reviews, fitting perfectly within the 512-token context window without out-of-index errors.
+    """
+    head_len = int(max_length * head_ratio)
+    tail_len = max_length - head_len
+    all_input_ids: list[list[int]] = []
+    all_attention_mask: list[list[int]] = []
+
+    for text in texts:
+        tokens = tokenizer.encode(text, add_special_tokens=True, truncation=False)
+        if len(tokens) <= max_length:
+            pad_len = max_length - len(tokens)
+            input_ids = tokens + [tokenizer.pad_token_id] * pad_len
+            attn_mask = [1] * len(tokens) + [0] * pad_len
+        else:
+            head = tokens[:head_len]
+            tail = tokens[-tail_len:]
+            input_ids = head + tail
+            attn_mask = [1] * max_length
+
+        all_input_ids.append(input_ids)
+        all_attention_mask.append(attn_mask)
+
+    return {
+        "input_ids": all_input_ids,
+        "attention_mask": all_attention_mask,
+    }
+
+
+def tokenize_split(
+    examples: dict[str, list],
+    tokenizer: AutoTokenizer,
+    max_length: int,
+    use_head_tail: bool = True,
+) -> dict[str, Any]:
+    cleaned_texts = [clean_text(t) for t in examples["text"]]
+    if use_head_tail and max_length >= 256:
+        return head_tail_tokenize(cleaned_texts, tokenizer, max_length=max_length, head_ratio=0.25)
     return tokenizer(
-        examples["text"],
+        cleaned_texts,
         truncation=True,
         padding="max_length",
         max_length=max_length,
     )
+
 
 
 def prepare_imdb(
