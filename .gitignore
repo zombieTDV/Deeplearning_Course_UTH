@@ -19,6 +19,7 @@ build/
 /data/*.zip
 /data/*.pt
 /data/*.json
+/src/data/DF40/
 
 # Experiment outputs (track plots, results & scripts; ignore heavy weights & DBs)
 /experiments/checkpoints/*.pt
