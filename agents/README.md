@@ -42,6 +42,7 @@ agents/
 ├── OVERVIEW.md                    # Core project overview, goals & phase roadmap
 ├── PURPOSE.md                     # Original project brief & requirements
 ├── PROJECT_ROADMAP.md             # Execution plan: milestones, phases, tasks, timeline
+├── CODEBASE_AUDIT_REPORT.md       # Running audit log (findings + phase completion gates)
 ├── HOW_TO_SETUP_AI_AGENT.md       # Step-by-step agent workflow setup
 ├── ML_PIPELINE_REFERENCE_v3.md    # End-to-end ML pipeline reference (steps 1-18+)
 │
@@ -62,6 +63,10 @@ agents/
 ├── phases/                        # Step-by-step pipeline & phase specifications
 │   ├── PHASE_TEMPLATE.md          # Template for phase docs (DATA_PREP, MODEL, ...)
 │   └── <PHASE>.md                 # One file per phase, filled from the template
+│
+├── plans/                         # Experiment/implementation plans
+│   ├── PLAN_EX2_*.md              # active plans
+│   └── completed/                 # archived/resolved plans (BUGFIX_*, PLAN_EX2_*)
 │
 ├── templates/                     # Standard templates & checklists for agents
 │   ├── PROJECT_ROADMAP_TEMPLATE.md  # Roadmap skeleton (milestones, phases, tasks)

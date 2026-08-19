@@ -1,3 +1,5 @@
+**Status:** [DONE] Completed & Archived
+
 # PLAN: Exercise 2 Anti-Overfitting & Re-Finetuning Plan
 
 **Goal**: Fix the overfitting phenomenon observed during Exercise 2 training, optimize regularization and step-wise evaluation, achieve higher held-out accuracy, and embed all visual charts directly inside Notebook 02 (`notebooks/02_ex2_finetune.ipynb`).

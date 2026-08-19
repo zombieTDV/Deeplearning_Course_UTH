@@ -1,0 +1,6 @@
+{
+  "total_samples": 22500,
+  "device": "cuda",
+  "checkpoint_path": "/home/bush/Desktop/Deeplearning_Course_UTH/experiments/runs/20260814_034056_distilbert-finetune-lora/checkpoints/distilbert-finetune-lora_best.pt",
+  "checkpoint_mtime": 1786656312.6153853
+}

@@ -1,5 +1,8 @@
 # Exercise 2 — Finetune `distilbert-base-uncased` on IMDB (binary sentiment).
-# Specialized per agents/plans/PLAN_EX2_OVERFITTING_FIX.md to fix overfitting.
+# Default (base) config for `python -m src.training.imdb_sentiment_train`.
+# Note: this config is NOT the top-scoring one — the best committed result
+# (93.23% test acc, see experiments/results/imdb_sentiment_eval.json) comes from
+# the 512-token tuned config: configs/config_imdb_sentiment_512_hyper.yaml.
 
 dataset:
   name: "stanfordnlp/imdb"
@@ -25,12 +28,15 @@ training:
   epochs: 4                # 4 epochs with step-wise evaluation
   batch_size: 8            # small batch + gradient accumulation
   gradient_accumulation_steps: 2
-  lr: 1.5e-5               # Reduced learning rate to stabilize loss and prevent overfitting
-  weight_decay: 0.05       # 5x stronger weight decay regularization
+  lr: 2.0e-5               # Baseline learning rate
+  weight_decay: 0.01       # Standard L2 weight decay regularization
+  classifier_dropout: 0.20 # Sequence classification head dropout
+  label_smoothing_factor: 0.0 # Hard binary cross-entropy targets
+  early_stopping_patience: 3 # Halt training when validation loss stops improving
+  lr_scheduler_type: "linear" # Linear learning rate decay
   warmup_ratio: 0.1
   fp16: true               # mixed precision keeps VRAM ≤3.5 GB
   eval_strategy: "steps"   # Frequent step-wise validation
   eval_steps: 300          # Evaluate every 300 steps (~4 evaluations per epoch)
   logging_steps: 50
   vram_budget_gb: 3.5      # strict ceiling 4 GB across team machines
-

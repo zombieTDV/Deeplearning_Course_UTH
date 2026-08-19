@@ -6,12 +6,22 @@ PYTORCH_FRAMEWORK_RULES.md §1.2 and roadmap risk R1).
 
 from __future__ import annotations
 
+import gc
 import threading
 
 import torch
 
 VRAM_TARGET_GB = 3.5
 VRAM_CEILING_GB = 4.0
+
+
+def cleanup_vram() -> None:
+    """Clear Python garbage collector and release PyTorch CUDA memory cache."""
+    gc.collect()
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+        torch.cuda.ipc_collect()
+
 
 
 class ResourceMonitor:

@@ -4,7 +4,7 @@ pandas
 numpy
 matplotlib
 tensorboard
-# PyTorch with CUDA: wheels are NOT on PyPI — install via the cu130 index (see agents/bugs/BUG_01)
+# PyTorch with CUDA: wheels are NOT on PyPI — install via the cu130 index (see agents/bugs/BUG_01_CICD_TORCH_CUDA_REQUIREMENTS_FAIL.md)
 #   pip install torch==2.13.0+cu130 torchvision==0.28.0+cu130 --index-url https://download.pytorch.org/whl/cu130
 # (plain `pip install torch` resolves to the CPU wheel and must be avoided on GPU machines)
 torch==2.13.0+cu130
@@ -20,4 +20,12 @@ transformers==5.15.0
 datasets==5.0.1
 evaluate==0.4.6
 accelerate>=1.1.0
+
+# Data-centric AI & PEFT (LoRA) — EX-08/13/14 label-error audit + LoRA adaptation
+# (lazily imported in src/data/cleanlab_denoiser.py and src/models/model_builder.py)
+cleanlab>=2.9.0          # Confident-Learning label-error audit (IMDBCleanlabAuditor)
+peft>=0.15.0             # LoRA / PEFT adaptation (build_model, EXP-LORA* presets)
+
+# Notebook-only display helpers (lazily imported in src/eval/evaluator.py & plotter.py)
+ipython                  # IPython.display for in-notebook figure/HTML rendering
 

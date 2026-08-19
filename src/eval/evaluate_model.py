@@ -15,9 +15,13 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+
+# Prevent PyTorch c10 ApproximateClock non-monotonic CPU frequency assertion crash on Linux
+os.environ["CUDA_MODULE_LOADING"] = "LAZY"
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -31,26 +35,45 @@ from sklearn.metrics import (
     roc_auc_score,
     roc_curve,
 )
-from transformers import AutoModelForSequenceClassification
 
 from src.data.prepare_imdb import prepare_imdb
-from src.utils.checkpoint_utils import latest_run_dir, safe_load_checkpoint
-from src.utils.resource_monitor import ResourceMonitor
+from src.utils.checkpoint_utils import safe_load_checkpoint
+from src.utils.resource_monitor import ResourceMonitor, cleanup_vram
 
 
-def _resolve_checkpoint(checkpoint: str | None, run_root: str) -> Path:
+def _resolve_checkpoint(checkpoint: str | None, run_root: str) -> tuple[Path, dict[str, Any] | None]:
     if checkpoint:
         path = Path(checkpoint)
         if not path.exists():
             raise SystemExit(f"Checkpoint not found: {path}")
-        return path
-    run_dir = latest_run_dir(run_root, "distilbert-finetune")
-    if run_dir is None:
+        return path, None
+
+    run_root_path = Path(run_root)
+    if not run_root_path.exists():
+        raise SystemExit(f"Run root directory not found: {run_root}")
+
+    # Find the newest timestamped run directory under experiments/runs/
+    matches = [p for p in run_root_path.glob("*_*") if p.is_dir() and (p / "checkpoints").exists()]
+    if not matches:
         raise SystemExit(f"No run directory found under {run_root}")
-    path = run_dir / "checkpoints" / "distilbert-finetune_best.pt"
-    if not path.exists():
-        raise SystemExit(f"Best checkpoint not found: {path}")
-    return path
+
+    run_dir = sorted(matches, key=lambda p: (p.name, p.stat().st_mtime), reverse=True)[0]
+
+    from src.utils.checkpoint_utils import resolve_run_files
+    files = resolve_run_files(run_dir)
+    target = files["swa"] or files["best"] or files["last"]
+    if target and target.exists():
+        cfg = None
+        metrics_cfg = list((run_dir / "metrics").glob("*_config.json")) if (run_dir / "metrics").exists() else []
+        if metrics_cfg:
+            try:
+                with open(metrics_cfg[0], encoding="utf-8") as f:
+                    cfg = json.load(f).get("config")
+            except (json.JSONDecodeError, OSError):
+                cfg = None
+        return target, cfg
+    raise SystemExit(f"Best checkpoint not found under {run_dir / 'checkpoints'}")
+
 
 
 @torch.no_grad()
@@ -84,13 +107,26 @@ def evaluate(
     batch_size: int = 32,
     max_samples: int | None = None,
 ) -> dict[str, Any]:
+    cleanup_vram()
     print(f"Loading checkpoint: {checkpoint_path}")
     ckpt = safe_load_checkpoint(checkpoint_path, device="cpu")
-    run_cfg = ckpt.get("config", {})
-    model_name = (run_cfg.get("model") or cfg.get("model"))["name"]
-    max_length = (run_cfg.get("data") or cfg.get("dataset"))["max_length"]
 
-    model = AutoModelForSequenceClassification.from_pretrained(model_name, num_labels=2)
+    run_cfg = ckpt.get("config", {})
+    model_cfg = run_cfg.get("model") or cfg.get("model") or {}
+    model_name = model_cfg.get("name", "distilbert-base-uncased")
+    data_cfg = run_cfg.get("data") or run_cfg.get("dataset") or cfg.get("data") or cfg.get("dataset") or {}
+    max_length = data_cfg.get("max_length", 256)
+    processed_dir = data_cfg.get("processed_dir", "data/processed/imdb_tokenized")
+    lora_cfg = run_cfg.get("lora")
+
+    from src.models.model_builder import build_model
+    model = build_model(
+        model_name=model_name,
+        num_labels=model_cfg.get("num_labels", 2),
+        id2label={int(k): v for k, v in model_cfg.get("id2label", {"0": "neg", "1": "pos"}).items()} if model_cfg.get("id2label") else None,
+        label2id={k: int(v) for k, v in model_cfg.get("label2id", {"neg": 0, "pos": 1}).items()} if model_cfg.get("label2id") else None,
+        lora_config_dict=lora_cfg,
+    )
     model.load_state_dict(ckpt["model_state_dict"])
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -102,7 +138,7 @@ def evaluate(
         dataset_id="stanfordnlp/imdb",
         model_name=model_name,
         max_length=max_length,
-        processed_dir="data/processed/imdb_tokenized",
+        processed_dir=processed_dir,
     )
     test: Dataset = ds["test"]
     if max_samples and max_samples < len(test):
@@ -237,15 +273,21 @@ def main() -> None:
     parser.add_argument("--run-root", default="experiments/runs")
     parser.add_argument("--batch-size", type=int, default=32)
     parser.add_argument("--max-samples", type=int, default=None, help="cap for quick smoke tests")
-    parser.add_argument("--config", default="configs/config_imdb_sentiment.yaml")
+    parser.add_argument("--config", default=None)
     args = parser.parse_args()
 
-    import yaml
+    ckpt_path, saved_cfg = _resolve_checkpoint(args.checkpoint, args.run_root)
 
-    with open(args.config, encoding="utf-8") as f:
-        cfg = yaml.safe_load(f)
-    ckpt_path = _resolve_checkpoint(args.checkpoint, args.run_root)
+    if saved_cfg is not None and not args.config:
+        cfg = saved_cfg
+    else:
+        import yaml
+        config_file = args.config or "configs/config_imdb_sentiment.yaml"
+        with open(config_file, encoding="utf-8") as f:
+            cfg = yaml.safe_load(f)
+
     evaluate(ckpt_path, cfg, batch_size=args.batch_size, max_samples=args.max_samples)
+
 
 
 if __name__ == "__main__":

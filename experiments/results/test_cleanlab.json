@@ -1,0 +1,31 @@
+{
+  "total_samples_audited": 4,
+  "total_label_issues_found": 2,
+  "estimated_noise_rate_pct": 50.0,
+  "mislabeled_as_negative_count": 1,
+  "mislabeled_as_positive_count": 1,
+  "issue_indices": [
+    0,
+    2
+  ],
+  "top_issues": [
+    {
+      "dataset_index": 0,
+      "given_label": "Negative (0)",
+      "suggested_label": "Positive (1)",
+      "confidence_pct": 95.0,
+      "prob_positive": 0.95,
+      "prob_negative": 0.05,
+      "text_excerpt": "This is an amazing masterpiece! Loved everything."
+    },
+    {
+      "dataset_index": 2,
+      "given_label": "Positive (1)",
+      "suggested_label": "Negative (0)",
+      "confidence_pct": 88.0,
+      "prob_positive": 0.12,
+      "prob_negative": 0.88,
+      "text_excerpt": "Worst movie ever made. Total trash."
+    }
+  ]
+}
