@@ -18,6 +18,8 @@ Training-state logs and checkpoints live in `experiments/runs/`, NOT here.
 | `resnet_densenet_sota_ensemble_results.json` | **What**: ensemble evaluation metrics (isolated/cross cat-dog breakdown). |
 | `stacking_mlp/` | **What**: stacking meta-model artifacts — `stacking_mlp_artifacts.npz` (val/test features + ensemble & MLP test probabilities), `mlp_{notta,tta}.pt`, `config.json`, `history.jsonl`. **Why**: notebook analysis of the 97.21% best configuration without re-training. **How**: `python -m src.experiments.stacking_mlp_train`. **Note**: `.npz`/`.pt` are regenerable by that script and are gitignored (kept out of git). |
 | `moe_phase1/` | **What**: Phase-1 soft-router artifacts — `moe_phase1_artifacts.npz` (expert probabilities + gates), `router_phase1.pt`, `config.json`, `history.jsonl`. **Why**: MoE router analysis without re-training. **How**: `python -m src.experiments.moe_router_train`. **Note**: `.npz`/`.pt` are regenerable by that script and are gitignored (kept out of git). |
+| `umap_features_summary.json` | **What**: UMAP clustering separability metrics (Silhouette, Davies-Bouldin, Calinski-Harabasz) comparing raw pixels against frozen, fine-tuned, SOTA models and SOTA-Ensemble penultimate features. **Why**: visual and quantitative proof of learned semantic class separation. **How**: `python src/eda/umap_cifar10_features.py --all`. |
+| `umap_embeddings_*.npy` / `umap_labels_*.npy` | **What**: 2D UMAP coordinates and ground-truth labels for CIFAR-10 test set representations across models. **Why**: fast re-plotting without re-running dimensionality reduction. |
 
 ## Storage rules
 
