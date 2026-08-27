@@ -2,13 +2,13 @@
   "metadata_5w1h": {
     "what": "Finetuned DistilBERT test-set evaluation (accuracy, ROC-AUC, confusion matrix, per-class P/R/F1)",
     "why": "Generalization benchmark on sealed IMDB test split vs Exercise 1 zero-shot floor",
-    "when": "2026-08-15T18:16:39.520529",
+    "when": "2026-08-27T15:00:55.597641",
     "where": "experiments/results/imdb_sentiment_eval.json | executed on cuda",
     "who": "bush-le + AI agent \u2014 coursework submission",
     "how": "single held-out evaluation pass, softmax probability output, no TTA"
   },
   "result": {
-    "checkpoint": "experiments/runs/20260815_173320_distilbert-finetune-lora-denoised/checkpoints/distilbert-finetune-lora-denoised_best.pt",
+    "checkpoint": "experiments/runs/20260815_173320_distilbert-finetune-lora-denoised/checkpoints/distilbert-finetune-lora-denoised_swa.pt",
     "model": "distilbert-base-uncased",
     "num_test_samples": 25000,
     "accuracy": 0.93144,

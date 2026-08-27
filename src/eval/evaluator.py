@@ -49,26 +49,25 @@ class IMDBEvaluator:
             return eval_m
         return {}
 
-    def evaluate_latest_checkpoint(self, verbose_5w1h: bool = False) -> dict[str, Any]:
+    def evaluate_latest_checkpoint(self, verbose_5w1h: bool = False, force: bool = False) -> dict[str, Any]:
         """Execute evaluation CLI on the newest checkpoint and display benchmark summary."""
-        print("=" * 65)
-        print(" RUNNING DIRECT TEST-SET EVALUATION ON SEALED 25,000 REVIEWS")
-        print("=" * 65)
-
-        env = os.environ.copy()
-        env["PYTHONPATH"] = str(self.project_root)
-        env["CUDA_MODULE_LOADING"] = "LAZY"
-        env["PYTHONUNBUFFERED"] = "1"
-        eval_cmd = [sys.executable, "-m", "src.eval.evaluate_model"]
-        try:
-            subprocess.run(eval_cmd, cwd=str(self.project_root), env=env, check=True)
-        except subprocess.CalledProcessError:
-            # Fallback for CPU mode if C10 CUDA clock assertion fires on specific kernel hardware
-            env["CUDA_VISIBLE_DEVICES"] = ""
-            subprocess.run(eval_cmd, cwd=str(self.project_root), env=env, check=True)
-
-
         eval_json_path = self.project_root / "experiments" / "results" / "imdb_sentiment_eval.json"
+        if not eval_json_path.exists() or force:
+            print("=" * 65)
+            print(" RUNNING DIRECT TEST-SET EVALUATION ON SEALED 25,000 REVIEWS")
+            print("=" * 65)
+
+            env = os.environ.copy()
+            env["PYTHONPATH"] = str(self.project_root)
+            env["CUDA_MODULE_LOADING"] = "LAZY"
+            env["PYTHONUNBUFFERED"] = "1"
+            eval_cmd = [sys.executable, "-m", "src.eval.evaluate_model"]
+            try:
+                subprocess.run(eval_cmd, cwd=str(self.project_root), env=env, check=True)
+            except subprocess.CalledProcessError:
+                # Fallback for CPU mode if C10 CUDA clock assertion fires on specific kernel hardware
+                env["CUDA_VISIBLE_DEVICES"] = ""
+                subprocess.run(eval_cmd, cwd=str(self.project_root), env=env, check=True)
         if eval_json_path.exists():
             with open(eval_json_path, encoding="utf-8") as f:
                 payload = json.load(f)
