@@ -25,7 +25,11 @@ os.environ["CUDA_MODULE_LOADING"] = "LAZY"
 
 import matplotlib.pyplot as plt
 import numpy as np
-import seaborn as sns
+
+try:
+    import seaborn as sns
+except ImportError:
+    sns = None
 import torch
 from datasets import Dataset
 from sklearn.metrics import (
@@ -494,20 +498,33 @@ def plot_metrics_heatmap_table(
             norm_vals[:, c] = (col - col.min()) / denom
 
     fig, ax = plt.subplots(figsize=figsize)
-    sns.heatmap(
-        norm_vals,
-        annot=annot_matrix,
-        fmt="",
-        cmap="YlGnBu",
-        xticklabels=metric_cols,
-        yticklabels=models,
-        cbar=True,
-        cbar_kws={"label": "Normalized Performance Rank (Column-wise: 1.0 = Peak SOTA)"},
-        linewidths=1.2,
-        linecolor="white",
-        ax=ax,
-        annot_kws={"fontsize": 9.5, "fontweight": "bold"},
-    )
+    if sns is not None:
+        sns.heatmap(
+            norm_vals,
+            annot=annot_matrix,
+            fmt="",
+            cmap="YlGnBu",
+            xticklabels=metric_cols,
+            yticklabels=models,
+            cbar=True,
+            cbar_kws={"label": "Normalized Performance Rank (Column-wise: 1.0 = Peak SOTA)"},
+            linewidths=1.2,
+            linecolor="white",
+            ax=ax,
+            annot_kws={"fontsize": 9.5, "fontweight": "bold"},
+        )
+    else:
+        im = ax.imshow(norm_vals, cmap="YlGnBu", aspect="auto", vmin=0, vmax=1)
+        cbar = fig.colorbar(im, ax=ax)
+        cbar.set_label("Normalized Performance Rank (Column-wise: 1.0 = Peak SOTA)")
+        ax.set_xticks(range(len(metric_cols)))
+        ax.set_xticklabels(metric_cols)
+        ax.set_yticks(range(len(models)))
+        ax.set_yticklabels(models)
+        for i in range(len(models)):
+            for j in range(len(metric_cols)):
+                ax.text(j, i, str(annot_matrix[i, j]), ha="center", va="center", color="black", fontsize=9.5, fontweight="bold")
+
     ax.set_title(title, fontsize=12, fontweight="bold", pad=15)
     plt.xticks(rotation=20, ha="right", fontsize=9.5, fontweight="bold")
     plt.yticks(rotation=0, fontsize=9.5)

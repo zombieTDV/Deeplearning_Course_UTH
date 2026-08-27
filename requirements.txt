@@ -3,6 +3,7 @@
 pandas
 numpy
 matplotlib
+seaborn>=0.13.0
 tensorboard
 # PyTorch with CUDA: wheels are NOT on PyPI — install via the cu130 index (see agents/bugs/BUG_01_CICD_TORCH_CUDA_REQUIREMENTS_FAIL.md)
 #   pip install torch==2.13.0+cu130 torchvision==0.28.0+cu130 --index-url https://download.pytorch.org/whl/cu130
