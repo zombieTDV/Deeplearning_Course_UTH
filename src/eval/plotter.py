@@ -171,11 +171,25 @@ class IMDBPlotter:
             plt.tight_layout()
             plt.show()
 
+    def display_metrics_summary_heatmap(self) -> None:
+        """Display saved Seaborn Metrics Summary Heatmap PNG artifact."""
+        heatmap_path = self.project_root / "experiments" / "plots" / "metrics_summary_heatmap.png"
+        if heatmap_path.exists():
+            try:
+                from IPython.display import Image, display
+
+                display(Image(filename=str(heatmap_path)))
+            except ImportError:
+                pass
+        else:
+            print("Metrics summary heatmap plot artifact not found at", heatmap_path)
+
     def display_zero_shot_baseline_artifacts(self) -> None:
-        """Helper to display Exercise 1 Zero-Shot baseline benchmark, ROC curve & baseline confusion matrix."""
+        """Helper to display Exercise 1 Baseline benchmark, ROC curve, baseline confusion matrix & metrics summary heatmap."""
         self.plot_baseline_benchmark(include_ex2=False)
         self.display_roc_curve(finetuned=False)
         self.display_confusion_matrix(finetuned=False)
+        self.display_metrics_summary_heatmap()
 
     def display_all_baseline_artifacts(self) -> None:
         """Legacy helper alias for zero-shot baseline artifacts."""
