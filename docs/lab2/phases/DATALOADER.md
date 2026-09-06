@@ -1,5 +1,11 @@
 # DATALOADER.md
 
+- **Created**: 2026-09-06T13:14:10+07:00
+- **Last Updated**: 2026-09-06T13:14:10+07:00
+
+---
+
+
 ## Overview
 
 The `dataloader.py` module provides DataLoader creation for CIFAR-10 with persistent train/val/test split. It ensures consistent data splitting across all phases of the project by persisting the split indices to disk.

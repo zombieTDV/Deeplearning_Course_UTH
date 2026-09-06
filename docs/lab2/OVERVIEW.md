@@ -1,5 +1,11 @@
 # OVERVIEW.md
 
+- **Created**: 2026-09-06T13:14:10+07:00
+- **Last Updated**: 2026-09-06T13:14:10+07:00
+
+---
+
+
 ## Project
 Practice 2 — Transfer learning with pre-trained architectures on CIFAR-10.
 

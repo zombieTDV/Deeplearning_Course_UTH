@@ -1,5 +1,11 @@
 # EXPERIMENT REPORT: EX-07 HTML Artifact Stripping & Tokenization Efficiency
 
+- **Created**: 2026-09-06T14:38:06+07:00
+- **Last Updated**: 2026-09-06T14:38:06+07:00
+
+---
+
+
 **Document ID:** `EX7-HTML-DATA-CLEANING-REPORT`  
 **Date:** 2026-08-15  
 **Author:** bush-le + Antigravity AI Pair Programmer  

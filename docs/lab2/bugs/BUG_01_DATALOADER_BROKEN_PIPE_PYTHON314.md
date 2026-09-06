@@ -1,5 +1,11 @@
 # 🐛 BUG-01: PyTorch DataLoader Multiprocessing `BrokenPipeError` in Python 3.14 & Linux Jupyter Environments
 
+- **Created**: 2026-09-06T13:14:10+07:00
+- **Last Updated**: 2026-09-06T13:14:10+07:00
+
+---
+
+
 - **Bug ID**: `BUG-01`
 - **Category**: Runtime Execution / Multiprocessing / DataLoader
 - **Date Identified**: 2026-08-04

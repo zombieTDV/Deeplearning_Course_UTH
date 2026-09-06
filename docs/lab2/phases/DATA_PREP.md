@@ -1,5 +1,11 @@
 # DATA_PREP.md
 
+- **Created**: 2026-09-06T13:14:10+07:00
+- **Last Updated**: 2026-09-06T13:14:10+07:00
+
+---
+
+
 ## Name
 
 Data Preparation — CIFAR-10

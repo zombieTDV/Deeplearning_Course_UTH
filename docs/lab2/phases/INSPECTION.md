@@ -1,5 +1,11 @@
 # INSPECTION.md
 
+- **Created**: 2026-09-06T13:14:10+07:00
+- **Last Updated**: 2026-09-06T13:14:10+07:00
+
+---
+
+
 ## Overview
 
 The `inspection.py` module provides data validation and quality checks for the CIFAR-10 dataset. It includes functions to verify label integrity, check class distribution, detect corrupted images, and validate image shapes.

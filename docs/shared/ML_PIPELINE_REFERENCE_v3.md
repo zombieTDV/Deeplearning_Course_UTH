@@ -1,9 +1,22 @@
-﻿# ML Pipeline Reference
+# Machine Learning Pipeline Reference (v3.0)
+
+| Field | Value |
+| :--- | :--- |
+| **Document Type** | Comprehensive ML Engineering & Pipeline Reference |
+| **Status** | Canonical Reference |
+| **Owner** | AI Agent & Human Practitioner |
+| **Scope** | Global Deep Learning Methodology |
+| **Created** | 2026-07-24T09:00:00+07:00 |
+| **Last Updated** | 2026-09-06T21:25:00+07:00 |
+| **Reference** | [docs/README.md](../README.md), [agents/rules/PYTORCH_FRAMEWORK_RULES.md](../../agents/rules/PYTORCH_FRAMEWORK_RULES.md) |
+
+---
 
 **Version:** 2.0
 **Scope:** Steps 1–18 (Problem Framing → Experimental Methodology), plus introductory coverage of Error Analysis and Interpretability. See coverage table below for what remains thin.
 **Audience:** Human practitioners and AI coding agents.
 **How to use:** Follow this document top-to-bottom before writing a single line of training code. Every section states *what*, *why*, and *when not to* — read all three.
+
 
 ---
 

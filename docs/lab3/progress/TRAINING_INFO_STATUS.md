@@ -5,8 +5,8 @@
 ## Header
 
 - **Title:** Finetuning with the HF Trainer (Exercise 2)
-- **Date created:** 2026-08-11
-- **Last updated:** 2026-08-13
+- **Created**: 2026-08-11T00:00:00+07:00
+- **Last Updated**: 2026-08-13T00:00:00+07:00
 - **Description:** Tracks `distilbert-base-uncased` finetuning via HF Trainer, LLRD, Cosine Scheduler, and 512 tokens expansion.
 - **Status:** Done
 - **Phase doc:** [../phases/TRAINING_INFO.md](../phases/TRAINING_INFO.md)

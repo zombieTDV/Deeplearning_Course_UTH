@@ -1,5 +1,11 @@
 # EXPERIMENT REPORT EX-10: DIAGNOSTIC AUDIT OF LORA MICRO-LEARNING RATE REGIME & UNDERFITTING MECHANICS
 
+- **Created**: 2026-09-06T14:38:06+07:00
+- **Last Updated**: 2026-09-06T14:38:06+07:00
+
+---
+
+
 > **Document ID:** `EX10-LORA-LOW-LR-UNDERFITTING`  
 > **Date:** 2026-08-15  
 > **Authors:** bush-le + Antigravity AI Pair Programmer  

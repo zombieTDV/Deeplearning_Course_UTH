@@ -1,5 +1,11 @@
 # Model Comparison Table
 
+- **Created**: 2026-09-06T13:09:10+07:00
+- **Last Updated**: 2026-09-06T13:09:10+07:00
+
+---
+
+
 | Metric | MLP | CNN | Diff |
 |--------|----:|----:|-----:|
 | Test Accuracy (%) | 88.45 | 93.30 | +4.85 |

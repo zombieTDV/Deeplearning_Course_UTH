@@ -5,8 +5,8 @@
 ## Header
 
 - **Title:** Baseline Model (Exercise 1 — Zero-Shot Sentiment Analysis)
-- **Date created:** 2026-08-11
-- **Last updated:** 2026-08-11
+- **Created**: 2026-08-11T00:00:00+07:00
+- **Last Updated**: 2026-08-11T00:00:00+07:00
 - **Description:** Tracks the Ex 1 zero-shot baseline and majority-class floor.
 - **Status:** Done
 - **Phase doc:** [../phases/BASELINE.md](../phases/BASELINE.md)

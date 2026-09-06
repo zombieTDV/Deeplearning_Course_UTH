@@ -24,6 +24,9 @@
 
 **Last updated:** 2026-08-15 (Milestone Achieved: **93.14% Test Accuracy** — EX-14 LoRA PEFT on Cleanlab-denoised IMDB with Head+Tail Truncation; builds on the EXP-06 512-token expansion milestone of **93.23%**)
 
+- **Created**: 2026-09-06T14:38:06+07:00
+- **Last Updated**: 2026-08-15T00:00:00+07:00
+
 ---
 
 ## Table of Contents

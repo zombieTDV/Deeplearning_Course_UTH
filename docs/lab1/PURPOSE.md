@@ -2,6 +2,12 @@ Aim: Because I study about DeepLearning -
 
 # Practice 1
 
+- **Created**: 2026-09-06T13:09:10+07:00
+- **Last Updated**: 2026-09-06T13:09:10+07:00
+
+---
+
+
 ### Exercise: PyTorch FashionMNIST Classification
 
 1. **Learn:** Study PyTorch Tensors, Datasets/Loaders, Transforms, Model Building, Autograd, Optimization, and Model Saving/Loading. - human: Quang Manh, not u(AI coding)

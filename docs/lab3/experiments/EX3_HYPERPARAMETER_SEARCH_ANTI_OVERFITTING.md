@@ -6,7 +6,8 @@
 
 - **Experiment Title:** Exercise 2 Hyperparameter Tuning & Advanced Anti-Overfitting Search
 - **Experiment ID:** `EXP-EX2-HYPERPARAMETER-SEARCH`
-- **Date Created:** 2026-08-12
+- **Created**: 2026-08-12T00:00:00+07:00
+- **Last Updated**: 2026-09-06T14:38:06+07:00
 - **Author / Role:** bush-le + AI agent → Coursework submission
 - **Status:** Planned
 - **Target Component:** [`src/training/imdb_sentiment_train.py`](../../src/training/imdb_sentiment_train.py), [`configs/config_imdb_sentiment.yaml`](../../configs/config_imdb_sentiment.yaml)

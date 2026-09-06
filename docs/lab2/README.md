@@ -1,4 +1,4 @@
-﻿# LAB2 — CIFAR-10 Transfer Learning (ResNet18, DenseNet121, ConvNeXt)
+# LAB2 — CIFAR-10 Transfer Learning (ResNet18, DenseNet121, ConvNeXt)
 
 - **Motivation/Background**: Second laboratory of the Deep Learning course. Focuses on transfer learning using pretrained ImageNet backbones on CIFAR-10.
 - **Purpose**: Document the full experimental pipeline, SOTA achievements, error analysis, and deliverables for LAB2.
@@ -10,6 +10,9 @@
   5. Ensembling & error reduction: Soft-voting ensembles, Class-Logit Bias Sweeping (resolving cat-dog confusion), Mixture of Experts (MoE), and Stacking MLPs.
   6. Deep feature analysis: 2D UMAP projections of deep representations across backbones.
 - **References**: `src/lab2/`, `notebooks/lab2/`, `experiments/lab2/`, `docs/lab2/experiments/`, `docs/lab2/phases/`.
+
+- **Created**: 2026-09-06T13:14:10+07:00
+- **Last Updated**: 2026-09-06T13:14:10+07:00
 
 ---
 

@@ -1,5 +1,11 @@
 # <TITLE> — Template (agents/phases)
 
+- **Created**: 2026-09-06T13:14:10+07:00
+- **Last Updated**: 2026-09-06T13:14:10+07:00
+
+---
+
+
 Copy this file into `agents/phases/` as `<PHASE>.md` for each phase/stage
 (DATA_PREP.md, TRAINING_INFO.md, MODEL.md, EVAL.md, ...). Everything for a
 phase stays in this single file.

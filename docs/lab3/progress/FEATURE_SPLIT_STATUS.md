@@ -5,8 +5,8 @@
 ## Header
 
 - **Title:** Feature Engineering & Split
-- **Date created:** 2026-08-11
-- **Last updated:** 2026-08-12
+- **Created**: 2026-08-11T00:00:00+07:00
+- **Last Updated**: 2026-08-12T00:00:00+07:00
 - **Description:** Tracks tokenization, train/val/test split, and leakage rules.
 - **Status:** Done
 - **Phase doc:** [../phases/FEATURE_SPLIT.md](../phases/FEATURE_SPLIT.md)

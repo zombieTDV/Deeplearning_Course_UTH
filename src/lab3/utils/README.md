@@ -1,5 +1,11 @@
 # src/utils — Shared Helpers
 
+- **Created**: 2026-09-06T14:38:06+07:00
+- **Last Updated**: 2026-09-06T14:38:06+07:00
+
+---
+
+
 Cross-cutting utilities used by the other layers:
 
 - `run_logger.py` — real-time logging + rotating files + JSONL history.

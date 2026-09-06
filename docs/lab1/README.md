@@ -1,4 +1,4 @@
-﻿# LAB1 — Fashion-MNIST Classification (MLP vs CNN)
+# LAB1 — Fashion-MNIST Classification (MLP vs CNN)
 
 - **Motivation/Background**: First laboratory of the Deep Learning course. Implements baseline classification on the Fashion-MNIST dataset to benchmark Multi-Layer Perceptrons (MLPs) against Convolutional Neural Networks (CNNs).
 - **Purpose**: Document the implementation, deliverables, experiments, and survivor map for LAB1.
@@ -8,6 +8,9 @@
   3. Regularization & anti-overfitting (data augmentation, label smoothing, focal loss).
   4. Hyperparameter tuning via Optuna (30 trials).
 - **References**: `src/lab1/`, `notebooks/lab1/`, `experiments/lab1/`, `data/lab1/splits/`.
+
+- **Created**: 2026-09-06T13:09:10+07:00
+- **Last Updated**: 2026-09-06T13:09:10+07:00
 
 ---
 

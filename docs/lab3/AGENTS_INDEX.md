@@ -1,5 +1,11 @@
 # Agent AI Knowledge Base & Control Layer
 
+- **Created**: 2026-09-06T14:38:06+07:00
+- **Last Updated**: 2026-09-06T14:38:06+07:00
+
+---
+
+
 Welcome to the **Agent AI Knowledge Base** for the `[PROJECT_NAME]` repository.
 This folder serves as the "second brain", memory, and behavioral control layer
 for AI agents working on this project.

@@ -1,5 +1,11 @@
 # CIFAR_STEM_EXPERIMENT.md — Native 32x32 Resolution vs 224x224 Resizing Experiment
 
+- **Created**: 2026-09-06T13:14:10+07:00
+- **Last Updated**: 2026-09-06T13:14:10+07:00
+
+---
+
+
 ## 📌 Experiment Overview
 
 - **Experiment Name:** Native CIFAR-10 Conv Stem Adaptation vs 224x224 Upsampling Baseline

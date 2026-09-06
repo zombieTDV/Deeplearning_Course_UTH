@@ -1,5 +1,11 @@
 # Runs-Path Audit Report — LAB2 & LAB3
 
+- **Created**: 2026-09-06T17:45:37+07:00
+- **Last Updated**: 2026-09-06T17:45:37+07:00
+
+---
+
+
 > **Scope:** All training, evaluation, inference, and RunLogger entry points.  
 > **Mode:** READ-ONLY. Nothing modified.  
 > **Target state:** `experiments/lab2/runs` for LAB2, `experiments/lab3/runs` for LAB3.

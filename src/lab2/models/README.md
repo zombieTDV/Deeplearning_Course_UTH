@@ -1,5 +1,11 @@
 # src/models — Model Layer
 
+- **Created**: 2026-09-06T13:14:10+07:00
+- **Last Updated**: 2026-09-06T13:14:10+07:00
+
+---
+
+
 ## Architecture Overview (LAB2)
 
 Builders produce the pretrained CIFAR-10 classifiers consumed by the training

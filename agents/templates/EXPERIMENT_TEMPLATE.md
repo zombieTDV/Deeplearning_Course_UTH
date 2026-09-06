@@ -1,50 +1,93 @@
-# <TITLE> — Template (agents/experiments)
+# <EXPERIMENT_ID>: <TITLE> — Experiment Specification & Report Template
 
-Copy this file into `agents/experiments/` as `<EXP_OR_NAME>.md` for each
-experiment. Register it in `agents/experiments/README.md`.
+- **Motivation/Background**: Systematic deep learning experimentation requires formal hypotheses, isolated variables, and reproducible artifacts to prevent confounding results.
+- **Purpose**: Document the objective, single variable changed, baseline comparison, 5W1H results, and findings for an individual experiment.
+- **Overview Pipeline**: Copy into `docs/experiments/<EXP_ID>_<NAME>.md` prior to executing the experiment, then populate results upon completion.
+- **Detailed Plan**: §1 Objective & Hypothesis; §2 Controlled Variables; §3 Setup & Hyperparameters; §4 Empirical Results (5W1H); §5 Key Findings & Regressions; §6 Reproduction Protocol.
+- **References**: `agents/rules/MD_CONVENTION.md`, `agents/rules/RESULTS_REPORTING.md`, `agents/rules/LOGGING_CHECKPOINT_RULES.md`.
+- **Created**: YYYY-MM-DDTHH:MM:SS±HH:MM
+- **Last Updated**: YYYY-MM-DDTHH:MM:SS±HH:MM
 
 ---
 
-## Header
+## Metadata
 
-- **Title:** <Short experiment name>
-- **Date created:** YYYY-MM-DD
-- **Last updated:** YYYY-MM-DD
-- **Description:** <One sentence: what this experiment tests.>
-- **Status:** [To Do | In Progress | Done | On Hold | Canceled]
-- **Experiment ID:** <e.g. EXP-07, or a short slug>
+- **Experiment ID**: `<e.g. EXP-01>`
+- **Title**: `<e.g. RandAugment + Cutout on ConvNeXt-Tiny>`
+- **Status**: [To Do | In Progress | Completed | Superseded | Canceled]
+- **Target Script**: [`src/experiments/...`](...)
+- **Output Directory**: [`experiments/runs/...`](...)
 
-## Objective
+---
 
-<What hypothesis is being tested; what success looks like (with a number).>
+## 1. Objective & Hypothesis
 
-## Single variable changed / held constant
+- **Hypothesis**: <Clear statement of expected performance shift, e.g. "Introducing RandAugment (N=2, M=9) will reduce validation overfitting and improve top-1 accuracy by ≥0.5%">
+- **Success Criteria**: <Quantifiable metric threshold, e.g. "Val accuracy ≥ 95.0% without training divergence">
 
-- **Changed:** <the one thing under test>
-- **Held constant:** <everything else — data, loss, scheduler, seed...>
+---
 
-## Setup
+## 2. Controlled Variables (Single-Variable Principle)
 
-- **Data / split:** <source, train/val/test sizes>
-- **Models / base:** <architectures, checkpoints>
-- **Hyperparameters:** <lr, epochs, batch, loss, scheduler, seed>
+- **Variable Changed**: `<the single experimental modification, e.g. data augmentation transform>`
+- **Held Constant**: `<model backbone, learning rate schedule, seed, optimizer, batch size>`
 
-## Results
+---
 
-| Metric | Before | After |
-|---|---|---|
-| Test accuracy | <x>% | <y>% |
-| <other metric> | ... | ... |
+## 3. Setup & Hyperparameters
 
-## Analysis / interpretation
+- **Dataset Split**: <Train / Val / Test sizes, seed>
+- **Model Architecture**: [`src/models/...`](...)
+- **Hyperparameters**:
+  - `epochs`: <int>
+  - `batch_size`: <int>
+  - `lr`: <float>
+  - `optimizer`: <name, weight_decay>
+  - `seed`: 42
 
-<What the numbers mean; whether the hypothesis holds; caveats.>
+---
 
-## Reproduce
+## 4. Empirical Results (5W1H)
 
-<Commands or notebook path to rerun. Note if runtime > 5 min.>
+> **5W1H — <Headline Result>**
+> - **What**: Top-1 Accuracy on test split
+> - **Why**: Measure generalization gain over baseline
+> - **When**: Measured YYYY-MM-DD on checkpoint `<run_name>_best.pt`
+> - **Where**: Artifacts in `experiments/runs/<run_dir>/`; run on `<device>`
+> - **Who**: `<author/team>`
+> - **How**: Evaluated with deterministic evaluation protocol, no TTA
 
-## Links
+### Comparison Table
 
-- Notebook: <relative path>
-- Status: [../progress/<EXP>_STATUS.md](../progress/<EXP>_STATUS.md)
+| Model / Configuration | Val Loss | Val Acc (%) | Test Acc (%) | Δ Acc (%) | Checkpoint |
+| :--- | :---: | :---: | :---: | :---: | :--- |
+| **Baseline** | 0.245 | 94.20 | 94.10 | — | `baseline_best.pt` |
+| **Experiment (<EXP_ID>)** | **0.210** | **94.85** | **94.70** | **+0.60** | `<exp_best>.pt` |
+
+---
+
+## 5. Key Findings & Regressions
+
+- **Primary Finding**: <Plain-language summary of what occurred>
+- **Regressions / Caveats**: <Any unexpected training slowdown, VRAM spikes, or per-class drops>
+- **Decision**: [ADOPTED | REJECTED | NEEDS_FURTHER_STUDY]
+
+---
+
+## 6. Reproduction Protocol
+
+```bash
+# Execute training script
+python -m src.experiments.<script_name> --epochs 30 --seed 42
+
+# Evaluate checkpoint
+python -m src.eval.evaluate_model --checkpoint experiments/runs/<run_dir>/checkpoints/<run>_best.pt
+```
+
+---
+
+## 7. Associated Links
+
+- Interactive Notebook Analysis: [`notebooks/...`](...)
+- Task Status: [`docs/progress/<PHASE>_STATUS.md`](...)
+- Master Experiment Index: [`docs/experiments/README.md`](README.md)

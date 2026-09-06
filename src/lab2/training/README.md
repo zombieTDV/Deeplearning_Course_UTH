@@ -1,5 +1,11 @@
 # src/training — Training Layer (script-only)
 
+- **Created**: 2026-09-06T13:14:10+07:00
+- **Last Updated**: 2026-09-06T13:14:10+07:00
+
+---
+
+
 ## Architecture Overview (LAB2)
 
 All model training runs here as Python scripts — **notebooks never train**:

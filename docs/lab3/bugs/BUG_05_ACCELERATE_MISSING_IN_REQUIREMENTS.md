@@ -1,5 +1,8 @@
 # BUG_05_ACCELERATE_MISSING_IN_REQUIREMENTS.md — Bug Report (agents/bugs)
 
+- **Created**: 2026-09-06T14:38:06+07:00
+- **Last Updated**: 2026-09-06T14:38:06+07:00
+
 ---
 
 ## Header

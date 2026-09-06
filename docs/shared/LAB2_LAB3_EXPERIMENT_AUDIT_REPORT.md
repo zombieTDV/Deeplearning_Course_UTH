@@ -1,7 +1,8 @@
 # LAB2 & LAB3 Experiment Directory Provenance Audit Report
 
 > **Branch:** `consolidate/unified-main`  
-> **Audit Date:** 2026-09-06  
+> **Created:** 2026-09-06T00:00:00+07:00  
+> **Last Updated:** 2026-09-06T17:45:37+07:00  
 > **Mode:** READ-ONLY — no files modified, staged, committed, or moved.
 
 ---

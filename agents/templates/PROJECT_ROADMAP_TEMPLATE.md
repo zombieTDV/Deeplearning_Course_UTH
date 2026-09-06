@@ -11,7 +11,9 @@
   (3) key milestones; (4) major phases; (5) task breakdown; (6) task dependencies;
   (7) resource allocation; (8) estimated timeline; (9) risks & mitigations;
   (10) maintenance.
-- **References**: Markdown (GitHub-flavoured tables/checklists).
+- **References**: Markdown (GitHub-flavoured tables/checklists), `agents/rules/MD_CONVENTION.md`.
+- **Created**: YYYY-MM-DDTHH:MM:SS±HH:MM
+- **Last Updated**: YYYY-MM-DDTHH:MM:SS±HH:MM
 
 ---
 

@@ -1,5 +1,11 @@
 # EXPERIMENT REPORT: EX-06 Sequence Length 512 & LLRD Accuracy Breakthrough
 
+- **Created**: 2026-09-06T14:38:06+07:00
+- **Last Updated**: 2026-09-06T14:38:06+07:00
+
+---
+
+
 **Document ID:** `EX6-512-TOKENS-BREAKTHROUGH-REPORT`  
 **Date:** 2026-08-13  
 **Author:** bush-le + Antigravity AI Pair Programmer  

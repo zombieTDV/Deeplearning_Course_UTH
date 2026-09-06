@@ -1,5 +1,8 @@
 # BUG_04_EXPERIMENTS_RUNS_DIR_MISSING_ON_CI.md — Bug Report (agents/bugs)
 
+- **Created**: 2026-09-06T14:38:06+07:00
+- **Last Updated**: 2026-09-06T14:38:06+07:00
+
 ---
 
 ## Header

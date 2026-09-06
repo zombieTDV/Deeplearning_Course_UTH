@@ -5,8 +5,8 @@
 ## Header
 
 - **Title:** Exercise 1 — Zero-Shot Sentiment Analysis Baseline
-- **Date created:** 2026-08-12
-- **Last updated:** 2026-08-12
+- **Created**: 2026-08-12T00:00:00+07:00
+- **Last Updated**: 2026-08-12T00:00:00+07:00
 - **Description:** Plan for implementing Exercise 1: zero-shot Hugging Face sentiment analysis pipeline, tokenization demonstration, and baseline evaluation on IMDB test set.
 - **Status:** Done
 - **Experiment ID:** EXP-EX1-BASELINE

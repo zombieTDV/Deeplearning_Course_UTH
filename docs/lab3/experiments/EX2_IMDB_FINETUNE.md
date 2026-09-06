@@ -5,8 +5,8 @@
 ## Header
 
 - **Title:** Exercise 2 — Finetuning `distilbert-base-uncased` on IMDB for Binary Sentiment Classification
-- **Date created:** 2026-08-12
-- **Last updated:** 2026-08-12
+- **Created**: 2026-08-12T00:00:00+07:00
+- **Last Updated**: 2026-08-12T00:00:00+07:00
 - **Description:** Plan for implementing Exercise 2: script-only HF `Trainer` finetuning of `distilbert-base-uncased` on the IMDB binary sentiment dataset, with full-state checkpoints, resume, logging, single held-out evaluation, and final 5W1H report.
 - **Status:** Done
 - **Experiment ID:** EXP-EX2-FINETUNE

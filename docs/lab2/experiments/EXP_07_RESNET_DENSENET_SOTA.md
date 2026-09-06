@@ -1,5 +1,11 @@
 # EXP_07_RESNET_DENSENET_SOTA.md — ResNet18 & DenseNet121 SOTA Peak Accuracy Solution Report
 
+- **Created**: 2026-08-02T00:00:00+07:00
+- **Last Updated**: 2026-09-06T13:14:10+07:00
+
+---
+
+
 ## 📌 1. Target & Objective
 
 - **Experiment ID:** `EXP-07`

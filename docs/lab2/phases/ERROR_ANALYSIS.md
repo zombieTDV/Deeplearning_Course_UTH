@@ -1,5 +1,11 @@
 # ERROR_ANALYSIS.md
 
+- **Created**: 2026-09-06T13:14:10+07:00
+- **Last Updated**: 2026-08-04T00:00:00+07:00
+
+---
+
+
 **Phase / area:** Cat/Dog Confusion Reduction — error taxonomy, diagnostic
 methodology, and known failure modes for the targeted cat↔dog strategy work.
 **Last updated:** 2026-08-04

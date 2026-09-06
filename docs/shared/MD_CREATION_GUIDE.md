@@ -1,4 +1,4 @@
-﻿# Markdown Documentation Creation Guide
+# Markdown Documentation Creation Guide
 
 This guide documents the process for creating comprehensive Markdown documentation files — from initial analysis to final review.
 
@@ -12,6 +12,9 @@ This guide documents the process for creating comprehensive Markdown documentati
 - [Step 4 — Organize the Body Content](#step-4--organize-the-body-content)
 - [Step 5 — Review and Refine](#step-5--review-and-refine)
 - [Conventions and Best Practices](#conventions-and-best-practices)
+
+- **Created**: 2026-09-06T13:05:18+07:00
+- **Last Updated**: 2026-09-06T13:05:18+07:00
 
 ---
 

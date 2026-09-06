@@ -6,8 +6,8 @@
 
 - **Title:** Data Survey & Cleaning
 - **Execution order:** 2 of 8
-- **Date created:** 2026-08-11
-- **Last updated:** 2026-08-12
+- **Created**: 2026-08-11T00:00:00+07:00
+- **Last Updated**: 2026-08-12T00:00:00+07:00
 - **Description:** Run EDA on [`stanfordnlp/imdb`](https://huggingface.co/datasets/stanfordnlp/imdb) (label balance 50/50, review lengths, plot visualizations) and document why cleaning/imbalance stages are N/A.
 - **Status:** Done
 

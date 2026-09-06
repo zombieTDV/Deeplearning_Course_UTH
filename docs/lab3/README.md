@@ -1,5 +1,11 @@
 # Practice 3 — Get Started with Hugging Face
 
+- **Created**: 2026-09-06T14:38:06+07:00
+- **Last Updated**: 2026-09-06T14:38:06+07:00
+
+---
+
+
 ## Project Overview
 
 Practice 3 — Get Started with Hugging Face is a **modular deep-learning

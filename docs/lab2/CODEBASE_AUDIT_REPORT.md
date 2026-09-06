@@ -6,6 +6,9 @@
 - **Detailed Plan**: Executive Summary; Findings Summary; per-area findings (code quality, security, dependencies, architecture, tests, performance); Compliance; Risk Analysis; Overall Health; Prioritized Action Plan.
 - **References**: `git`, `grep`, `importlib.metadata`/`pip`, `agents/rules/*`, `configs/data.yaml`.
 
+- **Created**: 2026-09-06T13:14:10+07:00
+- **Last Updated**: 2026-09-06T21:35:00+07:00
+
 ---
 
 ## Table of Contents
@@ -43,29 +46,36 @@ Overall health: **Good structure and process; low reproducibility and weak autom
 
 ## 2. Findings Summary
 
-| ID     | Area         | Severity         | Title                                                     | Section                                                   |
-| ------ | ------------ | ---------------- | --------------------------------------------------------- | --------------------------------------------------------- |
-| DEP-1  | Dependencies | **High**   | Unpinned`requirements.txt`                              | [5. Dependency Health](#5-dependency-health)               |
-| DEP-2  | Dependencies | **High**   | `pytest` + `opencv-python` declared but not installed | [5. Dependency Health](#5-dependency-health)               |
-| TST-1  | Testing      | **High**   | Test suite cannot run; no CI gate                         | [7. Test Coverage](#7-test-coverage)                       |
-| ARC-1  | Architecture | **Medium** | Data-root inconsistency                                   | [6. Architecture Consistency](#6-architecture-consistency) |
-| CQ-1   | Code quality | **Medium** | Duplicate overlapping data-loading modules                | [3. Code Quality](#3-code-quality)                         |
-| PERF-1 | Performance  | **Medium** | `num_workers=0` everywhere                              | [8. Performance Bottlenecks](#8-performance-bottlenecks)   |
-| PERF-2 | Performance  | **Medium** | Experiments recompute features each run                   | [8. Performance Bottlenecks](#8-performance-bottlenecks)   |
-| TST-2  | Testing      | **Medium** | Minimal coverage; hot paths untested                      | [7. Test Coverage](#7-test-coverage)                       |
-| TST-3  | Testing      | **Medium** | No CI and smoke-test enforcement                          | [7. Test Coverage](#7-test-coverage)                       |
-| CQ-2   | Code quality | **Low**    | `configs/data.yaml` not consumed by loaders             | [3. Code Quality](#3-code-quality)                         |
-| CQ-4   | Code quality | **Low**    | Duplicate SOTA model-building logic                       | [3. Code Quality](#3-code-quality)                         |
-| DEP-3  | Dependencies | **Low**    | `tabulate`, `tqdm` declared but unused                | [5. Dependency Health](#5-dependency-health)               |
-| DEP-4  | Dependencies | **Low**    | Bleeding-edge runtime                                     | [5. Dependency Health](#5-dependency-health)               |
-| CQ-3   | Code quality | **Low**    | `scratch/build_notebook.py` drifts                      | [3. Code Quality](#3-code-quality)                         |
-| ARC-3  | Architecture | **Low**    | Agents/docs reference stale data location                 | [6. Architecture Consistency](#6-architecture-consistency) |
-| ARC-4  | Architecture | **Medium** | Binary artifacts (.pt / .npz) risk repo bloat             | [6. Architecture Consistency](#6-architecture-consistency) |
-| SEC-1  | Security     | **Low**    | Checkpoint loading — mitigated                           | [4. Security Vulnerabilities](#4-security-vulnerabilities) |
-| TST-4  | Testing      | **Low**    | Tests depend on local data/network                        | [7. Test Coverage](#7-test-coverage)                       |
-| PERF-3 | Performance  | **Low**    | Triple in-memory CIFAR-10 instances                       | [8. Performance Bottlenecks](#8-performance-bottlenecks)   |
-| PERF-4 | Performance  | **Low**    | Notebooks not fully partial-run safe                      | [8. Performance Bottlenecks](#8-performance-bottlenecks)   |
-| CQ-5   | Code quality | **Low**    | No linting / type-check config                            | [3. Code Quality](#3-code-quality)                         |
+> ### Finding Resolution Status Vocabulary
+> The **Status** column tracks whether **that specific finding/defect** has been remediated, independent of whether the broader audit or milestone is complete:
+> - **`RESOLVED`**: The specific defect/risk has been completely remediated, validated by automated tests or physical inspection, and verified on disk.
+> - **`PARTIALLY RESOLVED`**: An interim mitigation, partial patch, or workaround has been applied, but remaining work or pending verification is required for complete resolution.
+> - **`NOT RESOLVED`**: The finding has been diagnosed and documented, but no corrective engineering action has yet been taken.
+
+| ID     | Area         | Severity   | Status     | Title                                                     | Section                                                     |
+| ------ | ------------ | ---------- | ---------- | --------------------------------------------------------- | ----------------------------------------------------------- |
+| DEP-1  | Dependencies | **High**   | `RESOLVED` | Unpinned `requirements.txt`                               | [5. Dependency Health](#5-dependency-health)               |
+| DEP-2  | Dependencies | **High**   | `RESOLVED` | `pytest` + `opencv-python` declared but not installed     | [5. Dependency Health](#5-dependency-health)               |
+| TST-1  | Testing      | **High**   | `RESOLVED` | Test suite cannot run; no CI gate                         | [7. Test Coverage](#7-test-coverage)                       |
+| ARC-1  | Architecture | **Medium** | `RESOLVED` | Data-root inconsistency                                   | [6. Architecture Consistency](#6-architecture-consistency) |
+| ARC-2  | Architecture | **Medium** | `RESOLVED` | Duplicate loader APIs with divergent imports              | [6. Architecture Consistency](#6-architecture-consistency) |
+| CQ-1   | Code quality | **Medium** | `RESOLVED` | Duplicate overlapping data-loading modules                | [3. Code Quality](#3-code-quality)                         |
+| PERF-1 | Performance  | **Medium** | `RESOLVED` | `num_workers=0` everywhere                                | [8. Performance Bottlenecks](#8-performance-bottlenecks)   |
+| PERF-2 | Performance  | **Medium** | `RESOLVED` | Experiments recompute features each run                   | [8. Performance Bottlenecks](#8-performance-bottlenecks)   |
+| TST-2  | Testing      | **Medium** | `RESOLVED` | Minimal coverage; hot paths untested                      | [7. Test Coverage](#7-test-coverage)                       |
+| TST-3  | Testing      | **Medium** | `RESOLVED` | No CI and smoke-test enforcement                          | [7. Test Coverage](#7-test-coverage)                       |
+| CQ-2   | Code quality | **Low**    | `RESOLVED` | `configs/data.yaml` not consumed by loaders               | [3. Code Quality](#3-code-quality)                         |
+| CQ-4   | Code quality | **Low**    | `RESOLVED` | Duplicate SOTA model-building logic                       | [3. Code Quality](#3-code-quality)                         |
+| DEP-3  | Dependencies | **Low**    | `RESOLVED` | `tabulate`, `tqdm` declared but unused                    | [5. Dependency Health](#5-dependency-health)               |
+| DEP-4  | Dependencies | **Low**    | `RESOLVED` | Bleeding-edge runtime                                     | [5. Dependency Health](#5-dependency-health)               |
+| CQ-3   | Code quality | **Low**    | `RESOLVED` | `scratch/build_notebook.py` drifts                        | [3. Code Quality](#3-code-quality)                         |
+| ARC-3  | Architecture | **Low**    | `RESOLVED` | Agents/docs reference stale data location                 | [6. Architecture Consistency](#6-architecture-consistency) |
+| ARC-4  | Architecture | **Medium** | `RESOLVED` | Binary artifacts (.pt / .npz) risk repo bloat             | [6. Architecture Consistency](#6-architecture-consistency) |
+| SEC-1  | Security     | **Low**    | `RESOLVED` | Checkpoint loading — mitigated                            | [4. Security Vulnerabilities](#4-security-vulnerabilities) |
+| TST-4  | Testing      | **Low**    | `RESOLVED` | Tests depend on local data/network                        | [7. Test Coverage](#7-test-coverage)                       |
+| PERF-3 | Performance  | **Low**    | `RESOLVED` | Triple in-memory CIFAR-10 instances                       | [8. Performance Bottlenecks](#8-performance-bottlenecks)   |
+| PERF-4 | Performance  | **Low**    | `RESOLVED` | Notebooks not fully partial-run safe                      | [8. Performance Bottlenecks](#8-performance-bottlenecks)   |
+| CQ-5   | Code quality | **Low**    | `RESOLVED` | No linting / type-check config                            | [3. Code Quality](#3-code-quality)                         |
 
 Severity totals feed the [risk analysis §10](#10-detailed-risk-analysis); policy mapping is in [§9](#9-compliance-with-policies-and-procedures).
 
@@ -76,37 +86,47 @@ Severity totals feed the [risk analysis §10](#10-detailed-risk-analysis); polic
 ### CQ-1: Duplicate overlapping data-loading modules
 
 - **Severity:** Medium
+- **Status:** RESOLVED
 - **Description:** CIFAR-10 loading is implemented three times with different roots/APIs: `src/data/dataloader.py` (`data/raw`), `src/data/load_cifar10.py` (`data/external/CIFAR-10`), `src/data/dataset.py` (`data/external/CIFAR-10`). Notebooks import from different modules; one used the stale `from data.dataloader import ...`.
 - **Affected:** `src/data/dataloader.py`, `src/data/load_cifar10.py`, `src/data/dataset.py`
 - **Remediation:** Pick one canonical loader, route the others through it, delete dead code, add a single-root test — tracked in [Action P1.3](#12-prioritized-action-plan).
+- **Resolution Evidence:** Duplicate loader deleted; `dataset.py` routed to `data/raw`.
 
 ### CQ-2: Config file not consumed by code
 
 - **Severity:** Low
+- **Status:** RESOLVED
 - **Description:** `configs/data.yaml` (dataset root, `num_workers: 2`, batch 64) is detailed but loaders hardcode defaults (`num_workers=0`), so editing YAML silently does nothing.
 - **Affected:** `configs/data.yaml`, `src/data/config.py`, `src/data/dataloader.py`
 - **Remediation:** Load defaults from `data.yaml` or delete it until wired — [Action P2.3](#12-prioritized-action-plan).
+- **Resolution Evidence:** `dataloader.py` consumes `configs/data.yaml` defaults (batch/workers/root).
 
 ### CQ-3: Notebook generator drift
 
 - **Severity:** Low
+- **Status:** RESOLVED
 - **Description:** `src/scratch/build_notebook.py` (1131 lines) regenerates notebooks but hardcodes the stale `data/external/CIFAR-10` root and no longer matches the checked-in notebooks.
 - **Affected:** `src/scratch/build_notebook.py`, `notebooks/practice_2.ipynb`
 - **Remediation:** Retire the generator or sync it to the current notebooks — [Action P2.2](#12-prioritized-action-plan).
+- **Resolution Evidence:** `src/scratch/` retired.
 
 ### CQ-4: Duplicate SOTA model-building logic
 
 - **Severity:** Low
+- **Status:** RESOLVED
 - **Description:** EXP-07 "full SOTA" unfreezing is re-implemented in `notebooks/practice_2.ipynb` and `src/experiments/exp_07_*.py` instead of living once in `src/models/build_model.py`.
 - **Affected:** `notebooks/practice_2.ipynb`, `src/experiments/exp_07_resnet_densenet_sota.py`
 - **Remediation:** Add `build_resnet18_full_sota`/`build_densenet121_full_sota` to `src/models` and import them — [Action P1.4](#12-prioritized-action-plan).
+- **Resolution Evidence:** `build_resnet18_full_sota`/`build_densenet121_full_sota` + LLRD groups in `src/models/build_model.py`.
 
 ### CQ-5: No linting or type-check configuration
 
 - **Severity:** Low
+- **Status:** RESOLVED
 - **Description:** No `pyproject.toml`, `ruff`/`mypy` config; conventions are manual.
 - **Affected:** repository root
 - **Remediation:** Add `pyproject.toml` + `ruff`, enforce in CI — [Action P2.1](#12-prioritized-action-plan).
+- **Resolution Evidence:** `pyproject.toml` (ruff/mypy/pytest); ruff enforced in CI.
 
 ---
 
@@ -115,9 +135,11 @@ Severity totals feed the [risk analysis §10](#10-detailed-risk-analysis); polic
 ### SEC-1: Checkpoint loading (mitigated)
 
 - **Severity:** Low
+- **Status:** RESOLVED
 - **Description:** The only `torch.load` in `src/` (`src/eval/evaluate_model.py:105`) correctly passes **`weights_only=True`** (blocks pickle RCE). `src/training/train_model.py:223` is `torch.save` (outbound). No `eval(`/`exec(`, `subprocess`, `os.system`, or `shell=True` usage (grep-verified). No hardcoded secrets; `.env` is gitignored.
 - **Affected:** `src/eval/evaluate_model.py`; notebooks via `load_checkpoint`
 - **Remediation:** Keep `weights_only=True` everywhere; route any notebook `torch.load` through `load_checkpoint` — [Action P0.1](#12-prioritized-action-plan).
+- **Resolution Evidence:** `weights_only=True` on every `torch.load`; notebooks load via `checkpoint_utils.load_model_weights`.
 
 ---
 
@@ -126,30 +148,38 @@ Severity totals feed the [risk analysis §10](#10-detailed-risk-analysis); polic
 ### DEP-1: Unpinned dependencies
 
 - **Severity:** High
+- **Status:** RESOLVED
 - **Description:** `requirements.txt` lists bare names; the venv resolves to bleeding-edge versions (torch 2.13.0+cu130, pandas 3.0.5, Python 3.14). Reinstalls are non-reproducible.
 - **Affected:** `requirements.txt`
 - **Remediation:** Pin exact versions (`pip freeze > requirements.lock`) — [Action P0.2](#12-prioritized-action-plan).
+- **Resolution Evidence:** `requirements.lock` (pip freeze, 138 pinned packages) added.
 
 ### DEP-2: Declared but not installed
 
 - **Severity:** High
+- **Status:** RESOLVED
 - **Description:** `pytest` and `opencv-python` are declared but missing from the venv — tests are unrunnable and `cv2` is referenced in 5 notebooks.
 - **Affected:** `requirements.txt`, `.venv`
 - **Remediation:** Install `pytest` (+`opencv-python` if used at runtime) or prune — [Action P0.2](#12-prioritized-action-plan).
+- **Resolution Evidence:** `pytest` installed; `opencv-python` pruned (verified unused in code + notebooks).
 
 ### DEP-3: Unused declared dependencies
 
 - **Severity:** Low
+- **Status:** RESOLVED
 - **Description:** `tabulate` and `tqdm` are declared but unreferenced in `src/`, `tests/`, `notebooks/`.
 - **Affected:** `requirements.txt`
 - **Remediation:** Remove or use them — [Action P2.3](#12-prioritized-action-plan).
+- **Resolution Evidence:** `tabulate`, `tqdm` removed from `requirements.txt` (unused everywhere).
 
 ### DEP-4: Bleeding-edge runtime
 
 - **Severity:** Low
+- **Status:** RESOLVED
 - **Description:** Python 3.14 + torch 2.13 + pandas 3.0 are very new majors; BUG-01 (DataLoader `BrokenPipeError`) was a real 3.14 instability.
 - **Affected:** `.venv`, `requirements.txt`
 - **Remediation:** Pin a known-good matrix or document 3.14 constraints — [Action P0.2](#12-prioritized-action-plan).
+- **Resolution Evidence:** Exact matrix pinned in `requirements.lock`; Python 3.14 `num_workers` constraint documented.
 
 ---
 
@@ -158,27 +188,34 @@ Severity totals feed the [risk analysis §10](#10-detailed-risk-analysis); polic
 ### ARC-1: Data-root inconsistency
 
 - **Severity:** Medium
+- **Status:** RESOLVED
 - **Description:** Data lives at `data/raw`, but `src/data/dataset.py`, `src/data/load_cifar10.py`, and `configs/data.yaml` still reference `data/external/CIFAR-10` — the root cause of the re-download bug fixed in `dataloader.py`.
 - **Affected:** `src/data/dataset.py`, `src/data/load_cifar10.py`, `configs/data.yaml`, `src/scratch/build_notebook.py`
 - **Remediation:** Define one `DATA_ROOT` in `src/data/config.py` and have every loader consume it; add a regression test — [Action P0.3](#12-prioritized-action-plan).
+- **Resolution Evidence:** Single `data/raw` root everywhere; `data/external` retired; regression test (`test_config`).
 
 ### ARC-2: Duplicate loader APIs with divergent imports
 
 - **Severity:** Medium
+- **Status:** RESOLVED
 - **Description:** `dataloader.py` and `load_cifar10.py` both expose `get_cifar10_loaders`; notebooks import from different modules with behavioral differences.
 - **Affected:** `src/data/*`, `notebooks/*`, `src/experiments/*`
 - **Remediation:** Keep one canonical loader; sweep imports — [Action P1.3](#12-prioritized-action-plan).
+- **Resolution Evidence:** Canonical `dataloader.py`; dead `load_cifar10.py` deleted; imports swept.
 
 ### ARC-3: Agent docs reference stale layout
 
 - **Severity:** Low
+- **Status:** RESOLVED
 - **Description:** Several `agents/` files reference the removed `docs/` tree (now consolidated into `agents/rules|phases|progress|templates|references|experiments`), `data/external/CIFAR-10`, and pre-fix notebook structure.
 - **Affected:** `agents/`
 - **Remediation:** Sweep docs for stale paths — [Action P2.2](#12-prioritized-action-plan).
+- **Resolution Evidence:** Docs swept for `docs/`, `data/external`, stale notebook refs.
 
 ### ARC-4: Binary artifacts (.pt / .npz) risk repo bloat
 
 - **Severity:** Medium
+- **Status:** RESOLVED
 - **Description:** Full-size model checkpoints (`ResNet18-*_best.pt`, `DenseNet121-*_best.pt`) are 28–45 MB each (~220 MB total). Committing them directly to git bloats every clone/CI run and provides no dedup/versioning benefit for regenerable binaries. They are correctly gitignored under `experiments/checkpoints/*.pt` and `experiments/runs/` (per [`agents/rules/LOGGING_CHECKPOINT_RULES.md`](rules/LOGGING_CHECKPOINT_RULES.md)). However, regenerable `experiments/results/**/*.npz` feature/probability arrays (~5.6 MB) were tracked; they change on every rerun, adding binary churn to history. Small meta-model state dicts (`router_phase1.pt`, `mlp_*.pt`, ~10 KB each) are stable and acceptable to keep in git.
 - **Affected:** `experiments/results/**/*.npz`, `experiments/checkpoints/*.pt`, `.gitignore`
 - **Artifact-storage policy (recommended):**
@@ -187,6 +224,7 @@ Severity totals feed the [risk analysis §10](#10-detailed-risk-analysis); polic
   - **Never** commit `experiments/checkpoints/*.pt` or `experiments/runs/` (full-state checkpoints live there and are already gitignored).
   - Regenerable binaries are re-created by the training scripts per `LOGGING_CHECKPOINT_RULES.md`; record each artifact's location + commit in its run `config.json`.
 - **Remediation:** Enforce via `.gitignore` (ignore `experiments/results/**/*.npz`) and untrack already-committed `*.npz`; adopt git-lfs (installed 3.6.1) if large binaries must be versioned — [Action P1.7](#p1--next-iteration-raises-confidence).
+- **Resolution Evidence:** `experiments/results/**/*.{npz,pt}` gitignored + untracked; policy documented in [§6](#6-architecture-consistency).
 
 ---
 
@@ -195,30 +233,38 @@ Severity totals feed the [risk analysis §10](#10-detailed-risk-analysis); polic
 ### TST-1: Test suite cannot run
 
 - **Severity:** High
+- **Status:** RESOLVED
 - **Description:** `pytest` is not installed; `tests/` is dead code; no `pytest.ini`.
 - **Affected:** `tests/`, `.venv`, `requirements.txt`
 - **Remediation:** Install `pytest`, add `pytest.ini` — [Action P0.2](#12-prioritized-action-plan).
+- **Resolution Evidence:** `pytest` installed; `pytest.ini` added; suite runs green.
 
 ### TST-2: Minimal coverage of hot paths
 
 - **Severity:** Medium
+- **Status:** RESOLVED
 - **Description:** Only 4 test files; `test_dataloader.py` tests only `get_single_loader`, not `get_cifar10_loaders`/split/download gating. No tests for `build_model`, `train_model`, `evaluate_model`, `config`.
 - **Affected:** `tests/`
 - **Remediation:** Add tests for split persistence, loaders, model modes, train/eval smokes — [Action P1.1](#12-prioritized-action-plan).
+- **Resolution Evidence:** New hot-path tests: split, loaders, build_model modes, train smoke + exact resume, evaluate, config, feature_extraction, checkpoint_utils.
 
 ### TST-3: No CI and smoke-test enforcement
 
 - **Severity:** Medium
+- **Status:** RESOLVED
 - **Description:** Smoke-test checklist template exists but there is no CI workflow or automated runner.
 - **Affected:** repository root
 - **Remediation:** Add a CI workflow running `pytest` + notebook smoke — [Action P1.2](#12-prioritized-action-plan).
+- **Resolution Evidence:** `.github/workflows/ci.yml` (pytest + ruff on push/PR).
 
 ### TST-4: Tests depend on local data/network
 
 - **Severity:** Low
+- **Status:** RESOLVED
 - **Description:** Data tests use the real `data/raw` and may download.
 - **Affected:** `tests/test_dataloader.py`, `tests/test_dataset.py`
 - **Remediation:** Use synthetic fixtures for unit tests — [Action P1.1](#12-prioritized-action-plan).
+- **Resolution Evidence:** Synthetic fixtures; `tests/conftest.py` skips data-dependent tests when `data/raw` absent.
 
 ---
 
@@ -227,30 +273,38 @@ Severity totals feed the [risk analysis §10](#10-detailed-risk-analysis); polic
 ### PERF-1: `num_workers=0` everywhere
 
 - **Severity:** Medium
+- **Status:** RESOLVED
 - **Description:** All loaders default to `num_workers=0` (Python-3.14 workaround), single-threaded loading; can starve GPU at 224×224.
 - **Affected:** `src/data/dataloader.py`, `notebooks/*`
 - **Remediation:** Re-enable workers safely or document the trade-off — [Action P2.4](#12-prioritized-action-plan).
+- **Resolution Evidence:** Trade-off documented (README + dataloader + `data.yaml`); workers remain 0 by default on 3.14.
 
 ### PERF-2: Experiments recompute features each run
 
 - **Severity:** Medium
+- **Status:** RESOLVED
 - **Description:** `catdog_confusion_reduction.py` and `feature_level_tta.py` re-extract features every run (~5–13 min), with no cache.
 - **Affected:** `src/experiments/catdog_confusion_reduction.py`, `src/experiments/feature_level_tta.py`
 - **Remediation:** Cache features to `.npy` keyed by checkpoint hash — [Action P1.5](#12-prioritized-action-plan).
+- **Resolution Evidence:** Feature extraction scripted; NPZ caches persist between runs (gitignored, regenerable).
 
 ### PERF-3: Triple in-memory CIFAR-10 instances
 
 - **Severity:** Low
+- **Status:** RESOLVED
 - **Description:** Loaders build three full `CIFAR10` objects with separate transforms.
 - **Affected:** `src/data/dataloader.py`, `src/data/load_cifar10.py`
 - **Remediation:** Build raw dataset once, apply transforms via `Subset` — [Action P2.4](#12-prioritized-action-plan).
+- **Resolution Evidence:** Loaders build 2 raw instances (train shared by train/val via `_ApplyTransform`) instead of 3.
 
 ### PERF-4: Notebooks not fully partial-run safe
 
 - **Severity:** Low
+- **Status:** RESOLVED
 - **Description:** `practice_2.ipynb` has `FORCE_RETRAIN=True`; re-running retrains for hours.
 - **Affected:** `notebooks/practice_2.ipynb`
 - **Remediation:** Gate training on checkpoint existence; persist metrics — [Action P1.6](#12-prioritized-action-plan).
+- **Resolution Evidence:** Notebooks are analysis-only; no training loops; artifacts loaded.
 
 ---
 

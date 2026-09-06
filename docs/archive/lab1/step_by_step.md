@@ -1,3 +1,10 @@
+# step_by_step
+
+- **Created**: 2026-09-06T13:09:10+07:00
+- **Last Updated**: 2026-09-06T13:09:10+07:00
+
+---
+
 1. First .md cell is a board to show Step by step of practice - Define problems
 2. In the high of code is step 
 Example: 

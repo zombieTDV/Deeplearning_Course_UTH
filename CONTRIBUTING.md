@@ -1,5 +1,11 @@
 # Contributing Guidelines
 
+- **Created**: 2026-07-26T16:01:02+07:00
+- **Last Updated**: 2026-07-29T23:37:05+07:00
+
+---
+
+
 Welcome to the project! Please follow these guidelines when contributing to the Deep Learning project.
 
 ---

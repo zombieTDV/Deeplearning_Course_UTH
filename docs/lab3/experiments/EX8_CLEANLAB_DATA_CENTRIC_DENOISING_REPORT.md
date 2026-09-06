@@ -1,5 +1,11 @@
 # EXPERIMENT REPORT EX-08: DATA-CENTRIC AI — CONFIDENT LEARNING & LABEL ERROR AUDIT (CLEANLAB)
 
+- **Created**: 2026-09-06T14:38:06+07:00
+- **Last Updated**: 2026-09-06T14:38:06+07:00
+
+---
+
+
 > **Document ID:** `EX8-DATA-CENTRIC-CLEANLAB-DENOISING`  
 > **Date:** 2026-08-15  
 > **Authors:** bush-le + Antigravity AI Pair Programmer  

@@ -6,6 +6,9 @@
 - **Detailed Plan**: Section 1 — Current Search Space Audit (HPs, ranges, dead zones); Section 2 — Insights from Optuna DB Analysis (importance rankings, best-trial convergence, trial #17 anomaly); Section 3 — Proposed Search Space Refinements (narrow, fix-to-constant, drop); Section 4 — Implementation Plan (code diff, n_trials, pruner tuning); Section 5 — Expected Outcomes and Validation.
 - **References**: Optuna 4.9.0 (SQLite storage, TPESampler, MedianPruner, FANOVA), PyTorch 2.x, torchvision (Fashion-MNIST), scikit-learn, `notebooks/error_analysis/MLP/phase4_mlp_optuna_merged.ipynb`, `outputs/error_analysis/MLP/phase4_optuna/optuna_study.db`.
 
+- **Created**: 2026-09-06T13:09:10+07:00
+- **Last Updated**: 2026-09-06T13:09:10+07:00
+
 ---
 
 ## Table of Contents

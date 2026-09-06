@@ -4,9 +4,12 @@
 - **Purpose**: Make the 5W1H principle (What, Why, When, Where, Who, How) mandatory for every metric presented in docs, notebooks, or reports.
 - **Overview Pipeline**: Applies to every result in `agents/experiments/*.md`, `experiments/results/*`, and analysis notebooks.
 - **Detailed Plan**: §1 the 5W1H rule; §2 the required block format; §3 metric-description pairs (project-definable); §4 where it applies; §5 checklist.
-- **References**: `agents/experiments/README.md`, `experiments/results/README.md`, MD_CONVENTION.md.
+- **References**: `agents/experiments/README.md`, `experiments/results/README.md`, `agents/rules/MD_CONVENTION.md`.
+- **Created**: 2026-09-06T13:05:18+07:00
+- **Last Updated**: 2026-09-06T21:25:00+07:00
 
 ---
+
 
 ## Table of Contents
 

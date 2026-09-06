@@ -1,4 +1,10 @@
 # AI-Assisted Development Rule Base
+
+- **Created**: 2026-09-06T13:09:10+07:00
+- **Last Updated**: 2026-09-06T13:09:10+07:00
+
+---
+
 ## Software Development & Documentation Standards
 
 ---

@@ -1,5 +1,11 @@
 # EXPERIMENT REPORT EX-11: REPLICATION AUDIT OF LORA MICRO-LR (5E-5) ON MULTI-ITERATION DENOISED DATA
 
+- **Created**: 2026-09-06T14:38:06+07:00
+- **Last Updated**: 2026-09-06T14:38:06+07:00
+
+---
+
+
 > **Document ID:** `EX11-LORA-5E5-EARLY-STOPPING`  
 > **Date:** 2026-08-15  
 > **Authors:** bush-le + Antigravity AI Pair Programmer  

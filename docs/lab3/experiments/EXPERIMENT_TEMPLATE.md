@@ -1,5 +1,11 @@
 # <TITLE> — Template (agents/experiments)
 
+- **Created**: 2026-09-06T14:38:06+07:00
+- **Last Updated**: 2026-09-06T14:38:06+07:00
+
+---
+
+
 Copy this file into `agents/experiments/` as `<EXP_OR_NAME>.md` for each
 experiment. Register it in `agents/experiments/README.md`.
 

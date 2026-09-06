@@ -5,8 +5,11 @@
 - **Overview Pipeline**: Codified during the refactor that moved all training out of notebooks into script entry points and upgraded `src/training/train_model.py` with full-state checkpointing and `src/utils/run_logger.py` (zero-dependency logging).
 - **Detailed Plan**: §1 policy (scripts vs notebooks, automatic persistence); §2 directory structure; §3 checkpoint file format; §4 naming rules; §5 resume procedure; §6 metrics storage & compression; §7 log levels & real-time monitoring; §8 acceptance checklist; Appendix A (optional) project-specific example.
 - **References**: `torch.save`/`torch.load (weights_only=True)`, `src/utils/run_logger.py`, `src/training/train_model.py`, `numpy`, `gzip` (stdlib), `src/utils/checkpoint_utils.py`.
+- **Created**: 2026-09-06T13:05:18+07:00
+- **Last Updated**: 2026-09-06T21:25:00+07:00
 
 ---
+
 
 ## Table of Contents
 

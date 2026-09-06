@@ -1,4 +1,10 @@
-﻿# LAB1 Experiments & Outputs Index
+# LAB1 Experiments & Outputs Index
+
+- **Created**: 2026-09-06T13:09:10+07:00
+- **Last Updated**: 2026-09-06T13:09:10+07:00
+
+---
+
 
 All experiment outputs, model checkpoints, plots, and Optuna databases generated during LAB1 are preserved here:
 

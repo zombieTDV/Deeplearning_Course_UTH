@@ -1,5 +1,11 @@
 # BUG-02: `KeyError: 'test_losses'` in Practice 2 Notebook & Build Script
 
+- **Created**: 2026-09-06T13:14:10+07:00
+- **Last Updated**: 2026-09-06T13:14:10+07:00
+
+---
+
+
 ## 📋 Summary Information
 
 | Metric | Details |

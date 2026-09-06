@@ -14,6 +14,9 @@
 - **References**: `agents/HOW_TO_SETUP_AI_AGENT.md`, `agents/rules/*`,
   `requirements.txt`, `.github/workflows/ci.yml`.
 
+- **Created**: 2026-09-06T14:38:06+07:00
+- **Last Updated**: 2026-09-06T14:38:06+07:00
+
 ---
 
 ## Table of Contents

@@ -1,8 +1,20 @@
-# NOTEBOOK_HEADER_CONVENTION.md
+# NOTEBOOK_HEADER_CONVENTION.md — Standardized First-Cell Notebook Headers
+
+- **Motivation/Background**: Notebooks in deep learning projects frequently suffer from missing context, broken relative imports, and unclear execution dependencies across kernel restarts.
+- **Purpose**: Define the mandatory structure of the first markdown cell of every notebook, including metadata, roadmap table, cross-references, and output persistence guarantees.
+- **Overview Pipeline**: Applied whenever creating or refactoring Jupyter notebooks in this repository.
+- **Detailed Plan**: §1 Title; §2 Subtitle & Purpose; §3 Roadmap Table; §4 References; §5 Output Persistence & Cell Independence.
+- **References**: `agents/rules/MD_CONVENTION.md`, `agents/rules/LOGGING_CHECKPOINT_RULES.md`.
+- **Created**: 2026-09-06T13:05:18+07:00
+- **Last Updated**: 2026-09-06T21:25:00+07:00
+
+---
+
 Rules for the first cell of every notebook. Condensed from
 notebook_header_guide.md — see that file for the full worked example.
 Cross-reference link requirements come from
 [MD_CONVENTION.md](MD_CONVENTION.md#mandatory-cross-reference-links).
+
 
 Every notebook's first cell = a single markdown cell with 4 sections, in order:
 

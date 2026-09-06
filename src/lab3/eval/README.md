@@ -1,5 +1,11 @@
 # src/eval — Evaluation Layer
 
+- **Created**: 2026-09-06T14:38:06+07:00
+- **Last Updated**: 2026-09-06T14:38:06+07:00
+
+---
+
+
 What belongs here:
 
 - `evaluate_model.py` — test-set evaluation: loss, top-1 accuracy, per-class

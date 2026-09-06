@@ -1,5 +1,11 @@
 # EXPERIMENT REPORT EX-12: POST-MORTEM AUDIT OF LORA MICRO-LR (5E-5) ON CLEANLAB ITERATION 3 & ROOT-CAUSE ANALYSIS
 
+- **Created**: 2026-09-06T14:38:06+07:00
+- **Last Updated**: 2026-09-06T14:38:06+07:00
+
+---
+
+
 > **Document ID:** `EX12-LORA-5E5-DENOISED-EVAL`  
 > **Date:** 2026-08-15  
 > **Authors:** bush-le + Antigravity AI Pair Programmer  

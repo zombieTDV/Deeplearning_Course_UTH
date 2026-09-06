@@ -1,5 +1,11 @@
 # PLAN: Practice 3 Exercise 2 Interactive Notebook & End-to-End Workflow
 
+- **Created**: 2026-09-06T14:38:06+07:00
+- **Last Updated**: 2026-09-06T14:38:06+07:00
+
+---
+
+
 **Document ID:** `PLAN-EX2-INTERACTIVE-NOTEBOOK`  
 **Date:** 2026-08-12  
 **Author:** bush-le + Antigravity AI Agent  

@@ -24,6 +24,9 @@ session (`agents/OVERVIEW.md`, `agents/phases/PHASE_TEMPLATE.md` modified;
 `agents/PROJECT_ROADMAP.md` and 8 phase docs untracked).
 **Audit date:** 2026-08-11.
 
+- **Created**: 2026-08-11T00:00:00+07:00
+- **Last Updated**: 2026-09-06T21:35:00+07:00
+
 ---
 
 ## Table of Contents
@@ -77,22 +80,28 @@ the HF stack is only half-provisioned, and the test suite cannot currently run.
 
 ## 2. Findings Summary
 
-| ID | Area | Severity | Title | Section |
-|---|---|---|---|---|
-| `ARC-1` | Architecture | **High** | Documented `src/` modules entirely absent (docs claim code that doesn't exist) | [6. Architecture](#6-architecture-consistency) |
-| `DEP-1` | Dependencies | **High** | `transformers` not installed; environment vs `requirements.txt` drift | [5. Dependency Health](#5-dependency-health) |
-| `TST-1` | Tests | **High** | pytest not installed — smoke suite cannot execute | [7. Test Coverage](#7-test-coverage) |
-| `AQ-1` | Code quality | **Medium** | `run_logger.py` documented in two layers (ownership ambiguity) | [3. Code Quality](#3-code-quality) |
-| `DEP-2` | Dependencies | **Medium** | No version pins / no lockfile (reproducibility) | [5. Dependency Health](#5-dependency-health) |
-| `ARC-2` | Architecture | **Medium** | `FOLDER_STRUCTURE.md` not updated for `PROJECT_ROADMAP.md` + new phase docs | [6. Architecture](#6-architecture-consistency) |
-| `TST-2` | Tests | **Medium** | Only smoke tests; no unit tests (modules don't exist yet) | [7. Test Coverage](#7-test-coverage) |
-| `AQ-2` | Code quality | **Low** | Unused `needs_data` marker in [conftest.py](../tests/conftest.py) | [3. Code Quality](#3-code-quality) |
-| `AQ-3` | Code quality | **Low** | `agents/progress/*_STATUS.md` referenced by OVERVIEW + 8 phase docs but absent | [3. Code Quality](#3-code-quality) |
-| `ARC-3` | Architecture | **Low** | Two phase-doc templates coexist (`templates/PHASE_DOC_TEMPLATE.md` vs `phases/PHASE_TEMPLATE.md`) | [6. Architecture](#6-architecture-consistency) |
-| `AQ-4` | Code quality | Info | Root [README.md](../README.md) still carries template placeholders | [3. Code Quality](#3-code-quality) |
-| `SEC-1` | Security | Info | No application code in tree — minimal attack surface (positive) | [4. Security](#4-security-vulnerabilities) |
-| `SEC-2` | Security | Info | No secrets; `.gitignore` excludes data, checkpoints, `.env` (positive) | [4. Security](#4-security-vulnerabilities) |
-| `PERF-1` | Performance | Info | No training/eval code yet; constraints already documented (positive) | [8. Performance](#8-performance-bottlenecks) |
+> ### Finding Resolution Status Vocabulary
+> The **Status** column tracks whether **that specific finding/defect** has been remediated, independent of whether the broader audit or milestone is complete:
+> - **`RESOLVED`**: The specific defect/risk has been completely remediated, validated by automated tests or physical inspection, and verified on disk.
+> - **`PARTIALLY RESOLVED`**: An interim mitigation, partial patch, or workaround has been applied, but remaining work or pending verification is required for complete resolution.
+> - **`NOT RESOLVED`**: The finding has been diagnosed and documented, but no corrective engineering action has yet been taken.
+
+| ID | Area | Severity | Status | Title | Section |
+|---|---|---|---|---|---|
+| `ARC-1` | Architecture | **High** | `RESOLVED` | Documented `src/` modules entirely absent (docs claim code that doesn't exist) | [6. Architecture Consistency](#6-architecture-consistency) |
+| `DEP-1` | Dependencies | **High** | `RESOLVED` | `transformers` not installed; environment vs `requirements.txt` drift | [5. Dependency Health](#5-dependency-health) |
+| `TST-1` | Tests | **High** | `RESOLVED` | pytest not installed — smoke suite cannot execute | [7. Test Coverage](#7-test-coverage) |
+| `AQ-1` | Code quality | **Medium** | `RESOLVED` | `run_logger.py` documented in two layers (ownership ambiguity) | [3. Code Quality](#3-code-quality) |
+| `DEP-2` | Dependencies | **Medium** | `RESOLVED` | No version pins / no lockfile (reproducibility) | [5. Dependency Health](#5-dependency-health) |
+| `ARC-2` | Architecture | **Medium** | `RESOLVED` | `FOLDER_STRUCTURE.md` not updated for `PROJECT_ROADMAP.md` + new phase docs | [6. Architecture Consistency](#6-architecture-consistency) |
+| `TST-2` | Tests | **Medium** | `RESOLVED` | Only smoke tests; no unit tests (modules don't exist yet) | [7. Test Coverage](#7-test-coverage) |
+| `AQ-2` | Code quality | **Low** | `RESOLVED` | Unused `needs_data` marker in [conftest.py](../tests/conftest.py) | [3. Code Quality](#3-code-quality) |
+| `AQ-3` | Code quality | **Low** | `RESOLVED` | `agents/progress/*_STATUS.md` referenced by OVERVIEW + 8 phase docs but absent | [3. Code Quality](#3-code-quality) |
+| `ARC-3` | Architecture | **Low** | `RESOLVED` | Two phase-doc templates coexist (`templates/PHASE_DOC_TEMPLATE.md` vs `phases/PHASE_TEMPLATE.md`) | [6. Architecture Consistency](#6-architecture-consistency) |
+| `AQ-4` | Code quality | Info | `RESOLVED` | Root [README.md](../README.md) still carries template placeholders | [3. Code Quality](#3-code-quality) |
+| `SEC-1` | Security | Info | `RESOLVED` | No application code in tree — minimal attack surface (positive) | [4. Security Vulnerabilities](#4-security-vulnerabilities) |
+| `SEC-2` | Security | Info | `RESOLVED` | No secrets; `.gitignore` excludes data, checkpoints, `.env` (positive) | [4. Security Vulnerabilities](#4-security-vulnerabilities) |
+| `PERF-1` | Performance | Info | `RESOLVED` | No training/eval code yet; constraints already documented (positive) | [8. Performance Bottlenecks](#8-performance-bottlenecks) |
 
 Severity totals: **High × 3, Medium × 4, Low × 3, Info × 4.** Cross-reference:
 [risk analysis §10](#10-detailed-risk-analysis) and
@@ -104,6 +113,7 @@ Severity totals: **High × 3, Medium × 4, Low × 3, Info × 4.** Cross-referenc
 
 ### `AQ-1`: `run_logger.py` documented in two layers — ownership ambiguity
 - **Severity:** Medium
+- **Status:** RESOLVED
 - **Description:** [src/training/README.md](../src/training/README.md) lists
   `run_logger.py` as part of the training layer, while
   [src/utils/README.md](../src/utils/README.md) lists the same file (plus
@@ -118,18 +128,22 @@ Severity totals: **High × 3, Medium × 4, Low × 3, Info × 4.** Cross-referenc
   [LOGGING_CHECKPOINT_RULES.md](rules/LOGGING_CHECKPOINT_RULES.md) imports it
   as `src/utils/run_logger.py`) and update the other two docs to defer to it.
   — tracked in [Action P1.2](#12-prioritized-action-plan)
+- **Resolution Evidence:** Canonicalized `run_logger.py` and `checkpoint_utils.py` ownership to `src/utils/` (now `src/lab3/utils/run_logger.py`) per Action P1.2; updated layer READMEs to defer to it.
 
 ### `AQ-2`: Unused `needs_data` marker in conftest
 - **Severity:** Low
+- **Status:** RESOLVED
 - **Description:** [conftest.py](../tests/conftest.py) defines a `needs_data`
   skipif marker, but no test references it ([test_smoke.py](../tests/test_smoke.py)
   never applies it). It is dead scaffolding today.
 - **Affected:** [tests/conftest.py](../tests/conftest.py).
 - **Remediation:** either start applying it to data-dependent tests (planned
   Phase 2/3 tests) or delete it. — tracked in [Action P2.1](#12-prioritized-action-plan)
+- **Resolution Evidence:** Removed unused `needs_data` marker from `tests/conftest.py` per Action P2.1.
 
 ### `AQ-3`: Progress status files referenced but absent
 - **Severity:** Low
+- **Status:** RESOLVED
 - **Description:** [OVERVIEW.md](OVERVIEW.md) and all 8 phase docs
   ([phases/SETUP.md](phases/SETUP.md) … [phases/REPORT.md](phases/REPORT.md))
   link to `agents/progress/<PHASE>_STATUS.md`, but the directory contains only
@@ -140,14 +154,17 @@ Severity totals: **High × 3, Medium × 4, Low × 3, Info × 4.** Cross-referenc
   [HOW_TO_SETUP_AI_AGENT.md](HOW_TO_SETUP_AI_AGENT.md) creates them as each
   phase starts); otherwise create stubs. Document the intent so it isn't
   re-flagged. — tracked in [Action P1.3](#12-prioritized-action-plan)
+- **Resolution Evidence:** Created all 8 progress status files per Action P1.3 (now colocated under `docs/lab3/progress/`).
 
 ### `AQ-4`: Root README template placeholders
 - **Severity:** Info
+- **Status:** RESOLVED
 - **Description:** [README.md](../README.md) still contains `[PROJECT_NAME]`
   and `[Fill in — license…]` placeholders from the bootstrap template.
 - **Affected:** [README.md](../README.md).
 - **Remediation:** fill in the project name and license/course context.
   — tracked in [Action P2.3](#12-prioritized-action-plan)
+- **Resolution Evidence:** Replaced `[PROJECT_NAME]` and placeholder license text with LAB3 course context in `README.md` per Action P2.3.
 
 ---
 
@@ -155,6 +172,7 @@ Severity totals: **High × 3, Medium × 4, Low × 3, Info × 4.** Cross-referenc
 
 ### `SEC-1`: No application code in tree — minimal attack surface (positive)
 - **Severity:** Info
+- **Status:** RESOLVED
 - **Description:** `src/` contains only package `__init__.py` files; there is
   no model, training, or evaluation code to contain injection, RCE, or data
   leaks yet. The one security-relevant requirement (checkpoints load with
@@ -163,14 +181,17 @@ Severity totals: **High × 3, Medium × 4, Low × 3, Info × 4.** Cross-referenc
 - **Affected:** entire `src/` tree.
 - **Remediation:** none now — enforce `weights_only=True` when
   `checkpoint_utils.py` is implemented. — tracked in [Action P0.2](#12-prioritized-action-plan)
+- **Resolution Evidence:** Positive baseline finding; maintained throughout implementation by enforcing `weights_only=True` in `checkpoint_utils.py` and `safe_load_checkpoint` (verified in PR #15 audit).
 
 ### `SEC-2`: No secrets; `.gitignore` excludes sensitive paths (positive)
 - **Severity:** Info
+- **Status:** RESOLVED
 - **Description:** No credentials/tokens found in tracked files; `.gitignore`
   covers `.env*`, `/data/raw/`, `/experiments/checkpoints/*.pt`, and
   `/experiments/runs/`, and `.kilo` config is ignored.
 - **Affected:** [.gitignore](../.gitignore).
 - **Remediation:** none.
+- **Resolution Evidence:** Positive baseline finding; `.gitignore` rules verified on disk across all phases (`.env*`, `/data/raw/`, `/experiments/checkpoints/*.pt`, `/experiments/runs/`).
 
 ---
 
@@ -178,6 +199,7 @@ Severity totals: **High × 3, Medium × 4, Low × 3, Info × 4.** Cross-referenc
 
 ### `DEP-1`: `transformers` missing; environment vs `requirements.txt` drift
 - **Severity:** High
+- **Status:** RESOLVED
 - **Description:** The active environment has `torch 2.10.0`, `datasets 5.0.0`,
   and `evaluate 0.4.6`, but **`transformers` is not installed** — yet it is the
   library both exercises are built on (Exercise 1 step 1). Conversely, the
@@ -189,15 +211,18 @@ Severity totals: **High × 3, Medium × 4, Low × 3, Info × 4.** Cross-referenc
 - **Remediation:** `pip install transformers`, and rewrite
   `requirements.txt` to declare the HF stack (roadmap task T1) so the file and
   environment converge. — tracked in [Action P0.1](#12-prioritized-action-plan)
+- **Resolution Evidence:** Provisioned `.venv` with HF stack (`transformers`, `datasets`, `evaluate`), updated `requirements.txt`, and added `requirements.lock` per Action P0.1.
 
 ### `DEP-2`: No version pins / no lockfile
 - **Severity:** Medium
+- **Status:** RESOLVED
 - **Description:** [requirements.txt](../requirements.txt) lists bare package
   names; the repo references a `requirements.lock` (pip freeze) that does not
   exist. The roadmap's T1 pins HF versions, but nothing is pinned today.
 - **Affected:** [requirements.txt](../requirements.txt).
 - **Remediation:** pin top-level versions and add `requirements.lock`.
   — tracked in [Action P1.4](#12-prioritized-action-plan)
+- **Resolution Evidence:** Added top-level version pins in `requirements.txt` and generated `requirements.lock` via pip freeze per Action P1.4.
 
 ---
 
@@ -205,6 +230,7 @@ Severity totals: **High × 3, Medium × 4, Low × 3, Info × 4.** Cross-referenc
 
 ### `ARC-1`: Documented `src/` modules entirely absent
 - **Severity:** High
+- **Status:** RESOLVED
 - **Description:** Every module the layer READMEs describe is missing —
   only `__init__.py` files exist. Absent: `train_model.py`,
   `run_logger.py`, `<feature>_train.py`
@@ -222,9 +248,11 @@ Severity totals: **High × 3, Medium × 4, Low × 3, Info × 4.** Cross-referenc
 - **Remediation:** these are planned implementations (roadmap Phases 4–6), so
   the fix is to **label them as planned in the docs** (or implement them) —
   silence the drift either way. — tracked in [Action P0.2](#12-prioritized-action-plan)
+- **Resolution Evidence:** Annotated `src/` layer READMEs as planned per Action P0.2; subsequently all modules were implemented in Phases 2–8 (`src/lab3/data`, `src/lab3/models`, `src/lab3/training`, `src/lab3/eval`, `src/lab3/utils`).
 
 ### `ARC-2`: `FOLDER_STRUCTURE.md` not updated for new governance files
 - **Severity:** Medium
+- **Status:** RESOLVED
 - **Description:** [FOLDER_STRUCTURE.md](rules/FOLDER_STRUCTURE.md) does not
   list `agents/PROJECT_ROADMAP.md` (it describes OVERVIEW.md as the roadmap),
   and lists only example phase docs — the 8 phase files added this session
@@ -234,9 +262,11 @@ Severity totals: **High × 3, Medium × 4, Low × 3, Info × 4.** Cross-referenc
 - **Affected:** [FOLDER_STRUCTURE.md](rules/FOLDER_STRUCTURE.md).
 - **Remediation:** update the structure listing (with human approval per the
   rule's own constraint). — tracked in [Action P1.1](#12-prioritized-action-plan)
+- **Resolution Evidence:** Updated `FOLDER_STRUCTURE.md` and `agents/README.md` to index `PROJECT_ROADMAP.md` and the 8 phase docs per Action P1.1.
 
 ### `ARC-3`: Two phase-doc templates coexist
 - **Severity:** Low
+- **Status:** RESOLVED
 - **Description:** `templates/PHASE_DOC_TEMPLATE.md`
   and [phases/PHASE_TEMPLATE.md](phases/PHASE_TEMPLATE.md) both claim to be the
   phase-doc template; the 8 phase docs were created from the latter. Two
@@ -245,6 +275,7 @@ Severity totals: **High × 3, Medium × 4, Low × 3, Info × 4.** Cross-referenc
   [phases/PHASE_TEMPLATE.md](phases/PHASE_TEMPLATE.md).
 - **Remediation:** designate one canonical template and remove or alias the
   other. — tracked in [Action P2.2](#12-prioritized-action-plan)
+- **Resolution Evidence:** Deleted redundant `templates/PHASE_DOC_TEMPLATE.md` and standardized on `phases/PHASE_TEMPLATE.md` per Action P2.2.
 
 ---
 
@@ -252,6 +283,7 @@ Severity totals: **High × 3, Medium × 4, Low × 3, Info × 4.** Cross-referenc
 
 ### `TST-1`: pytest not installed — smoke suite cannot execute
 - **Severity:** High
+- **Status:** RESOLVED
 - **Description:** `python -m pytest` fails in both the `.venv` and system
   Python ("No module named pytest"), despite pytest being declared in
   [requirements.txt](../requirements.txt). [test_smoke.py](../tests/test_smoke.py)
@@ -261,9 +293,11 @@ Severity totals: **High × 3, Medium × 4, Low × 3, Info × 4.** Cross-referenc
 - **Affected:** [tests/](../tests/), environment.
 - **Remediation:** install pytest into the active environment (and any CI) —
   included in [Action P0.1](#12-prioritized-action-plan).
+- **Resolution Evidence:** Installed `pytest` into `.venv` and verified passing in Phase 2 & 4 completion audit per Action P0.1.
 
 ### `TST-2`: Only smoke tests; no unit tests
 - **Severity:** Medium
+- **Status:** RESOLVED
 - **Description:** The entire suite is
   [test_smoke.py](../tests/test_smoke.py) (3 tests: imports, directory
   existence, knowledge-base files). No unit tests exist for the modules the
@@ -272,6 +306,7 @@ Severity totals: **High × 3, Medium × 4, Low × 3, Info × 4.** Cross-referenc
 - **Affected:** [tests/](../tests/).
 - **Remediation:** add a unit test alongside each module as its phase
   implements it (roadmap Phases 3, 6, 7). — tracked in [Action P0.2](#12-prioritized-action-plan)
+- **Resolution Evidence:** Added unit and integration tests alongside implemented modules across PR #13, #15, #16 (`test_data_leakage.py`, `test_trainer_regressions.py`, `test_cleanlab_denoiser.py`); suite expanded to 15+ passing tests.
 
 ---
 
@@ -279,6 +314,7 @@ Severity totals: **High × 3, Medium × 4, Low × 3, Info × 4.** Cross-referenc
 
 ### `PERF-1`: No training/eval code yet — performance is N/A (positive)
 - **Severity:** Info
+- **Status:** RESOLVED
 - **Description:** With no implementation, there are no hot paths to profile.
   The constraints that will shape performance are already documented:
   `num_workers = 0` safety note ([src/data/README.md](../src/data/README.md)),
@@ -286,6 +322,7 @@ Severity totals: **High × 3, Medium × 4, Low × 3, Info × 4.** Cross-referenc
   [PROJECT_ROADMAP.md](PROJECT_ROADMAP.md)).
 - **Affected:** none.
 - **Remediation:** none now; revisit after Phase 6 produces the first run.
+- **Resolution Evidence:** Positive baseline finding; VRAM targets (<= 3.5GB/6GB), gradient accumulation, and `num_workers=0` constraints documented and honored across all training scripts.
 
 ---
 

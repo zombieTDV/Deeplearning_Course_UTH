@@ -1,5 +1,11 @@
 # <TITLE> — Template (agents/bugs)
 
+- **Created**: 2026-09-06T14:38:06+07:00
+- **Last Updated**: 2026-09-06T14:38:06+07:00
+
+---
+
+
 Copy this file into `agents/bugs/` as `BUG_<NN>_<SHORT_SNAKE_NAME>.md` for each
 new bug. Register it in `agents/bugs/README.md`.
 

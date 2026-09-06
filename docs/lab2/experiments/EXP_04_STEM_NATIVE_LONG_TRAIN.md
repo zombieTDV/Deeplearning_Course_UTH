@@ -1,5 +1,11 @@
 # EXP_04_STEM_NATIVE_LONG_TRAIN.md — Native 32x32 Conv Stem Training Report
 
+- **Created**: 2026-08-02T00:00:00+07:00
+- **Last Updated**: 2026-09-06T13:14:10+07:00
+
+---
+
+
 ## 📌 1. Target & Objective
 
 - **Experiment ID:** `EXP-04`

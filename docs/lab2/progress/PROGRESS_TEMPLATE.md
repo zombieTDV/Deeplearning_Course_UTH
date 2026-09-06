@@ -1,5 +1,11 @@
 # <TITLE> — Template (agents/progress)
 
+- **Created**: 2026-09-06T13:14:10+07:00
+- **Last Updated**: 2026-09-06T13:14:10+07:00
+
+---
+
+
 Copy this file into `agents/progress/` as `<PHASE>_STATUS.md` for each phase.
 Update after every meaningful change. This is the fast thing to read without
 re-reading the whole phase doc.

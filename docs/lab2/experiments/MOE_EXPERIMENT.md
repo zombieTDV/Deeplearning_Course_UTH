@@ -1,5 +1,11 @@
 # MOE_EXPERIMENT.md
 
+- **Created**: 2026-09-06T13:14:10+07:00
+- **Last Updated**: 2026-08-05T00:00:00+07:00
+
+---
+
+
 **Experiment:** Mixture of Experts (learned router) on the CIFAR-10 SOTA
 ensemble (ResNet18-sota + DenseNet121-sota).
 **Last updated:** 2026-08-05

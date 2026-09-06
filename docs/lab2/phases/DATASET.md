@@ -1,5 +1,11 @@
 # DATASET.md
 
+- **Created**: 2026-09-06T13:14:10+07:00
+- **Last Updated**: 2026-09-06T13:14:10+07:00
+
+---
+
+
 ## Overview
 
 The `dataset.py` module provides functions for downloading, loading, and verifying the CIFAR-10 dataset. It serves as the foundation for the data pipeline, handling the initial data acquisition and basic dataset information retrieval.

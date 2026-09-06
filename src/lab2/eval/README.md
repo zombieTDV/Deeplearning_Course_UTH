@@ -1,5 +1,11 @@
 # src/eval — Evaluation Layer
 
+- **Created**: 2026-09-06T13:14:10+07:00
+- **Last Updated**: 2026-09-06T13:14:10+07:00
+
+---
+
+
 ## Architecture Overview (LAB2)
 
 The evaluation layer produces the reported test metrics consumed by analysis

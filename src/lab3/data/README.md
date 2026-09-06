@@ -1,5 +1,11 @@
 # src/data — Data Pipeline Layer
 
+- **Created**: 2026-09-06T14:38:06+07:00
+- **Last Updated**: 2026-09-06T14:38:06+07:00
+
+---
+
+
 What belongs here:
 
 - `transforms.py` — train/eval augmentation and normalization pipelines.

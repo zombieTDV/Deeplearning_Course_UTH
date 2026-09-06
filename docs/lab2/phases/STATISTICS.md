@@ -1,5 +1,11 @@
 # STATISTICS.md
 
+- **Created**: 2026-09-06T13:14:10+07:00
+- **Last Updated**: 2026-09-06T13:14:10+07:00
+
+---
+
+
 ## Overview
 
 The `statistics.py` module computes and manages dataset statistics for normalization. It provides functions to calculate mean and standard deviation from datasets, save/load statistics to/from JSON files, and retrieve normalization parameters for transform pipelines.

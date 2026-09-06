@@ -5,8 +5,8 @@
 ## Header
 
 - **Title:** Setup & Problem Framing
-- **Date created:** 2026-08-11
-- **Last updated:** 2026-08-11
+- **Created**: 2026-08-11T00:00:00+07:00
+- **Last Updated**: 2026-08-11T00:00:00+07:00
 - **Description:** Tracks environment provisioning and problem framing for Practice 3.
 - **Status:** Done
 - **Phase doc:** [../phases/SETUP.md](../phases/SETUP.md)

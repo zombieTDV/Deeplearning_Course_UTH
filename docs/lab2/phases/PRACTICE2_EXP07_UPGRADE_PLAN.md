@@ -6,6 +6,9 @@
 - **Overview Pipeline**: Frozen & Fine-tuned ResNet18/DenseNet121 baselines + EXP-07 SOTA Deep LLRD, culminating in a 96.00% Validation Accuracy Soft-Voting Ensemble with 9-chart diagnostic suite.
 - **References**: PyTorch 2.x, Torchvision 0.28+, scikit-learn (`roc_curve`, `auc`, `label_binarize`), Matplotlib, TensorBoard, [`data/dataloader.py`](../../data/dataloader.py), [`data/transforms.py`](../../data/transforms.py), [`src/models/build_model.py`](../../src/models/build_model.py), [`src/training/train_model.py`](../../src/training/train_model.py), [`src/eval/evaluate_model.py`](../../src/eval/evaluate_model.py).
 
+- **Created**: 2026-09-06T13:14:10+07:00
+- **Last Updated**: 2026-09-06T13:14:10+07:00
+
 ---
 
 ## Table of Contents

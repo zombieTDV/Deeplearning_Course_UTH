@@ -1,5 +1,11 @@
 # MOE_STATUS.md
 
+- **Created**: 2026-09-06T13:14:10+07:00
+- **Last Updated**: 2026-08-05T00:00:00+07:00
+
+---
+
+
 **Phase / area:** Mixture of Experts (MoE) on the SOTA ensemble — learned
 per-input gating between ResNet18-sota and DenseNet121-sota.
 **Last updated:** 2026-08-05

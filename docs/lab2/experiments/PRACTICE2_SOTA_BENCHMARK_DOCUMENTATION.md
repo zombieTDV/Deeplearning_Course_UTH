@@ -1,5 +1,11 @@
 # 📘 Practice 2: SOTA Transfer Learning & Benchmarking Suite — Master Upgrade Documentation
 
+- **Created**: 2026-09-06T13:14:10+07:00
+- **Last Updated**: 2026-09-06T13:14:10+07:00
+
+---
+
+
 - **Project Title**: Modernization of Practice 2 (`notebooks/practice_2.ipynb`) into a State-of-the-Art (SOTA) Transfer Learning & Computer Vision Benchmarking Suite on CIFAR-10.
 - **Core Backbones**: ResNet18 & DenseNet121 (ImageNet-pretrained).
 - **Peak Performance Achieved**: **🏆 96.87% Test Accuracy** (Soft-Voting Ensemble; **97.12%** with 2-view TTA, **97.21%** with TTA + stacking MLP — see `SUMMARY_RESULTS.md`).

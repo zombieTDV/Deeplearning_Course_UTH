@@ -1,5 +1,11 @@
 # EXP_05_MODEL_ARCH_SWEEP.md — Modern Vision Architecture (ConvNeXt & EfficientNet) Benchmark Report
 
+- **Created**: 2026-08-02T00:00:00+07:00
+- **Last Updated**: 2026-09-06T13:14:10+07:00
+
+---
+
+
 ## 📌 1. Target & Objective
 
 - **Experiment ID:** `EXP-05`

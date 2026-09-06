@@ -1,33 +1,92 @@
-# CODEBASE_AUDIT.md
-Run this procedure before starting any task that touches more than
-one file, or at the start of a new session. Goal: catch drift between
-what the docs claim and what the code actually does, BEFORE acting on it.
+# CODEBASE_AUDIT.md — Drift Audit Procedure & Finding Resolution Gate
 
-## Steps
-1. List all files under `src/`, `data/`, `agents/` — diff against
-   `FOLDER_STRUCTURE.md`. Note anything present but undocumented,
-   or documented but missing.
-2. For every function/class name referenced in `agents/**/*.md`, grep for
-   it in `src/` or `data/`. Flag any that don't exist or whose signature changed.
-3. Cross-check `agents/progress/*_STATUS.md` against real artifacts —
-   e.g. if `TRAINING_STATUS.md` says "Done," does a checkpoint file
-   actually exist? If not, flag it.
-4. Check naming in recently changed files against `NAMING_CONVENTION.md`.
-5. Check for orphaned experiment outputs (runs with no corresponding
-   entry in progress files).
+- **Motivation/Background**: In multi-stage coursework projects, documentation, configuration, and implementation rapidly diverge across labs. Building upon outdated documentation or false assumptions causes compounding errors and expensive refactoring.
+- **Purpose**: Define the mandatory pre-task codebase audit checklist to catch drift between documentation claims and physical repository state before performing non-trivial modifications.
+- **Overview Pipeline**: Executed at the start of a session or prior to any multi-file refactor.
+- **Detailed Plan**: §1 Audit Scope; §2 Five-Step Inspection Checklist; §3 Output Format; §4 Hard Acceptance Gate; §5 Audit Lifecycle & Finding Resolution.
+- **References**: `agents/rules/FOLDER_STRUCTURE.md`, `agents/templates/CODEBASE_AUDIT_TEMPLATE.md`.
+- **Created**: 2026-09-06T13:05:18+07:00
+- **Last Updated**: 2026-09-06T21:25:00+07:00
 
-## Output format
-Summarize findings in under 150 words as a short list:
-- ✅ No discrepancies found, OR
-- ⚠️ [file/claim] says X, but code shows Y
+---
 
-## Hard rule
-Do NOT proceed with the requested task until discrepancies are either
-resolved or the human explicitly says "proceed anyway." This audit is
-cheap compared to the cost of building on a wrong assumption.
+## Table of Contents
 
-## When to run this
-- Start of a new session
-- Before any multi-file refactor or pipeline change
-- NOT before every trivial single-line edit (too expensive to run
-  constantly — use judgment)
+- [1. Audit Scope & Trigger Points](#1-audit-scope--trigger-points)
+- [2. Five-Step Inspection Checklist](#2-five-step-inspection-checklist)
+- [3. Output Format](#3-output-format)
+- [4. Hard Acceptance Gate](#4-hard-acceptance-gate)
+- [5. Audit Lifecycle & Finding Resolution](#5-audit-lifecycle--finding-resolution)
+
+---
+
+## 1. Audit Scope & Trigger Points
+
+### When to Run:
+- **Session Start:** Whenever an agent begins work in an existing or resumed repository.
+- **Pre-Refactoring:** Before any refactoring touching multiple files or changing package structure.
+- **Pre-Merge:** Prior to merging feature branches into `main`.
+
+### When NOT to Run:
+- Trivial, localized single-file edits or documentation typo fixes.
+
+---
+
+## 2. Five-Step Inspection Checklist
+
+1. **Filesystem vs FOLDER_STRUCTURE.md:**
+   - List files in `src/<lab>/`, `tests/<lab>/`, `configs/`, and `docs/<lab>/`. Compare against [agents/rules/FOLDER_STRUCTURE.md](FOLDER_STRUCTURE.md).
+   - Identify any unversioned, undocumented files or stale directory layouts.
+2. **Import & Module Integrity:**
+   - Inspect package imports across `src/` and `tests/`.
+   - Ensure all internal imports resolve via the canonical package name (`from src.lab1...`, `from src.lab2...`, `from src.lab3...`).
+   - Flag deprecated, un-namespaced, or circular imports.
+3. **Artifact Claims vs Reality:**
+   - Cross-check claims in status reports (`docs/<lab>/progress/*_STATUS.md`).
+   - If a status doc claims training is complete, verify that the physical checkpoint file exists in `experiments/<lab>/runs/` or `experiments/<lab>/results/`.
+4. **Naming & Convention Compliance:**
+   - Check recently modified files against [agents/rules/NAMING_CONVENTION.md](NAMING_CONVENTION.md).
+5. **Git Working Tree State:**
+   - Verify `git status --short`. Note any untracked or unstaged changes before starting new work.
+
+---
+
+## 3. Output Format
+
+Summarize findings as a concise, structured report:
+
+```markdown
+### Codebase Drift Audit Summary
+- **Branch / Revision:** `<branch_name> (HEAD: <commit_hash>)`
+- **Working Tree:** `[Clean | N unstaged files]`
+- **Findings:**
+  - ✅ FOLDER_STRUCTURE alignment: [Verified / Discrepancies noted]
+  - ✅ Package imports: [Clean / Stale imports found]
+  - ✅ Claimed artifacts: [Verified on disk / Missing]
+- **Verdict:** `[CLEAN - PROCEED | DRIFT DETECTED - BLOCKED]`
+```
+
+---
+
+## 4. Hard Acceptance Gate
+
+**HARD RULE:** Do NOT proceed with the requested engineering task if critical discrepancies or unverified claims are discovered, until:
+1. The drift is rectified in code/docs, OR
+2. The human engineer explicitly acknowledges the finding and approves proceeding.
+
+---
+
+## 5. Audit Lifecycle & Finding Resolution
+
+### Audit Archiving
+- Routine pre-task audit summaries are output directly to the conversation.
+- Formal milestone or pre-merge audit reports generated from [agents/templates/CODEBASE_AUDIT_TEMPLATE.md](../templates/CODEBASE_AUDIT_TEMPLATE.md) must be saved into `docs/shared/AUDIT_<TOPIC>.md` with active ISO 8601 timestamps.
+
+### Individual Finding Resolution Status Vocabulary
+Every finding listed in an audit report's **Findings Summary** must track its own remediation status:
+- **`RESOLVED`**: The specific defect/risk has been completely remediated, validated by automated tests or physical inspection, and verified on disk.
+- **`PARTIALLY RESOLVED`**: An interim mitigation, partial patch, or workaround has been applied, but remaining work or pending verification is required for complete resolution.
+- **`NOT RESOLVED`**: The finding has been diagnosed and documented, but no corrective engineering action has yet been taken.
+
+> [!NOTE]
+> The finding status tracks whether **that specific finding** has been addressed, independent of whether the broader audit or milestone is complete.

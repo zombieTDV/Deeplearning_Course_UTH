@@ -4,7 +4,9 @@
 - **Purpose**: One sentence — what this report establishes (baseline of code quality, security, deps, architecture, tests, performance for <branch>).
 - **Overview Pipeline**: 1–2 sentences — the audit process: git-tree inspection, static grep of `src/`/`tests`/`notebooks`, dependency matrix vs active environment, compliance check against the project rulebase.
 - **Detailed Plan**: sections covered — Executive Summary, Findings Summary, per-area findings (code quality, security, dependencies, architecture, tests, performance), Compliance, Risk Analysis, Overall Health, Prioritized Action Plan.
-- **References**: `git`, `grep`, `pip`/`importlib.metadata`, project rulebase (`agents/rules/`, `Docs/Rulebase.md`), previous audit.
+- **References**: `git`, `grep`, `pip`/`importlib.metadata`, project rulebase (`agents/rules/`), previous audit.
+- **Created**: YYYY-MM-DDTHH:MM:SS±HH:MM
+- **Last Updated**: YYYY-MM-DDTHH:MM:SS±HH:MM
 
 ---
 
@@ -46,11 +48,18 @@ Brief verdict: what is strong (≤3 bullets) and what blocks maturity (≤3 bull
 
 ## 2. Findings Summary
 
-| ID | Area | Severity | Title | Section |
-|---|---|---|---|---|
-| `<ID>-1` | Code quality | **High** | <short title> | [3. Code Quality](#3-code-quality) |
-| `<ID>-2` | Security | **Medium** | <short title> | [4. Security Vulnerabilities](#4-security-vulnerabilities) |
-| ... | ... | ... | ... | ... |
+> ### Finding Resolution Status Vocabulary
+> The **Status** column tracks whether **that specific finding/defect** has been remediated, independent of whether the broader audit or milestone is complete:
+> - **`RESOLVED`**: The specific defect/risk has been completely remediated, validated by automated tests or physical inspection, and verified on disk.
+> - **`PARTIALLY RESOLVED`**: An interim mitigation, partial patch, or workaround has been applied, but remaining work or pending verification is required for complete resolution.
+> - **`NOT RESOLVED`**: The finding has been diagnosed and documented, but no corrective engineering action has yet been taken.
+
+| ID | Area | Severity | Status | Title | Section |
+|---|---|---|---|---|---|
+| `<ID>-1` | Code quality | **High** | `NOT RESOLVED` | <short title> | [3. Code Quality](#3-code-quality) |
+| `<ID>-2` | Security | **Medium** | `PARTIALLY RESOLVED` | <short title> | [4. Security Vulnerabilities](#4-security-vulnerabilities) |
+| `<ID>-3` | Dependencies | **Low** | `RESOLVED` | <short title> | [5. Dependency Health](#5-dependency-health) |
+| ... | ... | ... | ... | ... | ... |
 
 Cross-reference: severity totals by area → [risk analysis §10](#10-detailed-risk-analysis) and [compliance §9](#9-compliance-with-policies-and-procedures).
 
@@ -65,9 +74,11 @@ Cross-reference: severity totals by area → [risk analysis §10](#10-detailed-r
 
 ### `<ID>-1`: <Short title>
 - **Severity:** [Critical | High | Medium | Low | Info]
+- **Status:** [RESOLVED | PARTIALLY RESOLVED | NOT RESOLVED]
 - **Description:** <what the issue is and why it matters>
 - **Affected:** <file(s) / component(s)>
 - **Remediation:** <concrete fix> — tracked in [Action P1.x](#12-prioritized-action-plan)
+- **Resolution Evidence:** <if RESOLVED/PARTIALLY RESOLVED: commit hash, test run, or verification diff>
 
 > Repeat for each finding. Positive findings use severity `Info`.
 
@@ -77,9 +88,11 @@ Cross-reference: severity totals by area → [risk analysis §10](#10-detailed-r
 
 ### `<ID>-2`: <Short title>
 - **Severity:** ...
+- **Status:** [RESOLVED | PARTIALLY RESOLVED | NOT RESOLVED]
 - **Description:** ...
 - **Affected:** ...
 - **Remediation:** ... — tracked in [Action P0.x](#12-prioritized-action-plan)
+- **Resolution Evidence:** ...
 
 ---
 
@@ -87,9 +100,11 @@ Cross-reference: severity totals by area → [risk analysis §10](#10-detailed-r
 
 ### `<ID>-3`: <Short title>
 - **Severity:** ...
+- **Status:** [RESOLVED | PARTIALLY RESOLVED | NOT RESOLVED]
 - **Description:** ...
 - **Affected:** ...
 - **Remediation:** ... — tracked in [Action P0.x](#12-prioritized-action-plan)
+- **Resolution Evidence:** ...
 
 ---
 
@@ -97,9 +112,11 @@ Cross-reference: severity totals by area → [risk analysis §10](#10-detailed-r
 
 ### `<ID>-4`: <Short title>
 - **Severity:** ...
+- **Status:** [RESOLVED | PARTIALLY RESOLVED | NOT RESOLVED]
 - **Description:** ...
 - **Affected:** ...
 - **Remediation:** ... — tracked in [Action P1.x](#12-prioritized-action-plan)
+- **Resolution Evidence:** ...
 
 ---
 
@@ -107,9 +124,11 @@ Cross-reference: severity totals by area → [risk analysis §10](#10-detailed-r
 
 ### `<ID>-5`: <Short title>
 - **Severity:** ...
+- **Status:** [RESOLVED | PARTIALLY RESOLVED | NOT RESOLVED]
 - **Description:** ...
 - **Affected:** ...
 - **Remediation:** ... — tracked in [Action P0.x](#12-prioritized-action-plan)
+- **Resolution Evidence:** ...
 
 ---
 
@@ -117,9 +136,11 @@ Cross-reference: severity totals by area → [risk analysis §10](#10-detailed-r
 
 ### `<ID>-6`: <Short title>
 - **Severity:** ...
+- **Status:** [RESOLVED | PARTIALLY RESOLVED | NOT RESOLVED]
 - **Description:** ...
 - **Affected:** ...
-- **Remediation:** ... — tracked in [Action P2.x](#12-prioritized-action-plan)
+- **Remediation:** ... — tracked in [Action P1.x](#12-prioritized-action-plan)
+- **Resolution Evidence:** ...
 
 ---
 
@@ -131,53 +152,32 @@ Assessed against the project rulebase (`agents/rules/*`, `Docs/Rulebase.md`).
 |---|---|---|---|
 | <Rulebase §N — name> | [Compliant \| Partial \| Non-compliant] | <evidence> | [<ID>-x](#2-findings-summary) |
 
-Cross-reference: non-compliance items map to [risk §10](#10-detailed-risk-analysis) and [action §12](#12-prioritized-action-plan).
-
 ---
 
 ## 10. Detailed Risk Analysis
 
-| Risk | Likelihood | Impact | Overall | Description & mitigation | Related finding |
-|---|---|---|---|---|---|
-| <risk> | [Low \| Med \| High] | [Low \| Med \| High] | **Moderate** | <narrative> | [<ID>-x](#2-findings-summary) |
+Rollup of severity totals across all findings:
 
-Cross-reference: severity ratings originate in [§2](#2-findings-summary); mitigations are scheduled in [§12](#12-prioritized-action-plan).
+| Severity | Count | Primary Areas |
+|---|---|---|
+| **Critical** | N | ... |
+| **High** | N | ... |
+| **Medium** | N | ... |
+| **Low** | N | ... |
+| **Info** | N | ... |
 
 ---
 
 ## 11. Overall Project Health
 
-| Dimension | Rating | Notes |
-|---|---|---|
-| <Dimension> | [Strong \| Good \| Fair \| Weak \| None] | <1-line note> |
-
-Cross-reference: per-dimension evidence in [§3](#3-code-quality)–[§8](#8-performance-bottlenecks).
+One-line health rating with clear operational verdict:
+- **`HEALTH RATING: [HEALTHY | AT RISK | BLOCKED]`**
 
 ---
 
 ## 12. Prioritized Action Plan
 
-### P0 — Fix now (blocks trust / reproducibility / security)
-- **P0.1** <action> — addresses [<ID>-x](#2-findings-summary)
-- **P0.2** ...
-
-### P1 — Next iteration (raises confidence)
-- **P1.1** <action> — addresses [<ID>-x](#2-findings-summary)
-
-### P2 — Polish (when time permits)
-- **P2.1** <action> — addresses [<ID>-x](#2-findings-summary)
-
-> Lint/tooling actions (ruff, mypy, CI niceties) belong here at most — per the
-> AI-era perspective, they are hygiene for humans, never blocking criteria.
-
-Cross-reference: each item links back to its finding; the summary table is in [§2](#2-findings-summary).
-
----
-
-## Self-review checklist (before finalizing)
-
-- [ ] All 5 header fields present
-- [ ] TOC anchors resolve (lowercase, strip punctuation, spaces → hyphens)
-- [ ] Cross-reference links between related sections resolve (summary ↔ detail ↔ action plan)
-- [ ] Metrics match source; file/notebook paths relative to project root
-- [ ] Dates in `YYYY-MM-DD`; `---` separators between major sections
+Prioritized remediation items mapped directly to findings:
+- **P0 (Blocker / Immediate):** Critical correctness, security, or data leakage bugs.
+- **P1 (High):** Architecture divergence, missing regression tests, reproducibility flaws.
+- **P2 (Medium / Low):** Deprecated dependency updates, logging improvements, minor cleanup.

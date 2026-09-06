@@ -1,6 +1,19 @@
-﻿# How to Set Up an AI Agent Workflow (v2)
+# How to Set Up an AI Agent Workflow (v3.0)
+
+| Field | Value |
+| :--- | :--- |
+| **Document Type** | Standard Operating Procedure (SOP) |
+| **Status** | Canonical Workflow SOP |
+| **Owner** | AI Agent & Engineering Team |
+| **Scope** | Global Repository Lifecycle |
+| **Created** | 2026-09-06T13:05:18+07:00 |
+| **Last Updated** | 2026-09-06T21:25:00+07:00 |
+| **Reference** | [docs/README.md](../README.md), [agents/rules/AGENT_AI.md](../../agents/rules/AGENT_AI.md) |
+
+---
 
 ## Step 1: Set default rules for the AI agent
+
 
 Place these in `agents/rules/`. These are the **always-on** files — the only
 ones that should be loaded into the agent's persistent system prompt.

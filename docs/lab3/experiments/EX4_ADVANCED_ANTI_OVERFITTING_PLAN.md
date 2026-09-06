@@ -1,5 +1,11 @@
 # EXPERIMENT SPECIFICATION: Exercise 2 Advanced Anti-Overfitting Suite
 
+- **Created**: 2026-09-06T14:38:06+07:00
+- **Last Updated**: 2026-09-06T14:38:06+07:00
+
+---
+
+
 **Document ID:** `EXP-EX2-ADVANCED-SPEC`  
 **Date:** 2026-08-12  
 **Author:** bush-le + Antigravity AI Agent  

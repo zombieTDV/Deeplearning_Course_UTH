@@ -1,3 +1,10 @@
+# PURPOSE
+
+- **Created**: 2026-09-06T13:14:10+07:00
+- **Last Updated**: 2026-09-06T13:14:10+07:00
+
+---
+
 Practice 2 - Hands-on practice with pre-trained neural network architectures
 Exercises:
 

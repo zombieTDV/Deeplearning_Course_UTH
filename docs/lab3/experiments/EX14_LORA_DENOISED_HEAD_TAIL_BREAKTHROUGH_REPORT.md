@@ -1,5 +1,11 @@
 # EXPERIMENT REPORT EX-14: LORA PEFT ON DENOISED IMDB WITH HEAD-TAIL TRUNCATION BREAKTHROUGH (93.14% TEST ACCURACY)
 
+- **Created**: 2026-09-06T14:38:06+07:00
+- **Last Updated**: 2026-09-06T14:38:06+07:00
+
+---
+
+
 > **Document ID:** `EX14-LORA-DENOISED-HEAD-TAIL-BREAKTHROUGH`  
 > **Date:** 2026-08-15  
 > **Authors:** bush-le + Antigravity AI Pair Programmer  

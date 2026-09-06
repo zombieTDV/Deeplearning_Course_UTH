@@ -1,5 +1,11 @@
 # EXP_02_LR_SCHEDULER_LLRD.md — Learning Rate Schedulers & Layer-wise LR Decay (LLRD) Report
 
+- **Created**: 2026-08-02T00:00:00+07:00
+- **Last Updated**: 2026-09-06T13:14:10+07:00
+
+---
+
+
 ## 📌 1. Target & Objective
 
 - **Experiment ID:** `EXP-02`

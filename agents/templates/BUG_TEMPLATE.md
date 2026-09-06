@@ -1,38 +1,69 @@
-# <TITLE> — Template (agents/bugs)
+# <TITLE> — Bug Report Template
 
-Copy this file into `agents/bugs/` as `BUG_<NN>_<SHORT_SNAKE_NAME>.md` for each
-new bug. Register it in `agents/bugs/README.md`.
+- **Motivation/Background**: Runtime failures, environment incompatibilities, and logic bugs must be documented with actionable root-cause analysis and verification evidence.
+- **Purpose**: Provide a structured template for capturing bug symptoms, root causes, remediations, and verification tests.
+- **Overview Pipeline**: Copy this skeleton into `docs/bugs/BUG_<NN>_<SHORT_NAME>.md` when diagnosing any non-trivial issue.
+- **Detailed Plan**: §1 Symptom & Traceback; §2 Root Cause Analysis; §3 Solution & Code Changes; §4 Verification Evidence; §5 Related Links.
+- **References**: `agents/rules/MD_CONVENTION.md`.
+- **Created**: YYYY-MM-DDTHH:MM:SS±HH:MM
+- **Last Updated**: YYYY-MM-DDTHH:MM:SS±HH:MM
 
 ---
 
-## Header
+## Metadata
 
-- **Title:** <Short bug title, e.g. "DataLoader BrokenPipeError in Python 3.14">
-- **Bug ID:** `BUG-<NN>`
-- **Date identified:** YYYY-MM-DD
-- **Description:** <One sentence: what fails and where.>
-- **Status:** [Open | In Progress | Resolved | Won't Fix]
-- **Severity:** [Low | Medium | High | Critical]
-- **Category:** <e.g. Runtime / Data / Training / Evaluation / Environment>
-- **Target component:** <file(s)/module(s) affected>
+- **Bug ID**: `BUG-<NN>`
+- **Title**: <Short bug title, e.g. "DataLoader BrokenPipeError on Windows">
+- **Status**: [Open | In Progress | Resolved | Won't Fix]
+- **Severity**: [Low | Medium | High | Critical]
+- **Category**: [Environment | Data | Architecture | Training | Evaluation | CI/CD]
+- **Target Component**: [`src/...`](...)
+
+---
 
 ## 1. Symptom & Error Traceback
 
-<What happened. Paste the full traceback / error message.>
+<Describe what happened, the command run, and paste the exact traceback or error output.>
+
+```text
+<paste full traceback here>
+```
+
+---
 
 ## 2. Root Cause Analysis
 
-<Why it happened. Numbered list of contributing causes.>
+<Detailed explanation of why the failure occurred. Cite specific file lines and environmental conditions.>
+
+1. Cause item 1
+2. Cause item 2
+
+---
 
 ## 3. Solution & Remediation
 
-<What was changed and why. Include code snippets / file links.>
+<Explain the architectural or code changes made to fix the issue. Include code diffs or links to modified files.>
+
+- Modified [`src/...`](...) to handle ...
+
+---
 
 ## 4. Verification Evidence
 
-<How it was confirmed fixed — command, expected output.>
+<Command executed to verify the fix and its output.>
+
+```bash
+pytest tests/test_<module>.py -v
+```
+
+**Output:**
+```text
+<paste passing test log here>
+```
+
+---
 
 ## 5. Related Links
 
-- Master bug index: [README.md](README.md)
-- Related code: <relative links with anchors>
+- Bug Directory Index: [`docs/bugs/README.md`](README.md)
+- Related Modules: [`src/...`](...)

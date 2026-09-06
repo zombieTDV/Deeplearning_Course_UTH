@@ -1,5 +1,11 @@
 # experiments/results — Metrics Index & Descriptions
 
+- **Created**: 2026-09-06T14:38:06+07:00
+- **Last Updated**: 2026-09-06T14:38:06+07:00
+
+---
+
+
 Every file below is described with the 5W1H principle (What / Why / When /
 Where / Who / How) — see
 [agents/rules/RESULTS_REPORTING.md](../../agents/rules/RESULTS_REPORTING.md).

@@ -1,7 +1,21 @@
-﻿# OPTUNA_DB_GUIDE.md
+# Optuna SQLite Study Reference & Analysis Guide
+
+| Field | Value |
+| :--- | :--- |
+| **Document Type** | Tool Reference & Analysis SOP |
+| **Status** | Active Reference |
+| **Owner** | AI Agent & Human Practitioner |
+| **Scope** | Hyperparameter Optimization & Study Persistence |
+| **Created** | 2026-09-06T13:05:18+07:00 |
+| **Last Updated** | 2026-09-06T21:25:00+07:00 |
+| **Reference** | [docs/README.md](../README.md), [agents/rules/LOGGING_CHECKPOINT_RULES.md](../../agents/rules/LOGGING_CHECKPOINT_RULES.md) |
+
+---
+
 Quick reference for loading, analyzing, and exporting an Optuna SQLite study.
 Read on demand when doing HPO analysis — not part of always-on rules.
 Runnable script version: `src/utils/optuna_db_report.py`
+
 
 ## Load
 ```python

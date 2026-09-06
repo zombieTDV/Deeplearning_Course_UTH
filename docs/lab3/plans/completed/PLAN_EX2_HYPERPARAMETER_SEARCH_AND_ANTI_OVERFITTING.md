@@ -2,6 +2,12 @@
 
 # PLAN: EX2 Systematic Hyperparameter Tuning & Advanced Anti-Overfitting Search
 
+- **Created**: 2026-09-06T14:38:06+07:00
+- **Last Updated**: 2026-09-06T14:38:06+07:00
+
+---
+
+
 **Goal**: Establish a systematic experimental protocol to eliminate overfitting in Exercise 2 (finetuning `distilbert-base-uncased` on IMDB), discover optimal hyperparameters, enforce early stopping, and maximize generalization accuracy while maintaining strict VRAM budget ($\le 3.5\text{ GB}$).
 
 ---

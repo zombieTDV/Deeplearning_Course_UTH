@@ -1,5 +1,11 @@
 # STRATEGY PLAN: Exercise 2 BERT & DistilBERT + LoRA Adaptation Strategy
 
+- **Created**: 2026-09-06T14:38:06+07:00
+- **Last Updated**: 2026-09-06T14:38:06+07:00
+
+---
+
+
 **Document ID:** `PLAN-EX2-ACCURACY-AND-OVERFITTING-STRATEGY`  
 **Date:** 2026-08-13  
 **Author:** bush-le + Antigravity AI Pair Programmer  

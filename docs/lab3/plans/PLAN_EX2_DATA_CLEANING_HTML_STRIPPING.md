@@ -1,5 +1,11 @@
 # TECHNICAL PLAN: IMDB Data Cleaning & HTML Artifact Stripping (Approach 1)
 
+- **Created**: 2026-09-06T14:38:06+07:00
+- **Last Updated**: 2026-09-06T14:38:06+07:00
+
+---
+
+
 **Document ID:** `PLAN-EX2-DATA-CLEANING-HTML-STRIPPING`  
 **Date:** 2026-08-15  
 **Author:** bush-le + Antigravity AI Pair Programmer  

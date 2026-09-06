@@ -1,5 +1,11 @@
 # Optuna Database (RDB) — Loading, Analysis, and Export Guide
 
+- **Created**: 2026-09-06T13:09:10+07:00
+- **Last Updated**: 2026-09-06T13:09:10+07:00
+
+---
+
+
 ## 1. Loading a Study from SQLite Storage
 
 ```python

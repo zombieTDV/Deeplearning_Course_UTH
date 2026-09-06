@@ -1,5 +1,11 @@
 # src/training — Training Layer (scripts only)
 
+- **Created**: 2026-09-06T14:38:06+07:00
+- **Last Updated**: 2026-09-06T14:38:06+07:00
+
+---
+
+
 What belongs here:
 
 - `train_model.py` — the generic training loop: full-state checkpointing

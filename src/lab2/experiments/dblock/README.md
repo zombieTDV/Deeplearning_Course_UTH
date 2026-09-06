@@ -12,6 +12,9 @@
 - **Detailed Plan**: File inventory; patch log; license & attribution.
 - **References**: transformers, torch, scipy, numpy.
 
+- **Created**: 2026-09-06T13:14:10+07:00
+- **Last Updated**: 2026-09-06T13:14:10+07:00
+
 ---
 
 ## File inventory

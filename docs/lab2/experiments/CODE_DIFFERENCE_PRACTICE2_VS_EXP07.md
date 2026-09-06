@@ -1,5 +1,11 @@
 # CODE_DIFFERENCE_PRACTICE2_VS_EXP07.md — Code Architecture & Technical Differences Analysis
 
+- **Created**: 2026-09-06T13:14:10+07:00
+- **Last Updated**: 2026-09-06T13:14:10+07:00
+
+---
+
+
 ## 📌 Executive Summary
 
 This document provides a comprehensive, line-by-line and architectural comparison between the exploratory baseline code in [`../../notebooks/practice_2.ipynb`](../../notebooks/practice_2.ipynb) and the production SOTA optimization module in [`../../src/experiments/exp_07_resnet_densenet_sota.py`](../../src/experiments/exp_07_resnet_densenet_sota.py).

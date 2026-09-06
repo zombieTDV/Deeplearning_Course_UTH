@@ -5,8 +5,8 @@
 ## Header
 
 - **Title:** Evaluation & Validation
-- **Date created:** 2026-08-11
-- **Last updated:** 2026-08-13
+- **Created**: 2026-08-11T00:00:00+07:00
+- **Last Updated**: 2026-08-13T00:00:00+07:00
 - **Description:** Tracks sealed test-set evaluation with 5W1H metrics.
 - **Status:** Done
 - **Phase doc:** [../phases/EVAL.md](../phases/EVAL.md)

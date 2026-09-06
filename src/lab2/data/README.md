@@ -1,5 +1,11 @@
 # src/data — Data Pipeline Layer
 
+- **Created**: 2026-09-06T13:14:10+07:00
+- **Last Updated**: 2026-09-06T13:14:10+07:00
+
+---
+
+
 ## Architecture Overview (LAB2)
 
 The data layer is the first stage of the LAB2 pipeline:

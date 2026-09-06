@@ -5,8 +5,8 @@
 ## Header
 
 - **Title:** Error Analysis, Interpretability & Reporting
-- **Date created:** 2026-08-11
-- **Last updated:** 2026-08-15
+- **Created**: 2026-08-11T00:00:00+07:00
+- **Last Updated**: 2026-08-15T00:00:00+07:00
 - **Description:** Tracks error analysis, interpretability, interactive demo notebooks, and 5W1H experiment reports.
 - **Status:** Done
 - **Phase doc:** [../phases/REPORT.md](../phases/REPORT.md)

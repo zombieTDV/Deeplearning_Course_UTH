@@ -1,5 +1,11 @@
 # Git Working Guide — AI Agent Collaboration
 
+- **Created**: 2026-09-06T13:09:10+07:00
+- **Last Updated**: 2026-09-06T13:09:10+07:00
+
+---
+
+
 ## Principles
 
 - **One commit per logical unit of work.** Don't bundle unrelated changes.

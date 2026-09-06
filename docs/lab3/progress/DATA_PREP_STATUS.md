@@ -5,8 +5,8 @@
 ## Header
 
 - **Title:** Data Survey, Preprocessing & Data-Centric AI Cleaning
-- **Date created:** 2026-08-11
-- **Last updated:** 2026-08-15
+- **Created**: 2026-08-11T00:00:00+07:00
+- **Last Updated**: 2026-08-15T00:00:00+07:00
 - **Description:** Tracks IMDB EDA, HTML noise stripping, Head+Tail Truncation, and Cleanlab Confident Learning.
 - **Status:** Done
 - **Phase doc:** [../phases/DATA_PREP.md](../phases/DATA_PREP.md)

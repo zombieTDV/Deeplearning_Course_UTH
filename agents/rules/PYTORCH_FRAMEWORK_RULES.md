@@ -1,10 +1,15 @@
-# PYTORCH_FRAMEWORK_RULES.md — PyTorch Framework Usage & Architecture Rules
+# PYTORCH_FRAMEWORK_RULES.md — PyTorch Architecture & Device Governance
 
 - **Motivation/Background**: This project uses PyTorch and the Hugging Face ecosystem as its core deep learning framework. All model building, data pipeline transforms, training loops, and evaluations must adhere to standard PyTorch patterns.
 - **Purpose**: Define mandatory PyTorch architectural rules, device management, reproducibility standards, and Hugging Face integration guidelines.
-- **Overview Pipeline**: Applied across `src/data/`, `src/models/`, `src/training/`, and `src/eval/`.
+- **Overview Pipeline**: Enforced across all model definitions (`src/*/models/`), dataloaders (`src/*/data/`), training loops (`src/*/training/`), and evaluations (`src/*/eval/`).
+- **Detailed Plan**: §1 PyTorch Core Principles; §2 Device Agnostic Execution & VRAM Targets; §3 Determinism & Seeding; §4 Hugging Face & Cleanlab Rules; §5 Safe Checkpoint Loading.
+- **References**: `torch`, `torchvision`, `transformers`, `agents/rules/LOGGING_CHECKPOINT_RULES.md`.
+- **Created**: 2026-09-06T13:05:18+07:00
+- **Last Updated**: 2026-09-06T21:25:00+07:00
 
 ---
+
 
 ## 1. PyTorch Core Principles
 

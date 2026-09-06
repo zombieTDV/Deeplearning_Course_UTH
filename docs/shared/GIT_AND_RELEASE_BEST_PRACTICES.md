@@ -1,4 +1,4 @@
-﻿# GIT_AND_RELEASE_BEST_PRACTICES.md — Git, CI, and Release Best Practices
+# GIT_AND_RELEASE_BEST_PRACTICES.md — Git, CI, and Release Best Practices
 
 - **Motivation/Background**: AI agents can trivially `git commit`, `git push`,
   and publish releases, but an unapproved push can overwrite teammate work,
@@ -16,6 +16,9 @@
 - **References**: `git`, `git tag`, GitHub REST API, GitHub Actions,
   [MD_CONVENTION.md](../rules/MD_CONVENTION.md), [LOGGING_CHECKPOINT_RULES.md](../rules/LOGGING_CHECKPOINT_RULES.md),
   [.github/workflows/ci.yml](../../.github/workflows/ci.yml).
+
+- **Created**: 2026-09-06T13:05:18+07:00
+- **Last Updated**: 2026-09-06T13:05:18+07:00
 
 ---
 

@@ -5,16 +5,24 @@
 - **Overview Pipeline**: Organized by research stage boundaries (LAB1, LAB2, LAB3), with cross-project SOPs under `shared/` and early drafts preserved under `archive/`.
 - **Detailed Plan**: §1 Architecture; §2 Stage Navigation; §3 Shared Manuals.
 - **References**: `agents/rules/FOLDER_STRUCTURE.md`, `docs/shared/`.
+- **Created**: 2026-09-06T13:05:18+07:00
+- **Last Updated**: 2026-09-06T21:25:00+07:00
 
 ---
 
 ## 1. Documentation Structure
 
+This repository implements the **Dual-Paradigm Architecture (Archetype B: Multi-Track Coursework)**.
+
+- **Global / Shared (`docs/`, `docs/shared/`):** Master research index, inter-agent handoff templates, universal engineering SOPs, and cross-lab consolidation audit reports.
+- **Colocated Track Documentation (`docs/lab1/`, `docs/lab2/`, `docs/lab3/`):** Each laboratory maintains its own phase specifications (`phases/`), live progress trackers (`progress/`), empirical experiment writeups (`experiments/`), and defect analyses (`bugs/`), preventing cross-domain clutter.
+
 ```text
 docs/
 ├── README.md                          # This file (master research index)
 ├── shared/                            # Cross-project reference guides, SOPs, and manuals
-│   ├── HOW_TO_SETUP_AI_AGENT.md       # 9-step agent workflow setup SOP
+│   ├── HOW_TO_SETUP_AI_AGENT.md       # 10-step agent workflow setup SOP
+│   ├── HANDOFF_TEMPLATE.md            # Inter-agent task handoff specification
 │   ├── ML_PIPELINE_REFERENCE_v3.md    # 18-step ML engineering reference guide
 │   ├── MD_CREATION_GUIDE.md           # 5-step pedagogical documentation guide
 │   ├── OPTUNA_DB_GUIDE.md             # Optuna SQLite analysis and export guide
@@ -22,6 +30,7 @@ docs/
 │   ├── FINAL_CONSOLIDATION_AUDIT_REPORT.md  # Comprehensive consolidation readiness audit
 │   ├── LAB2_LAB3_EXPERIMENT_AUDIT_REPORT.md # Experiment lineage & artifact integrity audit
 │   └── RUNS_PATH_AUDIT_REPORT.md      # Runtime path verification report
+
 ├── archive/                           # Preserved historical drafts
 │   └── lab1/                          # LAB1 early rulebase and notes
 ├── lab1/                              # Fashion-MNIST Classification Stage
