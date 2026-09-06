@@ -1,0 +1,14 @@
+Test Accuracy (percentage): 88.45
+Test Accuracy (fraction): 0.8845
+
+Class           TPR(Recall)        FPR  Precision
+T-shirt/top         0.8940     0.0269     0.7887
+Trouser             0.9801     0.0012     0.9892
+Pullover            0.8028     0.0155     0.8496
+Dress               0.9037     0.0147     0.8703
+Coat                0.8025     0.0184     0.8244
+Sandal              0.9606     0.0083     0.9304
+Shirt               0.6750     0.0277     0.7356
+Sneaker             0.9173     0.0060     0.9449
+Bag                 0.9649     0.0041     0.9643
+Ankle boot          0.9430     0.0056     0.9472

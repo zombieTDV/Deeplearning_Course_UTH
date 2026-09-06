@@ -1,0 +1,84 @@
+Misclassification Analysis
+======================================================================
+
+True: T-shirt/top  (errors: 191)
+--------------------------------------------------
+  -> Shirt           count= 139
+  -> Dress           count=  26
+  -> Pullover        count=  15
+  -> Bag             count=   6
+  -> Coat            count=   4
+  -> Sneaker         count=   1
+
+True: Trouser  (errors: 37)
+--------------------------------------------------
+  -> Dress           count=  27
+  -> Pullover        count=   3
+  -> Coat            count=   3
+  -> Bag             count=   2
+  -> T-shirt/top     count=   1
+  -> Shirt           count=   1
+
+True: Pullover  (errors: 193)
+--------------------------------------------------
+  -> Coat            count= 112
+  -> Shirt           count=  49
+  -> T-shirt/top     count=  18
+  -> Dress           count=  11
+  -> Bag             count=   2
+  -> Sneaker         count=   1
+
+True: Dress  (errors: 105)
+--------------------------------------------------
+  -> Coat            count=  34
+  -> Shirt           count=  31
+  -> T-shirt/top     count=  22
+  -> Pullover        count=  10
+  -> Trouser         count=   4
+  -> Bag             count=   4
+
+True: Coat  (errors: 150)
+--------------------------------------------------
+  -> Pullover        count=  68
+  -> Shirt           count=  49
+  -> Dress           count=  31
+  -> T-shirt/top     count=   1
+  -> Bag             count=   1
+
+True: Sandal  (errors: 94)
+--------------------------------------------------
+  -> Sneaker         count=  76
+  -> Ankle boot      count=  16
+  -> Bag             count=   2
+
+True: Shirt  (errors: 301)
+--------------------------------------------------
+  -> Pullover        count=  93
+  -> T-shirt/top     count=  92
+  -> Coat            count=  81
+  -> Dress           count=  25
+  -> Bag             count=  10
+
+True: Sneaker  (errors: 28)
+--------------------------------------------------
+  -> Ankle boot      count=  24
+  -> Sandal          count=   3
+  -> Bag             count=   1
+
+True: Bag  (errors: 36)
+--------------------------------------------------
+  -> Sneaker         count=   8
+  -> Pullover        count=   7
+  -> Dress           count=   7
+  -> Shirt           count=   6
+  -> T-shirt/top     count=   5
+  -> Sandal          count=   1
+  -> Trouser         count=   1
+  -> Coat            count=   1
+
+True: Ankle boot  (errors: 49)
+--------------------------------------------------
+  -> Sneaker         count=  43
+  -> Sandal          count=   5
+  -> T-shirt/top     count=   1
+

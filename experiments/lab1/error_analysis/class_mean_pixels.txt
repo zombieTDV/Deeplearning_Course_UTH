@@ -1,0 +1,10 @@
+T-shirt/top: mean=-0.3488, std=0.5309, min=-1.0000, max=0.3749
+Trouser: mean=-0.5542, std=0.5837, min=-1.0000, max=0.6434
+Pullover: mean=-0.2466, std=0.5194, min=-1.0000, max=0.4695
+Dress: mean=-0.4822, std=0.5655, min=-1.0000, max=0.5125
+Coat: mean=-0.2293, std=0.5909, min=-1.0000, max=0.6032
+Sandal: mean=-0.7265, std=0.2696, min=-1.0000, max=-0.0329
+Shirt: mean=-0.3364, std=0.4598, min=-1.0000, max=0.3079
+Sneaker: mean=-0.6646, std=0.4680, min=-1.0000, max=0.4083
+Bag: mean=-0.2929, std=0.4642, min=-1.0000, max=0.4100
+Ankle boot: mean=-0.3976, std=0.5805, min=-1.0000, max=0.5502

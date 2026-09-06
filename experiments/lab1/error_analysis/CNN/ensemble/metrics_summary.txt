@@ -1,0 +1,15 @@
+Test Accuracy (percentage): 93.17
+Test Accuracy (fraction): 0.9317
+
+Class                TPR  Precision
+---------------------------------
+T-shirt/top       0.8680     0.8875
+Trouser           0.9880     0.9960
+Pullover          0.8930     0.9038
+Dress             0.9360     0.9369
+Coat              0.8950     0.9022
+Sandal            0.9870     0.9890
+Shirt             0.8110     0.7776
+Sneaker           0.9770     0.9702
+Bag               0.9890     0.9851
+Ankle boot        0.9730     0.9740

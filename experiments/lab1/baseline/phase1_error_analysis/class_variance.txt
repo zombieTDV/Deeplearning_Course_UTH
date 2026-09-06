@@ -1,0 +1,12 @@
+Class             Mean Var    Max Var               Top-5 Var Region
+-----------------------------------------------------------------
+T-shirt/top         0.2102     0.5545    (np.int64(10), np.int64(6))
+Trouser             0.1313     0.5877   (np.int64(26), np.int64(15))
+Pullover            0.2448     0.5442    (np.int64(25), np.int64(9))
+Dress               0.1821     0.6057     (np.int64(8), np.int64(8))
+Coat                0.2173     0.6449   (np.int64(26), np.int64(12))
+Sandal              0.2042     0.4888   (np.int64(14), np.int64(17))
+Shirt               0.2490     0.5199   (np.int64(22), np.int64(22))
+Sneaker             0.1286     0.5213   (np.int64(11), np.int64(21))
+Bag                 0.3182     0.6924   (np.int64(26), np.int64(11))
+Ankle boot          0.2122     0.6273    (np.int64(5), np.int64(21))
