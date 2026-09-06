@@ -1,4 +1,21 @@
-pandas
-numpy
-tabulate
-matplotlib
+# ==============================================================================
+# Deeplearning_Course — Unified Coursework Requirements Proxy
+# ==============================================================================
+# This proxy file references the complete multi-tier development environment.
+#
+# Standard Installation (CPU / GitHub Actions CI / Default PyPI wheels):
+#   pip install -r requirements.txt
+#
+# NVIDIA GPU Workstations (CUDA 13.0 wheels):
+#   pip install torch==2.13.0+cu130 torchvision==0.28.0+cu130 --index-url https://download.pytorch.org/whl/cu130
+#   pip install -r requirements.txt
+#
+# Tiered Structure:
+#   requirements/base.txt -> Core scientific & PyTorch stack
+#   requirements/lab1.txt -> Fashion-MNIST specific dependencies
+#   requirements/lab2.txt -> CIFAR-10 transfer learning dependencies
+#   requirements/lab3.txt -> Hugging Face NLP, LoRA, and Cleanlab stack
+#   requirements/dev.txt  -> Unified developer, linting, and testing suite
+# ==============================================================================
+
+-r requirements/dev.txt

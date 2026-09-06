@@ -1,0 +1,9 @@
+-r base.txt
+seaborn>=0.13.0
+transformers==5.15.0
+datasets==5.0.1
+evaluate==0.4.6
+accelerate>=1.1.0
+cleanlab>=2.9.0
+peft>=0.15.0
+ipython

@@ -1,4 +1,4 @@
-﻿# Coursework Research Documentation (`/docs`)
+# Coursework Research Documentation (`/docs`)
 
 - **Motivation/Background**: This directory consolidates all evolving research knowledge, stage specifications, experiment plans, and reference manuals across all three coursework laboratories.
 - **Purpose**: Provide a structured, stage-by-stage memory of research evolution that is clean, reproducible, and verifiable.
@@ -18,7 +18,10 @@ docs/
 │   ├── ML_PIPELINE_REFERENCE_v3.md    # 18-step ML engineering reference guide
 │   ├── MD_CREATION_GUIDE.md           # 5-step pedagogical documentation guide
 │   ├── OPTUNA_DB_GUIDE.md             # Optuna SQLite analysis and export guide
-│   └── GIT_AND_RELEASE_BEST_PRACTICES.md # Git commits, CI, and release management SOP
+│   ├── GIT_AND_RELEASE_BEST_PRACTICES.md # Git commits, CI, and release management SOP
+│   ├── FINAL_CONSOLIDATION_AUDIT_REPORT.md  # Comprehensive consolidation readiness audit
+│   ├── LAB2_LAB3_EXPERIMENT_AUDIT_REPORT.md # Experiment lineage & artifact integrity audit
+│   └── RUNS_PATH_AUDIT_REPORT.md      # Runtime path verification report
 ├── archive/                           # Preserved historical drafts
 │   └── lab1/                          # LAB1 early rulebase and notes
 ├── lab1/                              # Fashion-MNIST Classification Stage

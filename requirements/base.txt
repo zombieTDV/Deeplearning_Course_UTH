@@ -1,0 +1,14 @@
+# Universal scientific & deep learning core for CPU CI and local runtime
+# Note: On standard PyPI, these versions resolve to standard wheels.
+# On NVIDIA GPU workstations, install the CUDA 13.0 wheels as documented in requirements.txt.
+numpy==2.5.1
+pandas==3.0.5
+matplotlib==3.11.1
+scikit-learn==1.9.0
+pyyaml==6.0.3
+optuna==4.9.0
+tabulate==0.10.0
+pillow==12.3.0
+tensorboard==2.21.0
+torch==2.13.0
+torchvision==0.28.0

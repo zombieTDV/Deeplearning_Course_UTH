@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "deeplearning-course-uth"
+version = "1.0.0"
+description = "Consolidated Deep Learning Coursework: Fashion-MNIST Baseline, CIFAR-10 Transfer Learning, Hugging Face NLP Sentiment Analysis"
+readme = "README.MD"
+requires-python = ">=3.11, <3.13"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+pythonpath = ["."]
+addopts = "-q"
+markers = [
+    "gpu: marks tests as requiring a CUDA-enabled GPU (deselect with '-m \"not gpu\"')",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+# Frozen one-shot experiment scripts carry legacy lint debt; they are excluded
+# from strict maintained architecture lint checks.
+extend-exclude = [
+    "src/lab2/experiments/exp_*.py",
+    "src/lab2/experiments/plot_*.py",
+    "src/lab2/experiments/run_all_experiments.py",
+    "src/lab2/experiments/cifar_stem_experiment.ipynb",
+    "src/lab3/experiments/baseline_imdb_sentiment.py",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "B"]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+# CLI training scripts bootstrap sys.path before importing src.* modules (E402)
+"src/lab2/experiments/*.py" = ["E402"]
+"src/lab2/training/*.py" = ["E402"]
+"src/lab3/experiments/*.py" = ["E402"]
+"src/lab3/training/*.py" = ["E402"]
+
+[tool.mypy]
+python_version = "3.12"
+warn_unused_ignores = true
+ignore_missing_imports = true
