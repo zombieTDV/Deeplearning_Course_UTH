@@ -1,11 +1,11 @@
-﻿"""test_config.py — configs/data.yaml is loaded and consistent (TST-2, CQ-2, ARC-1)."""
+"""test_config.py — configs/data.yaml is loaded and consistent (TST-2, CQ-2, ARC-1)."""
 
 import os
 from pathlib import Path
 
 from src.lab2.data.config import load_config
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 
 def test_load_config_reads_yaml():

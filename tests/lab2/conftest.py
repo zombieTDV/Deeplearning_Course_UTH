@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DATA_ROOT = PROJECT_ROOT / "data" / "raw" / "cifar-10-batches-py"
 
 # True when the real dataset is present locally. Data-dependent tests are

@@ -1,4 +1,4 @@
-﻿"""test_build_model.py — trainable-parameter structure per mode (TST-2, CQ-4)."""
+"""test_build_model.py — trainable-parameter structure per mode (TST-2, CQ-4)."""
 
 import torch
 import torch.nn as nn
@@ -10,7 +10,7 @@ from src.lab2.models.build_model import (
     build_resnet18_full_sota,
     count_trainable_params,
 )
-from tests.conftest import requires_pretrained
+from tests.lab2.conftest import requires_pretrained
 
 
 @requires_pretrained

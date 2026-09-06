@@ -1,4 +1,4 @@
-﻿"""
+"""
 config.py — Configuration loader for data pipeline.
 
 Usage:
@@ -23,11 +23,12 @@ TB_LOG_DIR = str(_PROJECT_ROOT / "experiments" / "tensorboard_logs")
 CKPT_DIR = str(_PROJECT_ROOT / "experiments" / "checkpoints")
 
 
-def load_config(config_path: str | Path = "configs/data.yaml") -> dict[str, Any]:
+def load_config(config_path: str | Path = "configs/lab2_data.yaml") -> dict[str, Any]:
     """Load configuration from YAML file.
 
     Args:
-        config_path: Path to the configuration file.
+        config_path: Path to the configuration file. Defaults to configs/lab2_data.yaml,
+                     with fallback to configs/data.yaml (or vice-versa).
 
     Returns:
         Dictionary with configuration parameters.
@@ -36,12 +37,31 @@ def load_config(config_path: str | Path = "configs/data.yaml") -> dict[str, Any]
         FileNotFoundError: If configuration file does not exist.
         yaml.YAMLError: If YAML parsing fails.
     """
-    config_path = Path(config_path)
+    path = Path(config_path)
 
-    if not config_path.exists():
+    candidates = [path]
+    if not path.is_absolute():
+        candidates.append(_PROJECT_ROOT / path)
+
+    if path.name == "data.yaml":
+        candidates.append(path.with_name("lab2_data.yaml"))
+        if not path.is_absolute():
+            candidates.append((_PROJECT_ROOT / path).with_name("lab2_data.yaml"))
+    elif path.name == "lab2_data.yaml":
+        candidates.append(path.with_name("data.yaml"))
+        if not path.is_absolute():
+            candidates.append((_PROJECT_ROOT / path).with_name("data.yaml"))
+
+    resolved_path: Path | None = None
+    for candidate in candidates:
+        if candidate.exists():
+            resolved_path = candidate
+            break
+
+    if resolved_path is None:
         raise FileNotFoundError(f"Configuration file not found: {config_path}")
 
-    with open(config_path) as f:
+    with open(resolved_path) as f:
         config = yaml.safe_load(f)
 
     return config
