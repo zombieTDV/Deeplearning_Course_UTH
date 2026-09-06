@@ -7,7 +7,31 @@ dist/
 build/
 .eggs/
 .kilo
-data
+
+# Data — raw/processed/external data stays local
+/data/raw/*
+!/data/raw/.gitkeep
+/data/processed/*
+!/data/processed/.gitkeep
+/data/external/*
+!/data/external/.gitkeep
+/data/*.tar.gz
+/data/*.zip
+/data/*.pt
+/data/*.json
+
+# Experiment outputs (track plots, results & scripts; ignore heavy weights & DBs)
+/experiments/checkpoints/*.pt
+!/experiments/checkpoints/.gitkeep
+/experiments/runs/*
+!/experiments/runs/.gitkeep
+# Regenerable binary arrays (feature/probability caches) — scripts rebuild them
+/experiments/results/**/*.npz
+# Regenerable model weights (meta-model state dicts) — scripts rebuild them
+/experiments/results/**/*.pt
+/experiments/tb_logs/
+/experiments/*.db
+/experiments/*.sqlite
 
 # Virtual environment
 .venv/
@@ -28,30 +52,6 @@ Thumbs.db
 # Jupyter
 .ipynb_checkpoints/
 
-# Data
-data/*.csv
-data/*.parquet
-data/*.h5
-data/*.hdf5
-data/*.npz
-data/raw/
-
-# Model weights
-model/backup/
-!model/backup/.gitkeep
-model/baseline/
-!model/baseline/.gitkeep
-
-# Lab generated artifacts
-labs/*/results/logs/
-!labs/*/results/logs/.gitkeep
-labs/*/results/metrics/
-!labs/*/results/metrics/.gitkeep
-labs/*/results/models/
-!labs/*/results/models/.gitkeep
-labs/*/results/plots/
-!labs/*/results/plots/.gitkeep
-
 # Logs
 logs/
 !logs/.gitkeep
@@ -59,3 +59,7 @@ logs/
 # Environment
 .env
 .env.*
+
+# Scratch folder
+scratch/
+*.tar.gz
