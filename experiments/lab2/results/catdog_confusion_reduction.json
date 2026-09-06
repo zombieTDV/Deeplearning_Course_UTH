@@ -1,0 +1,38 @@
+{
+  "device": "cuda",
+  "focal_gamma": 2.0,
+  "focal_dog_weight": 1.5,
+  "epochs": 40,
+  "spec_epochs": 3,
+  "results": [
+    {
+      "name": "Baseline ensemble (finetune x2)",
+      "isolated_acc": 87.4,
+      "cat_acc": 85.6,
+      "dog_acc": 89.2,
+      "cross_confusions": 143
+    },
+    {
+      "name": "S1 Hard-negative mining",
+      "isolated_acc": 86.1,
+      "cat_acc": 84.5,
+      "dog_acc": 87.7,
+      "cross_confusions": 169
+    },
+    {
+      "name": "S2 Focal loss / class-weight",
+      "isolated_acc": 86.9,
+      "cat_acc": 84.89999999999999,
+      "dog_acc": 88.9,
+      "cross_confusions": 153
+    },
+    {
+      "name": "S3 Specialist CNN member",
+      "isolated_acc": 87.15,
+      "cat_acc": 85.3,
+      "dog_acc": 89.0,
+      "cross_confusions": 148
+    }
+  ],
+  "hard_negatives_train": 611
+}

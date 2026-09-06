@@ -1,0 +1,69 @@
+# Data Pipeline Configuration
+# Centralized configuration for the data pipeline modules
+
+dataset:
+  name: "CIFAR-10"
+  root: "data/raw"          # single canonical copy (external data dir retired)
+  download: true            # gated in dataloader: only when data/raw is empty
+  num_classes: 10
+
+image:
+  size: 224
+  channels: 3
+
+normalization:
+  # ImageNet statistics for pretrained models
+  imagenet:
+    mean: [0.485, 0.456, 0.406]
+    std: [0.229, 0.224, 0.225]
+  
+  # CIFAR-10 statistics (computed from dataset)
+  cifar10:
+    mean: [0.4914, 0.4822, 0.4465]
+    std: [0.2470, 0.2435, 0.2616]
+
+transforms:
+  train:
+    resize: 224
+    random_crop: 224
+    random_crop_padding: 16
+    random_horizontal_flip: true
+    random_rotation: 0
+    color_jitter:
+      enabled: false
+      brightness: 0.0
+      contrast: 0.0
+      saturation: 0.0
+      hue: 0.0
+  
+  eval:
+    resize: 224
+
+dataloader:
+  batch_size: 64
+  shuffle_train: true
+  shuffle_eval: false
+  # 0 = main-process loading: safe on Python 3.14 (see BUG-01 BrokenPipeError).
+  # Set >0 on a stable runtime to enable multiprocess loading.
+  num_workers: 0
+  pin_memory: true
+  persistent_workers: false
+  drop_last: false
+
+split:
+  seed: 42
+  train_ratio: 0.9  # 45k train / 5k val out of 50k
+  split_file: "data/processed/cifar10_split_seed42.json"
+
+statistics:
+  batch_size: 1000
+  stats_file: "data/processed/dataset_statistics.json"
+  compute_on_device: null  # null = CPU, or specify device like "cuda"
+
+training:
+  seed: 42
+  device: "cuda"  # or "cpu"
+  epochs: 30
+  dropout: 0.0    # classification-head dropout during training (0.0 = disabled)
+  deterministic: false
+  benchmark: true

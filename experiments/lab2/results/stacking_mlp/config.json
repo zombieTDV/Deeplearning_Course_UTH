@@ -1,0 +1,12 @@
+{
+  "run_name": "stacking_mlp",
+  "meta_model": "MLP [20->64->10]",
+  "epochs": 40,
+  "seed": 0,
+  "lr": 0.001,
+  "features": "concat of SOTA expert softmax probs (20-dim), optional 2-view hflip TTA",
+  "val_acc_notta": 97.2,
+  "val_acc_tta": 97.36,
+  "description": "What: train a stacking meta-model over the SOTA ensemble's probability features. Why: test whether a learned combiner beats fixed 0.5/0.5 soft-voting. How: Adam lr=1e-3, 40 epochs, trained on the validation split only (leakage-free). When/Where: reproduced by this script; artifacts in experiments/results/stacking_mlp/. Who: LAB2 team.",
+  "timestamp": "2026-08-10T10:00:58"
+}

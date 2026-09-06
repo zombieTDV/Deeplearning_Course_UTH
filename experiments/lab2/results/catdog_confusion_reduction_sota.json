@@ -1,0 +1,39 @@
+{
+  "device": "cuda",
+  "base": "sota",
+  "focal_gamma": 2.0,
+  "focal_dog_weight": 1.5,
+  "epochs": 40,
+  "spec_epochs": 3,
+  "results": [
+    {
+      "name": "Baseline ensemble (sota x2)",
+      "isolated_acc": 93.45,
+      "cat_acc": 93.0,
+      "dog_acc": 93.89999999999999,
+      "cross_confusions": 86
+    },
+    {
+      "name": "S1 Hard-negative mining",
+      "isolated_acc": 92.4,
+      "cat_acc": 92.2,
+      "dog_acc": 92.60000000000001,
+      "cross_confusions": 107
+    },
+    {
+      "name": "S2 Focal loss / class-weight",
+      "isolated_acc": 92.35,
+      "cat_acc": 92.2,
+      "dog_acc": 92.5,
+      "cross_confusions": 108
+    },
+    {
+      "name": "S3 Specialist CNN member",
+      "isolated_acc": 93.5,
+      "cat_acc": 92.9,
+      "dog_acc": 94.1,
+      "cross_confusions": 85
+    }
+  ],
+  "hard_negatives_train": 1
+}
