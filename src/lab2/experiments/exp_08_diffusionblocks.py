@@ -1,4 +1,4 @@
-﻿"""
+"""
 exp_08_diffusionblocks.py — Evaluate DiffusionBlocks (Sakana AI, ICLR 2026)
 for VRAM reduction during fine-tuning.
 
@@ -35,7 +35,7 @@ Usage:
   python -m src.experiments.exp_08_diffusionblocks --smoke   # 1 epoch, 4 batches
 
 Artifacts:
-  experiments/runs/<ts>_DB-<track>-<mode>/  (config JSON, history JSONL, best.pt)
+  experiments/lab2/runs/<ts>_DB-<track>-<mode>/  (config JSON, history JSONL, best.pt)
   experiments/results/diffusionblocks_summary.json  (consolidated across runs)
 
 The DBlock training/inference math below is a faithful port of the official
@@ -73,7 +73,7 @@ from dblock.vit import (
     load_vit,
 )
 
-RUNS_ROOT = PROJECT_ROOT / "experiments" / "runs"
+RUNS_ROOT = PROJECT_ROOT / "experiments" / "lab2" / "runs"
 RESULTS_DIR = PROJECT_ROOT / "experiments" / "results"
 SUMMARY_PATH = RESULTS_DIR / "diffusionblocks_summary.json"
 
@@ -606,7 +606,7 @@ def main():
             "training vs end-to-end backprop. Why: evaluate VRAM reduction "
             "during finetuning for LAB2. How: plain-PyTorch port of official "
             "SakanaAI code; per-step torch.cuda peak stats; fixed seed. "
-            "Where: RTX 4060 Laptop (8GB); runs under experiments/runs. "
+            "Where: RTX 4060 Laptop (8GB); runs under experiments/lab2/runs. "
             "Who: LAB2 team. When: " + datetime.now().strftime("%Y-%m-%d")),
     }
 

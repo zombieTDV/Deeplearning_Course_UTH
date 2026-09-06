@@ -1,4 +1,4 @@
-﻿"""
+"""
 train_lab2_models.py — CLI entry point for ALL LAB2 model training.
 
 Policy (see agents/rules/LOGGING_CHECKPOINT_RULES.md)
@@ -22,10 +22,10 @@ Usage:
     python -m src.training.train_lab2_models --smoke                  # 1 epoch, 2 batches (CI sanity)
 
 Artifacts (per run, see LOGGING_CHECKPOINT_RULES.md):
-    experiments/runs/<ts>_<run_name>/checkpoints/<run>_{best,last}.pt
-    experiments/runs/<ts>_<run_name>/logs/<run>.log
-    experiments/runs/<ts>_<run_name>/metrics/<run>_{config.json,history.jsonl}
-    experiments/runs/registry.json          # run_name -> latest run dir
+    experiments/lab2/runs/<ts>_<run_name>/checkpoints/<run>_{best,last}.pt
+    experiments/lab2/runs/<ts>_<run_name>/logs/<run>.log
+    experiments/lab2/runs/<ts>_<run_name>/metrics/<run>_{config.json,history.jsonl}
+    experiments/lab2/runs/registry.json          # run_name -> latest run dir
     experiments/results/training_history.json  # combined history for notebooks
 """
 
@@ -63,7 +63,7 @@ from src.lab2.utils.run_logger import RunLogger
 
 DEFAULT_EPOCHS = 30
 DEFAULT_SEED = 42
-RUNS_ROOT = PROJECT_ROOT / "experiments" / "runs"
+RUNS_ROOT = PROJECT_ROOT / "experiments" / "lab2" / "runs"
 RESULTS_DIR = PROJECT_ROOT / "experiments" / "results"
 REGISTRY_PATH = RUNS_ROOT / "registry.json"
 
@@ -254,7 +254,7 @@ def main() -> None:
                 f"How: AdamW (lr={lr}), CE{' (label smoothing 0.1)' if smoothing else ''}, "
                 f"{'RandAugment+Erasing' if use_adv else 'standard ImageNet transforms'}, "
                 f"early stopping patience 4. "
-                f"Where: experiments/runs (checkpoints/logs/metrics). "
+                f"Where: experiments/lab2/runs (checkpoints/logs/metrics). "
                 f"Who: LAB2 team. When: reproducibility run — full state logged."),
         }
 
@@ -290,7 +290,7 @@ def main() -> None:
     if not args.smoke:
         _write_combined_history(all_results)
         print("\nAll requested runs finished. Combined history -> experiments/results/training_history.json")
-        print("Registry (run_name -> latest run dir) -> experiments/runs/registry.json")
+        print("Registry (run_name -> latest run dir) -> experiments/lab2/runs/registry.json")
     else:
         print("\nSmoke run finished (no registry / results updated). "
               f"Runs under {RUNS_ROOT}")

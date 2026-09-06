@@ -25,6 +25,10 @@ build/
 !/experiments/checkpoints/.gitkeep
 /experiments/runs/*
 !/experiments/runs/.gitkeep
+/experiments/lab2/runs/*
+!/experiments/lab2/runs/.gitkeep
+/experiments/lab3/runs/*
+!/experiments/lab3/runs/.gitkeep
 # Regenerable binary arrays (feature/probability caches) — scripts rebuild them
 /experiments/results/**/*.npz
 # Regenerable model weights (meta-model state dicts) — scripts rebuild them

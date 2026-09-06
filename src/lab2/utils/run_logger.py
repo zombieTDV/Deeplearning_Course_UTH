@@ -1,4 +1,4 @@
-﻿"""
+"""
 run_logger.py — Lightweight, zero-dependency run logging for training & experiments.
 
 Why this module
@@ -28,7 +28,7 @@ Usage
 -----
     from src.lab2.utils.run_logger import RunLogger
 
-    logger = RunLogger(run_name="ResNet18-frozen", runs_root="experiments/runs")
+    logger = RunLogger(run_name="ResNet18-frozen", runs_root="experiments/lab2/runs")
     logger.write_config({"epochs": 20, "lr": 1e-3, "seed": 42})
     logger.log("Starting training")
     logger.progress("epoch 3/20 [120/704] loss=1.234 acc=85.1% eta=12m")
@@ -61,11 +61,11 @@ class RunLogger:
     Args:
         run_name: Identifier for the run (e.g. ``"ResNet18-sota"``).  It is
             sanitized and used in every artifact file name.
-        runs_root: Parent directory of all runs (default ``experiments/runs``).
+        runs_root: Parent directory of all runs (default ``experiments/lab2/runs``).
         console: If True (default), also print to stdout.
     """
 
-    def __init__(self, run_name: str, runs_root: str | Path = "experiments/runs",
+    def __init__(self, run_name: str, runs_root: str | Path = "experiments/lab2/runs",
                  console: bool = True):
         self.name = _sanitize(run_name)
         ts = datetime.now().strftime("%Y%m%d_%H%M%S")

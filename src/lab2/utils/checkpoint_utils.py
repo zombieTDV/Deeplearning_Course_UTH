@@ -1,9 +1,9 @@
-﻿"""
+"""
 checkpoint_utils.py — Locate and load trained checkpoints across runs.
 
 Checkpoints produced by ``src/training/train_lab2_models.py`` live in
-``experiments/runs/<ts>_<run_name>/checkpoints/<run_name>_{best,last}.pt`` and
-are tracked in ``experiments/runs/registry.json`` (run_name -> latest run dir).
+``experiments/lab2/runs/<ts>_<run_name>/checkpoints/<run_name>_{best,last}.pt`` and
+are tracked in ``experiments/lab2/runs/registry.json`` (run_name -> latest run dir).
 
 Legacy checkpoints (state-dict-only, from the old notebook-based training) live
 flat in ``experiments/checkpoints/<run_name>_best.pt`` and remain loadable.
@@ -32,7 +32,7 @@ def _announce(resource: str, path) -> None:
 
 def find_best_checkpoint(
     run_name: str,
-    runs_root: str | Path = "experiments/runs",
+    runs_root: str | Path = "experiments/lab2/runs",
     fallback_dir: str | Path = "experiments/checkpoints",
 ) -> Path | None:
     """Return the most recent ``<run_name>_best.pt`` path, or None.
@@ -91,7 +91,7 @@ def find_best_checkpoint(
 
 def find_latest_run_dir(
     run_name: str,
-    runs_root: str | Path = "experiments/runs",
+    runs_root: str | Path = "experiments/lab2/runs",
 ) -> Path | None:
     """Return the most recent run directory containing *run_name*, or None.
 

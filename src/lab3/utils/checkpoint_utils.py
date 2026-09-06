@@ -31,7 +31,7 @@ def save_checkpoint(path: str | Path, state: dict[str, Any]) -> None:
 
 
 def latest_run_dir(run_root: str | Path, run_name: str | None = None) -> Path | None:
-    """Find the registered or newest `experiments/runs/<ts>_<run_name>/` for a run name, or newest overall."""
+    """Find the registered or newest `experiments/lab3/runs/<ts>_<run_name>/` for a run name, or newest overall."""
     run_root = Path(run_root)
     if not run_root.is_dir():
         return None
@@ -109,7 +109,7 @@ def resolve_run_files(run_dir: str | Path) -> dict[str, Path | None]:
 
 
 def update_registry(run_root: str | Path, run_name: str, run_dir: str | Path) -> None:
-    """Point `experiments/runs/registry.json` at the latest run dir."""
+    """Point `<run_root>/registry.json` at the latest run dir."""
     registry_path = Path(run_root) / "registry.json"
     registry: dict[str, Any] = {}
     if registry_path.exists():

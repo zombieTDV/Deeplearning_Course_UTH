@@ -1,4 +1,4 @@
-﻿"""
+"""
 stacking_mlp_train.py — Train the stacking meta-model (script-only training).
 
 Policy: notebooks never train.  This script runs the full stacking pipeline:
@@ -134,7 +134,7 @@ def main() -> None:
 
     device = torch.device(args.device if args.device else
                           ("cuda" if torch.cuda.is_available() else "cpu"))
-    logger = RunLogger("stacking_mlp", runs_root=PROJECT_ROOT / "experiments" / "runs")
+    logger = RunLogger("stacking_mlp", runs_root=PROJECT_ROOT / "experiments" / "lab2" / "runs")
 
     val_loader, test_loader = load_loaders()
     rn, dn = load_experts(device)

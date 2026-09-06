@@ -3,14 +3,14 @@
 Script-only training CLI (LOGGING_CHECKPOINT_RULES.md §1). Wraps the HF
 `Trainer` + `TrainingArguments` (Exercise 2 steps 5-6) and persists full-state
 checkpoints (``<run>_best.pt``, ``<run>_last.pt``), a log file, config, and
-JSONL history into ``experiments/runs/<ts>_<run>/`` with resume support.
+JSONL history into ``experiments/lab3/runs/<ts>_<run>/`` with resume support.
 
 Usage::
 
-    python -m src.training.imdb_sentiment_train --epochs 3 --seed 42 --tb
-    python -m src.training.imdb_sentiment_train --smoke
-    python -m src.training.imdb_sentiment_train --resume
-    python -m src.training.imdb_sentiment_train --force-resume
+    python -m src.lab3.training.imdb_sentiment_train --epochs 3 --seed 42 --tb
+    python -m src.lab3.training.imdb_sentiment_train --smoke
+    python -m src.lab3.training.imdb_sentiment_train --resume
+    python -m src.lab3.training.imdb_sentiment_train --force-resume
 """
 
 from __future__ import annotations

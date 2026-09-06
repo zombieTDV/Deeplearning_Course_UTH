@@ -1,4 +1,4 @@
-﻿"""
+"""
 moe_router_train.py — Train the Phase-1 MoE soft router (script-only training).
 
 Policy: notebooks never train.  This script runs the Phase-1 MoE pipeline:
@@ -151,7 +151,7 @@ def main() -> None:
 
     device = torch.device(args.device if args.device else
                           ("cuda" if torch.cuda.is_available() else "cpu"))
-    logger = RunLogger("moe_router", runs_root=PROJECT_ROOT / "experiments" / "runs")
+    logger = RunLogger("moe_router", runs_root=PROJECT_ROOT / "experiments" / "lab2" / "runs")
 
     val_loader, test_loader = load_loaders()
     rn, dn = load_experts(device)

@@ -2,13 +2,13 @@
 
 Runs inference exactly once on the sealed test split (golden rule 4, §10),
 reports accuracy, ROC-AUC, confusion matrix, and per-class precision/recall/F1 with 5W1H
-context, saves `experiments/results/imdb_sentiment_eval.json`, a normalized confusion
+context, saves `experiments/lab3/results/imdb_sentiment_eval.json`, a normalized confusion
 matrix plot, and an ROC curve plot.
 
 Usage::
 
-    python -m src.eval.evaluate_model --checkpoint experiments/runs/<ts>_<run>/checkpoints/<run>_best.pt
-    python -m src.eval.evaluate_model    # automatically resolves latest best.pt
+    python -m src.lab3.eval.evaluate_model --checkpoint experiments/lab3/runs/<ts>_<run>/checkpoints/<run>_best.pt
+    python -m src.lab3.eval.evaluate_model    # automatically resolves latest best.pt
 """
 
 from __future__ import annotations
