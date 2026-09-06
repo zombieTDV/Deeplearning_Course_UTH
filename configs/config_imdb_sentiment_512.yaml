@@ -1,0 +1,42 @@
+# Exercise 2 — Finetune `distilbert-base-uncased` on IMDB (binary sentiment).
+# EXP-06 variant: Max length 512 expansion optimized for 93.0%+ Accuracy Peak.
+
+dataset:
+  name: "stanfordnlp/imdb"
+  max_length: 512
+  seed: 42
+  val_size: 0.1
+  processed_dir: "data/lab3/processed/imdb_tokenized_512"
+
+model:
+  name: "distilbert-base-uncased"
+  num_labels: 2
+  id2label:
+    "0": "neg"
+    "1": "pos"
+  label2id:
+    "neg": 0
+    "pos": 1
+
+training:
+  seed: 42
+  run_name: "distilbert-finetune-512"
+  run_root: "experiments/lab3/runs"
+  epochs: 4
+  batch_size: 8
+  gradient_accumulation_steps: 2
+  lr: 2.5e-5
+  weight_decay: 0.03
+  classifier_dropout: 0.20
+  label_smoothing_factor: 0.05
+  use_llrd: true
+  decay_factor: 0.9
+  metric_for_best_model: "accuracy"
+  early_stopping_patience: 6
+  lr_scheduler_type: "cosine"
+  warmup_ratio: 0.1
+  fp16: true
+  eval_strategy: "steps"
+  eval_steps: 300
+  logging_steps: 50
+  vram_budget_gb: 3.5

@@ -1,0 +1,37 @@
+# Enhanced Hyperparameter Preset (EXP-07): 512 Tokens + LLRD 0.92 + LR 3e-5 + Warmup 15% + Label Smoothing 0.03
+model:
+  name: "distilbert-base-uncased"
+  num_labels: 2
+  id2label:
+    "0": "neg"
+    "1": "pos"
+  label2id:
+    "neg": 0
+    "pos": 1
+
+data:
+  name: "stanfordnlp/imdb"
+  max_length: 512
+  seed: 42
+  val_size: 0.1
+  processed_dir: "data/lab3/processed/imdb_tokenized_512"
+
+training:
+  seed: 42
+  run_name: "distilbert-finetune-512-hyper"
+  run_root: "experiments/lab3/runs"
+  batch_size: 8
+  gradient_accumulation_steps: 2
+  epochs: 4
+  lr: 3.0e-5
+  decay_factor: 0.92
+  weight_decay: 0.04
+  classifier_dropout: 0.15
+  label_smoothing_factor: 0.03
+  lr_scheduler_type: "cosine"
+  warmup_ratio: 0.15
+  early_stopping_patience: 3
+  fp16: true
+  eval_strategy: "steps"
+  eval_steps: 300
+  logging_steps: 50

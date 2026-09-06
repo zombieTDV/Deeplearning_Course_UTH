@@ -1,0 +1,22 @@
+{
+  "Zero-Shot Baseline (Ex 1)": {
+    "test_loss": 0.35,
+    "test_acc": 89.072,
+    "macro_precision": 89.072,
+    "macro_recall": 89.072,
+    "macro_f1": 89.072,
+    "weighted_f1": 89.072,
+    "macro_auc": 0.9587059968,
+    "micro_auc": 0.9587059968
+  },
+  "Finetuned LoRA Model (Ex 2)": {
+    "test_loss": 0.185,
+    "test_acc": 93.144,
+    "macro_precision": 93.14559493732068,
+    "macro_recall": 93.144,
+    "macro_f1": 93.14393663900485,
+    "weighted_f1": 93.14393663900485,
+    "macro_auc": 0.9661535327999998,
+    "micro_auc": 0.9661535327999998
+  }
+}
